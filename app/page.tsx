@@ -1,9 +1,12 @@
-import HomeBanner from "./components/homebanner/HomeBanner";
+// import Home from "./pages/home/home";
+import Banner from "./pages/home/banner/banner";
+import Brand from "./pages/home/brand/brand";
 
 export default function Home() {
   return (
     <div>
-      <HomeBanner />
+      <Banner/>
+      <Brand/>
     </div>
   );
 }

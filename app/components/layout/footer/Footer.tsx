@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Container from "../Container";
+import Container from "../../Container";
 import FooterList from "./FooterList";
 import { FaLinkedin } from "react-icons/fa";
 import { AiFillInstagram, AiOutlineGithub } from "react-icons/ai";

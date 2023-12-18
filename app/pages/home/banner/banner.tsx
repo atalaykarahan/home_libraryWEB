@@ -1,10 +1,10 @@
-import bgImage from "../../../public/images/bg.png";
-import bannerImg from "../../../public/images/banner-img.png";
+import bgImage from "../../../../public/images/bg.png";
+import bannerImg from "../../../../public/images/banner-img.png";
 import Image from "next/image";
-import "./homeBanner.css";
+import "./Banner.css";
 import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
-const HomeBanner = () => {
+const Banner = () => {
   return (
     <div
       className="
@@ -69,7 +69,7 @@ const HomeBanner = () => {
                 but the majority have suffered alteration in some form.There are
                 many variations of passages of Lorem Ipsum available,{" "}
               </p>
-              <ul className="flex justify-items-center">
+              <ul className="flex justify-center">
                 <li>
                   <Link href="#">
                     <span>get started</span>
@@ -93,9 +93,7 @@ const HomeBanner = () => {
             </div>
             {/* image */}
             <div
-              className="w320:max-w991:bottom-0
-            w992:max-w1199:bottom-[-10px] absolute bottom-[-110px] left-2/4"
-            >
+              className="image">
               <Image src={bannerImg} alt="Banner" />
             </div>
           </div>
@@ -105,4 +103,4 @@ const HomeBanner = () => {
   );
 };
 
-export default HomeBanner;
+export default Banner;
