@@ -2,9 +2,19 @@ import Image from "next/image";
 import lBook  from "../../../../public/images/placeHolders/lastBook.png";
 import "./LastBook.css";
 import { VscTriangleRight } from "react-icons/vsc";
+import bg from "../../../../public/images/last_book_bg.png"
 const LastBook = () => {
   return (
-    <section className="last-book">
+    <section className="last-book" style={{
+      backgroundImage: `url(${bg.src})`,
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "initial",
+      backgroundOrigin: "initial",
+      backgroundClip: "initial",
+      backgroundColor: "initial",
+    }}>
       <div className="container mx-auto">
         <div className="row items-center grid lg:grid-cols-2 justify-items-center">
           <div className="order-2 lg:order-1">
