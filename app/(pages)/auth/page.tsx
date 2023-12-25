@@ -1,7 +1,39 @@
+"use client";
 import Image from "next/image";
-import logo from "../../../public/images/atalayLogo.png"
+import logo from "../../../public/images/atalayLogo.png";
+import { login } from "../../api/services/authService";
+import { LoginDto } from "@/app/models/DTOs/loginDto";
 
-const Auth = () => {
+const Auth: React.FC = () => {
+
+  
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    let payload: LoginDto = {
+      userName: event.currentTarget.username.value,
+      password: event.currentTarget.password.value,
+    };
+
+    try {
+      login(payload)
+        .then((res: any) => {
+          if (!res.status) {
+            throw new Error("User ile ilgili bir hata oluştu");
+          }
+          return res.data;
+        })
+        .then((response: any) => {
+          console.log(response);
+          return response.token;
+        })
+        .catch((err: any) => console.log(err));
+    } catch (error) {
+      console.log("kullanıcı girişi ile ilgili bir sorun oluştu => " + error);
+      return null;
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,18 +49,18 @@ const Auth = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="/" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="nickName"
+                htmlFor="username"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Kullanıcı Adı
               </label>
               <div className="mt-2">
                 <input
-                  id="nickName"
-                  name="nickName"
+                  id="username"
+                  name="username"
                   type="text"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
