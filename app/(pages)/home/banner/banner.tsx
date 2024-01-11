@@ -43,7 +43,7 @@ const Banner = () => {
       w1200:max-w-[1140px]
       w1400:max-w-[1320px] w-full px-3 mx-auto"
       >
-        <div className="row">
+        <div className="row justify-center">
           <div
             className=" 
         flex 

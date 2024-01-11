@@ -1,12 +1,11 @@
-"use client";
 import Image from "next/image";
-import logo from "../../../public/images/atalayLogo.png";
-import { login } from "../../api/services/authService";
+import logo from "@/public/images/atalayLogo.png";
+// import { login } from "../../../api/services/authService";
 import { LoginDto } from "@/app/models/DTOs/loginDto";
+import { FcGoogle } from "react-icons/fc";
+import { Button } from "../ui/button";
 
-const Auth: React.FC = () => {
-
-  
+const LoginForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -15,23 +14,23 @@ const Auth: React.FC = () => {
       password: event.currentTarget.password.value,
     };
 
-    try {
-      login(payload)
-        .then((res: any) => {
-          if (!res.status) {
-            throw new Error("User ile ilgili bir hata oluştu");
-          }
-          return res.data;
-        })
-        .then((response: any) => {
-          console.log(response);
-          return response.token;
-        })
-        .catch((err: any) => console.log(err));
-    } catch (error) {
-      console.log("kullanıcı girişi ile ilgili bir sorun oluştu => " + error);
-      return null;
-    }
+    // try {
+    //   login(payload)
+    //     .then((res: any) => {
+    //       if (!res.status) {
+    //         throw new Error("User ile ilgili bir hata oluştu");
+    //       }
+    //       return res.data;
+    //     })
+    //     .then((response: any) => {
+    //       console.log(response);
+    //       return response.token;
+    //     })
+    //     .catch((err: any) => console.log(err));
+    // } catch (error) {
+    //   console.log("kullanıcı girişi ile ilgili bir sorun oluştu => " + error);
+    //   return null;
+    // }
   };
 
   return (
@@ -44,12 +43,12 @@ const Auth: React.FC = () => {
             alt="Atalay Karahan"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Var olan bir hesap ile giriş yap.
+            Hoş Geldin.
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6">
             <div>
               <label
                 htmlFor="username"
@@ -104,6 +103,14 @@ const Auth: React.FC = () => {
               >
                 Giriş yap
               </button>
+
+              <Button
+                size="lg"
+                className="mt-3 w-full justify-center rounded-m px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-s focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+                variant="outline"
+              >
+                <FcGoogle />
+              </Button>
             </div>
           </form>
 
@@ -122,4 +129,4 @@ const Auth: React.FC = () => {
   );
 };
 
-export default Auth;
+export default LoginForm;

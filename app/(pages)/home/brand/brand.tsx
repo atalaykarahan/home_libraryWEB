@@ -18,7 +18,7 @@ const Brand = () => {
   return (
     <section className="brand">
       <div className="konteyner">
-        <div className="row">
+        <div className="row justify-center">
           <div className="col-lg-12">
             <div className="bg">
               <ul className="flex justify-between items-center">

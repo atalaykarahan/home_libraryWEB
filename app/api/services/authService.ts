@@ -3,5 +3,5 @@ import axios from "../axios"
 import { CONFIG } from "@/config";
 
 export const login = (user: LoginDto) =>{
-    return axios.post(`Users/Login`, user)
+    return axios.post(`/users/login`, user)
 }

@@ -1,17 +1,20 @@
 "use client";
 import { useState, Fragment } from "react";
 import logo from "../../../public/images/logo.png";
+import krhnlogo from "@/public/images/atalayLogo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaRegBell } from "react-icons/fa";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
+import NavbarLinks from "./navbar-links";
 
 const NavBar = () => {
   const navigation = [
     { name: "Anasyfa", href: "/", current: true },
     { name: "Tüm Kitaplar", href: "#", current: false },
     { name: "Üyeler", href: "#", current: false },
+    { name: "Giriş Yap", href: "/login", current: false },
   ];
 
   function classNames(...classes: string[]) {
@@ -44,32 +47,20 @@ const NavBar = () => {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  {/* <Image
+                  <Image
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src={krhnlogo}
                     width="100"
                     height="100"
                     alt="Your Company"
-                  /> */}
+                  />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
+                 
+
+                    <NavbarLinks/>
+
+
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -88,13 +79,13 @@ const NavBar = () => {
                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      {/* <Image
+                      <Image
                        width="100"
                        height="100"
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={krhnlogo}
                         alt=""
-                      /> */}
+                      />
                     </Menu.Button>
                   </div>
                   <Transition
