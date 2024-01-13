@@ -26,7 +26,7 @@ export default async function RootLayout({
         <body className={inter.className}>
           <div className="flex flex-col min-h-screen">
             <NavBar />
-            <main className="flex-grow relative">{children}</main>
+            <main className="flex-grow">{children}</main>
             <Footer />
           </div>
         </body>

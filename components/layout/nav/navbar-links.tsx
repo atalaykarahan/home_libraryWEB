@@ -1,9 +1,6 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// interface NavBarButtonsProps{
-
-// }
 
 const NavbarLinks = () => {
   const pathname = usePathname();
@@ -27,23 +24,23 @@ const NavbarLinks = () => {
       </Link>
       <Link
         className={classNames(
-          pathname === "#"
+          pathname === "allbooks"
             ? "bg-gray-900 text-white"
             : "text-gray-300 hover:bg-gray-700 hover:text-white",
           "rounded-md px-3 py-2 text-sm font-medium"
         )}
-        href="/"
+        href="/allbooks"
       >
         Tüm Kitaplar
       </Link>
       <Link
         className={classNames(
-          pathname === "#"
+          pathname === "/users"
             ? "bg-gray-900 text-white"
             : "text-gray-300 hover:bg-gray-700 hover:text-white",
           "rounded-md px-3 py-2 text-sm font-medium"
         )}
-        href="/"
+        href="/users"
       >
         Üyeler
       </Link>
