@@ -18,7 +18,7 @@ import { Button } from "../ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/schemas";
 import { useState, useTransition } from "react";
-import { login } from "@/app/_api/services/authService";
+import { loginClient } from "@/app/_api/services/authService";
 import { loginAction } from "@/actions/login";
 
 const LoginForm: React.FC = () => {
@@ -41,9 +41,8 @@ const LoginForm: React.FC = () => {
         user_name: values.nick_name,
         password: values.password,
       };
-
       try {
-        login(serverProps)
+        loginClient(serverProps)
           .then((res: any) => {
             if (!res.status) {
               throw new Error("User ile ilgili bir hata oluştu");
@@ -76,8 +75,8 @@ const LoginForm: React.FC = () => {
   return (
     <CardWrapper
     headerLabel="Welcome back"
-    backButtonLabel="Don't have an account?"
-    backButtonHref="/auth/register"
+    backButtonLabel="Hesabın yok mu? üye ol"
+    backButtonHref="/register"
     showSocial
   >
     <Form {...form}>

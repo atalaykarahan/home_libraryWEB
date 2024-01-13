@@ -92,19 +92,19 @@ export const logoutServer = async () => {
 
 //#endregion All server side request (XmlHttpRequest) end
 
-export const login = (user: LoginDto) => {
+export const loginClient = (user: LoginDto) => {
   return axios.post(`/users/login`, user);
 };
 
-export const logout = () => {
+export const logoutClient = () => {
   return axios.post(`/users/logout`);
 };
 
-export const signUp = (user: RegisterDto) => {
+export const signUpClient = (user: RegisterDto) => {
   return axios.post(`/users/signup`, user);
 };
 
-export const check = (user: LoginDto) => {
+export const checkClient = (user: LoginDto) => {
   return axios.post(`/users/check`, user);
 };
 
