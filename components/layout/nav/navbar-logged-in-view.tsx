@@ -5,11 +5,25 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { logoutClient } from "@/app/_api/services/authService";
 import { logout } from "@/actions/logout";
+import { Badge } from "@/components/ui/badge";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { FaUser } from "react-icons/fa";
+import { ExitIcon } from "@radix-ui/react-icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { LogoutButton } from "@/components/auth/logout-button";
 
 const NavbarLoggedInView = () => {
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
+
+  const user = useCurrentUser();
 
   const logOutClick = () => {
     logoutClient().then((res: any) => {
@@ -31,7 +45,30 @@ const NavbarLoggedInView = () => {
       </button>
 
       {/* Profile dropdown */}
+
       <Menu as="div" className="relative ml-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarImage src={user?.image || ""} />
+              <AvatarFallback className="bg-orange-500">
+                <FaUser className="text-white" />
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40" align="end">
+            <DropdownMenuItem>Profil</DropdownMenuItem>
+            <DropdownMenuItem>Ayarlar</DropdownMenuItem>
+            <LogoutButton>
+              <DropdownMenuItem>
+                <ExitIcon className="h-4 w-4 mr-2" />
+                Çıkış yap
+              </DropdownMenuItem>
+            </LogoutButton>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </Menu>
+      {/* <Menu as="div" className="relative ml-3">
         <div>
           <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
             <span className="absolute -inset-1.5" />
@@ -97,7 +134,7 @@ const NavbarLoggedInView = () => {
             </Menu.Item>
           </Menu.Items>
         </Transition>
-      </Menu>
+      </Menu> */}
     </div>
   );
 };

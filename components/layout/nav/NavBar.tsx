@@ -11,10 +11,11 @@ import NavbarLinks from "./navbar-links";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import NavbarLoggedInView from "./navbar-logged-in-view";
 import NavbarLoggedOutView from "./navbar-logged-out-view";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
   const user = useCurrentUser();
-
+  const router = useRouter();
 
   const navigation = [
     { name: "Anasyfa", href: "/", current: true },
@@ -26,6 +27,10 @@ const NavBar = () => {
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
+
+  // const homeScreenRedirect(){
+  //   router.push
+  // }
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -52,7 +57,10 @@ const NavBar = () => {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
+                <div
+                  className="flex flex-shrink-0 items-center"
+                  onClick={() => router.push("/")}
+                >
                   <Image
                     className="h-8 w-auto"
                     src={krhnlogo}
@@ -62,17 +70,11 @@ const NavBar = () => {
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
-                 
-
-                    <NavbarLinks/>
-
-
+                  <NavbarLinks />
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              
-                    {user ? <NavbarLoggedInView /> : <NavbarLoggedOutView/>}
-
+                {user ? <NavbarLoggedInView /> : <NavbarLoggedOutView />}
               </div>
             </div>
           </div>
