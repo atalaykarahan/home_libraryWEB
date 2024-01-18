@@ -26,6 +26,10 @@ export const {
   signOut,
   signIn,
 } = NextAuth({
+  pages:{
+    signIn: "/login",
+    error: "/error",
+  },
   callbacks: {
     async session({ token, session }) {
       if (token.sub && session.user) {
@@ -59,6 +63,7 @@ export const {
         profile.email &&
         profile.email.endsWith("@gmail.com")
       ) {
+        console.log(profile);
         const user: RegisterDto = {
           user_name: profile.given_name,
           password: profile.sub,
@@ -66,11 +71,12 @@ export const {
         };
 
         const signUpServerApi = await signInServerWithGoole(user);
-        if (signUpServerApi) {
-          return true;
+        if (signUpServerApi.error) {
+          console.log(signUpServerApi.error)
+          return false;
         }
 
-        return false;
+        return true;
       }
       return true; // Do different verification for other providers that don't have `email_verified`
     },

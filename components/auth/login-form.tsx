@@ -20,6 +20,7 @@ import { LoginSchema } from "@/schemas";
 import { useState, useTransition } from "react";
 import { loginClient } from "@/app/_api/services/authService";
 import { loginAction } from "@/actions/login";
+import Link from "next/link";
 
 const LoginForm: React.FC = () => {
     const [isPending, startTransition] = useTransition();
@@ -112,6 +113,11 @@ const LoginForm: React.FC = () => {
                     type="password"
                   />
                 </FormControl>
+                <Button size="sm" variant="link" asChild className="px-0 font-normal">
+                  <Link href="/reset">
+                    Şifremi unuttum!
+                  </Link>
+                </Button>
                 <FormMessage />
               </FormItem>
             )}

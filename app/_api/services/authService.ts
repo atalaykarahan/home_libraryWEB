@@ -17,6 +17,7 @@ export const getMyCookie = () => {
 };
 
 //#region All server side request (XmlHttpRequest) start
+
 export const getLoggedInUserServer = async () => {
   const query = await fetch(`${process.env.BASE_URL}/users`, {
     headers: {
@@ -90,7 +91,13 @@ export const logoutServer = async () => {
   return response;
 };
 
+export const postResetUserServer = async (userInputValue: string) => {
+  const query = await fetch(`${process.env.BASE_URL}/users/reset`);
+};
+
 //#endregion All server side request (XmlHttpRequest) end
+
+//#region All client side code start
 
 export const loginClient = (user: LoginDto) => {
   return axios.post(`/users/login`, user);
@@ -107,5 +114,9 @@ export const signUpClient = (user: RegisterDto) => {
 export const checkClient = (user: LoginDto) => {
   return axios.post(`/users/check`, user);
 };
+
+export const verifiedEmailClient = (token: string) => {
+  return axios.post(`/users/email-verified`, {token: token});
+}
 
 //#endregion All client side code end

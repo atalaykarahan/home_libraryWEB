@@ -19,6 +19,7 @@ import FormError from "../form-error";
 import FormSuccess from "../form-success";
 import { useState, useTransition } from "react";
 import { RegisterDto } from "@/app/_models/DTOs/registerDto";
+import { loginAction } from "@/actions/login";
 
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -50,6 +51,14 @@ export const RegisterForm = () => {
           })
           .then((response: any) => {
             console.log(response);
+            loginAction(values).then((data) => {
+              if (data && data.error) {
+                // data varsa ve içinde error varsa, hata mesajını set et
+                setErrorMessage(data.error);
+              } else {
+                // Başka bir işlem yap veya başarı durumunu işle
+              }
+            });
           })
           .catch((err: any) => {
             if (err.response.status) {

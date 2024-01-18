@@ -1,5 +1,14 @@
 import * as z from "zod";
 
+
+export const ResetSchema = z.object({
+  userInputValue: z.union([
+    z.string().email({message:"Geçersiz e posta adresi"}),
+    z.string({ invalid_type_error: "Geçersiz karakter"})
+  ])
+});
+
+
 export const LoginSchema = z.object({
   nick_name: z.string({
     invalid_type_error: "Geçersiz karakter",
