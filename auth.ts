@@ -95,7 +95,7 @@ export const {
             return {
               id: user.user_id,
               name: user.user_name,
-              email: user.email,
+              email: user.user_email,
             };
           }
         } catch (error) {

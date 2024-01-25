@@ -91,11 +91,26 @@ export const logoutServer = async () => {
   return response;
 };
 
-export const postResetUserServer = async (userInputValue: string) => {
-  const query = await fetch(`${process.env.BASE_URL}/users/reset`);
-};
+export const newPasswordServer = async (password: string, token:string) => {
+  const props = {
+    password:password,
+    token:token
+  }
+  const query = await fetch(`${process.env.BASE_URL}/users/new-password`,{
+    method: "POST",
+    headers:{
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body:JSON.stringify(props),
+  });
+  const response = await query.json();
+  return response;
+}
 
 //#endregion All server side request (XmlHttpRequest) end
+
+//------------------------*************----------------------
 
 //#region All client side code start
 
@@ -117,6 +132,10 @@ export const checkClient = (user: LoginDto) => {
 
 export const verifiedEmailClient = (token: string) => {
   return axios.post(`/users/email-verified`, {token: token});
+}
+
+export const resetPasswordRequestClient = (inputValue: string) =>{
+  return axios.get(`/users/reset/${inputValue}`);
 }
 
 //#endregion All client side code end
