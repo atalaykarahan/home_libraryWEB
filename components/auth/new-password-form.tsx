@@ -1,7 +1,5 @@
 "use client";
-import * as z from "zod";
-import { CardWrapper } from "./card-wrapper";
-import { Input } from "@/components/ui/input";
+import { newPasswordServer } from "@/app/_api/services/authService";
 import {
   Form,
   FormControl,
@@ -10,22 +8,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { NewPasswordSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { LoginDto } from "@/app/_models/DTOs/loginDto";
+import * as z from "zod";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
 import { Button } from "../ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { NewPasswordSchema } from "@/schemas";
-import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import {
-  loginClient,
-  newPasswordServer,
-  resetPasswordRequestClient,
-} from "@/app/_api/services/authService";
-// import { loginAction } from "@/actions/login";
+import { CardWrapper } from "./card-wrapper";
 
 const NewPasswordForm: React.FC = () => {
   const searchParams = useSearchParams();
@@ -47,24 +41,44 @@ const NewPasswordForm: React.FC = () => {
     startTransition(() => {
       try {
         if (token) {
-          newPasswordServer(values.password, token).then((res: any) => {
-            if (res.message) {
-              setErrorMessage("");
-              setTryAgain(false);
-              setSuccessMessage("Şifreniz başarıyla değiştirildi");
-            } else {
-              if (
-                res.error ===
-                "Your token has been expired. Please try again verification process."
-              ) {
-                setSuccessMessage("");
-                setTryAgain(true);
-                setErrorMessage("Token süresi dolmuş yeniden deneyin.");
+          newPasswordServer(values.password, token)
+            .then((res: any) => {
+              console.log(res);
+              if (res.message) {
+                setErrorMessage("");
+                setTryAgain(false);
+                setSuccessMessage("Şifreniz başarıyla değiştirildi");
+              } else {
+                if (
+                  res.error ===
+                  "Your token has been expired. Please try again verification process."
+                ) {
+                  setSuccessMessage("");
+                  setTryAgain(true);
+                  setErrorMessage("Token süresi dolmuş yeniden deneyin.");
+                }
               }
-            }
-          });
+            })
+            .catch((err: any) => {
+              if (err.message === "Failed to fetch") {
+                setErrorMessage("Lütfen internet bağlantınızı kontrol edin!");
+                setTryAgain(false);
+                setSuccessMessage("");
+              } else {
+                setErrorMessage("Bilinmeyen bir hata oluştu!");
+                setTryAgain(false);
+                setSuccessMessage("");
+              }
+              console.log(
+                "Şifre sıfırlama request isteği ile ilgili bir sorun oluştu",
+                err
+              );
+            });
         }
       } catch (error) {
+        setErrorMessage("Bilinmeyen bir hata oluştu!");
+        setTryAgain(false);
+        setSuccessMessage("");
         console.log(
           "Şifre sıfırlama isteği ile ilgili bir sorun oluştu",
           error
