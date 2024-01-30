@@ -43,14 +43,12 @@ export const {
       return session;
     },
     async jwt({ token }) {
+      // console.log("jwt kısmındaki token kodu",token);
       if (!token.sub) return token;
 
-      const existingUser = await getLoggedInUserServer();
-
-      //if there is no existing user;
-      if (!existingUser) return token;
-
-      token.role = existingUser.authority_id;
+      await getLoggedInUserServer().then((value:any) => {
+        token.role = value.user_authority_id;
+      });
       return token;
     },
     async signIn({ account, profile }) {
@@ -63,7 +61,6 @@ export const {
         profile.email &&
         profile.email.endsWith("@gmail.com")
       ) {
-        console.log(profile);
         const user: RegisterDto = {
           user_name: profile.given_name,
           password: profile.sub,
@@ -82,7 +79,7 @@ export const {
 
         return true;
       }
-      return true; // Do different verification for other providers that don't have `email_verified`
+      return true;
     },
   },
   session: { strategy: "jwt" },
