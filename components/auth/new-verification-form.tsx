@@ -29,9 +29,8 @@ const NewVerificationForm = () => {
           return res.data;
         })
         .then((response: any) => {
-          console.log(response);
           if (response.message) {
-            setSuccess("E postanız başarıyla onaylandı");
+            setSuccess("Hesabınız başarıyla onaylandı");
           }
         })
         .catch((err: any) => {
@@ -58,7 +57,7 @@ const NewVerificationForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="E postamı onayla"
+      headerLabel="Hesabımı onayla"
       backButtonHref="/login"
       backButtonLabel="Giriş yap"
     >

@@ -24,6 +24,7 @@ import { loginAction } from "@/actions/login";
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -50,20 +51,14 @@ export const RegisterForm = () => {
             return res.data;
           })
           .then((response: any) => {
+            if (response.message === "mail sent") {
+              setSuccessMessage("Doğrulama maili gönderildi.");
+            }
             console.log(response);
-            loginAction(values).then((data) => {
-              if (data && data.error) {
-                // data varsa ve içinde error varsa, hata mesajını set et
-                setErrorMessage(data.error);
-              } else {
-                // Başka bir işlem yap veya başarı durumunu işle
-              }
-            });
           })
           .catch((err: any) => {
             if (err.response.status) {
               setErrorMessage("Geçersiz kullanıcı bilgileri");
-              console.log("düştü");
             }
             console.log(err);
           });
@@ -71,8 +66,6 @@ export const RegisterForm = () => {
         console.log("kullanıcı ile ilgili bir sorun oluştu ", error);
       }
     });
-
-    console.log(serverProps);
   };
 
   return (
@@ -141,7 +134,7 @@ export const RegisterForm = () => {
             />
           </div>
           <FormError message={errorMessage} />
-          <FormSuccess message="" />
+          <FormSuccess message={successMessage} />
           <Button type="submit" className="w-full">
             Kayıt Ol
           </Button>

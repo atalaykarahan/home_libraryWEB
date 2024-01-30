@@ -2,7 +2,7 @@ import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import {
   getLoggedInUserServer,
-  signInServerWithGoole,
+  signInServer,
 } from "./app/_api/services/authService";
 import Google from "next-auth/providers/google";
 
@@ -26,7 +26,7 @@ export const {
   signOut,
   signIn,
 } = NextAuth({
-  pages:{
+  pages: {
     signIn: "/login",
     error: "/error",
   },
@@ -70,9 +70,13 @@ export const {
           email: profile.email,
         };
 
-        const signUpServerApi = await signInServerWithGoole(user);
+        const signUpServerApi = await signInServer(
+          profile.given_name,
+          profile.email,
+          profile.sub
+        );
         if (signUpServerApi.error) {
-          console.log(signUpServerApi.error)
+          console.log(signUpServerApi.error);
           return false;
         }
 

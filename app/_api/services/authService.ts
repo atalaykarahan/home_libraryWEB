@@ -54,14 +54,24 @@ export const signUpServer = async (user: RegisterDto) => {
   return response;
 };
 
-export const signInServerWithGoole = async (user: RegisterDto) => {
-  const query = await fetch(`${process.env.BASE_URL}/users/login/google`, {
+export const signInServer = async (
+  user_name: string,
+  email: string,
+  google_id: string
+) => {
+  const props = {
+    user_name: user_name,
+    email: email,
+    password: google_id,
+    google_id: google_id,
+  };
+  const query = await fetch(`${process.env.BASE_URL}/users/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify(user),
+    body: JSON.stringify(props),
   });
   const cookieFullString = query.headers.get("set-cookie");
   if (cookieFullString) {
@@ -91,22 +101,22 @@ export const logoutServer = async () => {
   return response;
 };
 
-export const newPasswordServer = async (password: string, token:string) => {
+export const newPasswordServer = async (password: string, token: string) => {
   const props = {
-    password:password,
-    token:token
-  }
-  const query = await fetch(`${process.env.BASE_URL}/users/new-password`,{
+    password: password,
+    token: token,
+  };
+  const query = await fetch(`${process.env.BASE_URL}/users/new-password`, {
     method: "POST",
-    headers:{
+    headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body:JSON.stringify(props),
+    body: JSON.stringify(props),
   });
   const response = await query.json();
   return response;
-}
+};
 
 //#endregion All server side request (XmlHttpRequest) end
 
@@ -131,11 +141,11 @@ export const checkClient = (user: LoginDto) => {
 };
 
 export const verifiedEmailClient = (token: string) => {
-  return axios.post(`/users/email-verified`, {token: token});
-}
+  return axios.post(`/users/email-verified`, { token: token });
+};
 
-export const resetPasswordRequestClient = (inputValue: string) =>{
+export const resetPasswordRequestClient = (inputValue: string) => {
   return axios.get(`/users/reset/${inputValue}`);
-}
+};
 
 //#endregion All client side code end

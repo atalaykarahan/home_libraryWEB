@@ -26,7 +26,7 @@ export const RegisterSchema = z.object({
   nick_name: z.string({
     invalid_type_error: "Geçersiz karakter",
   }),
-  email: z.string().email().optional(),
+  email: z.string().email(),
   password: z.string().min(1, {
     message: "Şifre minimum 6 karakter uzunluğunda olmalı.",
   }),
