@@ -1,5 +1,6 @@
 export interface User {
-  id?: number;
+  //burası daha tam bitmedi hatalı yerleri var
+  user_id?: number;
   userName: string;
   password: string;
   authorityId?: number;

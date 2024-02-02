@@ -46,7 +46,7 @@ export const {
       // console.log("jwt kısmındaki token kodu",token);
       if (!token.sub) return token;
 
-      await getLoggedInUserServer().then((value:any) => {
+      await getLoggedInUserServer().then((value: any) => {
         token.role = value.user_authority_id;
       });
       return token;

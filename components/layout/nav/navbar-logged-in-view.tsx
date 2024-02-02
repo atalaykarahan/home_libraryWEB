@@ -1,8 +1,9 @@
+// "use client";
 import { Menu, Transition } from "@headlessui/react";
 import { FaRegBell } from "react-icons/fa";
 import krhnlogo from "@/public/images/atalayLogo.png";
 import Image from "next/image";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { logoutClient } from "@/app/_api/services/authService";
 import { logout } from "@/actions/logout";
 import { Badge } from "@/components/ui/badge";
@@ -17,24 +18,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { Button } from "@/components/ui/button";
+import CreateCategory from "@/components/dialog/create-category";
+import CreateBook from "@/components/dialog/create-book";
 
 const NavbarLoggedInView = () => {
+  const [createCategoryModal, setCreateCategoryModal] =
+    useState<boolean>(false); // Yeni state
+  const [createBookModal, setCreateBookModal] = useState<boolean>(false); // Yeni state
+
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
 
   const user = useCurrentUser();
+  // console.log(user & user.role === "1");
 
-  const logOutClick = () => {
-    logoutClient().then((res: any) => {
-      if (res.status === 200) {
-        logout();
-      }
-    });
-  };
+  // const logOutClick = () => {
+  //   logoutClient().then((res: any) => {
+  //     if (res.status === 200) {
+  //       logout();
+  //     }
+  //   });
+  // };
 
   return (
     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+      <CreateCategory
+        openModal={createCategoryModal}
+        closeModal={() => setCreateCategoryModal(false)}
+      />
+
+      <CreateBook  openModal={createBookModal}
+        closeModal={() => setCreateBookModal(false)}/>
+
       <button
         type="button"
         className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -58,6 +75,25 @@ const NavbarLoggedInView = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-40" align="end">
             <DropdownMenuItem>Profil</DropdownMenuItem>
+            {/* {user ? <NavbarLoggedInView /> : <NavbarLoggedOutView />} */}
+            {user && user.role >= 2 ? (
+              <>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCreateBookModal(true);
+                  }}
+                >
+                  Kitap Ekle
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCreateCategoryModal(true);
+                  }}
+                >
+                  Kategori Ekle
+                </DropdownMenuItem>
+              </>
+            ) : undefined}
             <DropdownMenuItem>Ayarlar</DropdownMenuItem>
             <LogoutButton>
               <DropdownMenuItem>
