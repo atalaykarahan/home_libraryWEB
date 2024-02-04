@@ -21,11 +21,15 @@ import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
 import CreateCategory from "@/components/dialog/create-category";
 import CreateBook from "@/components/dialog/create-book";
+import CreatePublisher from "@/components/dialog/publishers/create-publisher";
+import Publishers from "@/components/dialog/publishers/publishers";
 
 const NavbarLoggedInView = () => {
   const [createCategoryModal, setCreateCategoryModal] =
     useState<boolean>(false); // Yeni state
   const [createBookModal, setCreateBookModal] = useState<boolean>(false); // Yeni state
+  const [publishersModal, setPublishersModal] =
+    useState<boolean>(false); // Yeni state
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -49,8 +53,15 @@ const NavbarLoggedInView = () => {
         closeModal={() => setCreateCategoryModal(false)}
       />
 
-      <CreateBook  openModal={createBookModal}
-        closeModal={() => setCreateBookModal(false)}/>
+      <CreateBook
+        openModal={createBookModal}
+        closeModal={() => setCreateBookModal(false)}
+      />
+
+      <Publishers
+        openModal={publishersModal}
+        closeModal={() => setPublishersModal(false)}
+      />
 
       <button
         type="button"
@@ -78,6 +89,13 @@ const NavbarLoggedInView = () => {
             {/* {user ? <NavbarLoggedInView /> : <NavbarLoggedOutView />} */}
             {user && user.role >= 2 ? (
               <>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setPublishersModal(true);
+                  }}
+                >
+                  Yayınevleri
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     setCreateBookModal(true);

@@ -5,6 +5,7 @@ import NavBar from "@/components/layout/nav/NavBar";
 import Footer from "@/components/layout/footer/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default async function RootLayout({
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
+          <Toaster />
         </body>
       </html>
     </SessionProvider>
