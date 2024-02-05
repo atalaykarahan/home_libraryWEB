@@ -19,17 +19,16 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
-import CreateCategory from "@/components/dialog/create-category";
 import CreateBook from "@/components/dialog/create-book";
 import CreatePublisher from "@/components/dialog/publishers/create-publisher";
 import Publishers from "@/components/dialog/publishers/publishers";
+import Categories from "@/components/dialog/categories/categories";
 
 const NavbarLoggedInView = () => {
   const [createCategoryModal, setCreateCategoryModal] =
     useState<boolean>(false); // Yeni state
   const [createBookModal, setCreateBookModal] = useState<boolean>(false); // Yeni state
-  const [publishersModal, setPublishersModal] =
-    useState<boolean>(false); // Yeni state
+  const [publishersModal, setPublishersModal] = useState<boolean>(false); // Yeni state
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -48,7 +47,7 @@ const NavbarLoggedInView = () => {
 
   return (
     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-      <CreateCategory
+      <Categories
         openModal={createCategoryModal}
         closeModal={() => setCreateCategoryModal(false)}
       />
@@ -91,6 +90,13 @@ const NavbarLoggedInView = () => {
               <>
                 <DropdownMenuItem
                   onClick={() => {
+                    setCreateCategoryModal(true);
+                  }}
+                >
+                  Kategoriler
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
                     setPublishersModal(true);
                   }}
                 >
@@ -102,13 +108,6 @@ const NavbarLoggedInView = () => {
                   }}
                 >
                   Kitap Ekle
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setCreateCategoryModal(true);
-                  }}
-                >
-                  Kategori Ekle
                 </DropdownMenuItem>
               </>
             ) : undefined}
