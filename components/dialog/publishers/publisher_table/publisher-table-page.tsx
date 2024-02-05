@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Publisher } from "../../../../app/_models/publisher";
-import { columns } from "./columns";
+import { PublisherTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getAllPublisherClient } from "@/app/_api/services/publisherService";
+import { getPublishersAndBooksCount } from "@/app/_api/services/publisherService";
 
 const PublisherTablePage = () => {
-  const [publishers, setPublishers] = useState<Publisher[]>([]);
+  const [publishers, setPublishers] = useState<PublisherTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -15,7 +15,7 @@ const PublisherTablePage = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllPublisherClient();
+      const res = await getPublishersAndBooksCount();
 
       if (res.status !== 200) {
         throw new Error("User ile ilgili bir hata oluştu");
