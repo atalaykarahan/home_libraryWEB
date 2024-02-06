@@ -1,65 +1,54 @@
 // "use client";
-import { Menu, Transition } from "@headlessui/react";
-import { FaRegBell } from "react-icons/fa";
-import krhnlogo from "@/public/images/atalayLogo.png";
-import Image from "next/image";
-import { Fragment, useState } from "react";
-import { logoutClient } from "@/app/_api/services/authService";
-import { logout } from "@/actions/logout";
-import { Badge } from "@/components/ui/badge";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { FaUser } from "react-icons/fa";
-import { ExitIcon } from "@radix-ui/react-icons";
+import { LogoutButton } from "@/components/auth/logout-button";
+import Authors from "@/components/dialog/authors/authors";
+import Categories from "@/components/dialog/categories/categories";
+import CreateBook from "@/components/dialog/create-book";
+import Publishers from "@/components/dialog/publishers/publishers";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogoutButton } from "@/components/auth/logout-button";
-import { Button } from "@/components/ui/button";
-import CreateBook from "@/components/dialog/create-book";
-import CreatePublisher from "@/components/dialog/publishers/create-publisher";
-import Publishers from "@/components/dialog/publishers/publishers";
-import Categories from "@/components/dialog/categories/categories";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { Menu } from "@headlessui/react";
+import { ExitIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { FaRegBell, FaUser } from "react-icons/fa";
 
 const NavbarLoggedInView = () => {
-  const [createCategoryModal, setCreateCategoryModal] =
-    useState<boolean>(false); // Yeni state
-  const [createBookModal, setCreateBookModal] = useState<boolean>(false); // Yeni state
-  const [publishersModal, setPublishersModal] = useState<boolean>(false); // Yeni state
+  const [createBookModal, setCreateBookModal] = useState<boolean>(false);
+  const [categoryModal, setCategoryModal] = useState<boolean>(false);
+  const [publisherModal, setPublisherModal] = useState<boolean>(false);
+  const [authorModal, setAuthorModal] = useState<boolean>(false);
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
 
   const user = useCurrentUser();
-  // console.log(user & user.role === "1");
-
-  // const logOutClick = () => {
-  //   logoutClient().then((res: any) => {
-  //     if (res.status === 200) {
-  //       logout();
-  //     }
-  //   });
-  // };
 
   return (
     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-      <Categories
-        openModal={createCategoryModal}
-        closeModal={() => setCreateCategoryModal(false)}
-      />
-
       <CreateBook
         openModal={createBookModal}
         closeModal={() => setCreateBookModal(false)}
       />
 
+      <Categories
+        openModal={categoryModal}
+        closeModal={() => setCategoryModal(false)}
+      />
+
       <Publishers
-        openModal={publishersModal}
-        closeModal={() => setPublishersModal(false)}
+        openModal={publisherModal}
+        closeModal={() => setPublisherModal(false)}
+      />
+
+      <Authors
+        openModal={authorModal}
+        closeModal={() => setAuthorModal(false)}
       />
 
       <button
@@ -90,14 +79,21 @@ const NavbarLoggedInView = () => {
               <>
                 <DropdownMenuItem
                   onClick={() => {
-                    setCreateCategoryModal(true);
+                    setAuthorModal(true);
+                  }}
+                >
+                  Yazarlar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCategoryModal(true);
                   }}
                 >
                   Kategoriler
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    setPublishersModal(true);
+                    setPublisherModal(true);
                   }}
                 >
                   Yayınevleri
