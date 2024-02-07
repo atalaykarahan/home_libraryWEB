@@ -39,6 +39,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { getAllPublisherClient } from "@/app/_api/services/publisherService";
 import { Publisher } from "@/app/_models/publisher";
+import { Category } from "@/app/_models/category";
+import MultipleSelector, { Option } from "../ui/multiple-selector";
+import { getCategories } from "@/app/_api/services/categoryService";
 interface CreateCategoryProps {
   openModal: boolean;
   closeModal: () => void;
@@ -50,6 +53,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   const [openPublisher, setOpenPublisher] = useState(false);
   const [value, setValue] = useState<number>(0);
   const [publishers, setPublishers] = useState<Publisher[]>([]);
+  const [categories, setCategories] = useState<Option[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -58,14 +62,39 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
   const fetchData = async () => {
     try {
-      const res = await getAllPublisherClient();
+      const resPublisher = await getAllPublisherClient();
 
-      if (res.status !== 200) {
-        throw new Error("User ile ilgili bir hata oluştu");
+      if (resPublisher.status !== 200) {
+        throw new Error("publisher ile ilgili bir hata oluştu");
       }
 
-      const response = res.data;
-      setPublishers(response);
+      const responsePublisher = resPublisher.data;
+      setPublishers(responsePublisher);
+
+      const resCategory = await getCategories();
+      if(resCategory.status !== 200){
+        throw new Error("category ile ilgili bir hata oluştu");
+      }
+      const responseCategory:Category[] = resCategory.data;
+
+      console.table(responseCategory);
+      const transformedCategories = responseCategory.map(category => ({
+        label: category.category_name,
+        value: category.category_id.toString()
+      }));
+
+      if(transformedCategories){
+        setCategories(transformedCategories);
+      }
+
+
+
+
+
+
+
+
+
     } catch (error) {
       console.log("publisher try&catch hata -> ", error);
     }
@@ -82,6 +111,20 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
     },
   });
 
+  const OPTIONS: Option[] = [
+    { label: 'nextjs', value: 'nextjs' },
+    { label: 'React', value: 'react' },
+    { label: 'Remix', value: 'remix' },
+    { label: 'Vite', value: 'vite' },
+    { label: 'Nuxt', value: 'nuxt' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Svelte', value: 'svelte' },
+    { label: 'Angular', value: 'angular' },
+    { label: 'Ember', value: 'ember', disable: true },
+    { label: 'Gatsby', value: 'gatsby', disable: true },
+    { label: 'Astro', value: 'astro' },
+  ];
+
   const onSubmit = (values: z.infer<typeof CreateBookSchema>) => {
     console.log(values);
   };
@@ -92,6 +135,17 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
           <DialogTitle>Kitap Ekle</DialogTitle>
           <DialogDescription>açıklama kısmı</DialogDescription>
         </DialogHeader>
+
+        <MultipleSelector
+        defaultOptions={categories}
+        placeholder="Select frameworks you like..."
+        emptyIndicator={
+          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+            no results found.
+          </p>
+        }
+      />
+
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
