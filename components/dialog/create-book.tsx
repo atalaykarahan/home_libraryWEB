@@ -53,13 +53,13 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
   useEffect(() => {
     fetchData();
-    console.log("Kitap ekleme çalıştı")
+    console.log("Kitap ekleme çalıştı");
   }, [openModal]);
 
   const fetchData = async () => {
     try {
       const res = await getAllPublisherClient();
-     
+
       if (res.status !== 200) {
         throw new Error("User ile ilgili bir hata oluştu");
       }
@@ -84,38 +84,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
   const onSubmit = (values: z.infer<typeof CreateBookSchema>) => {
     console.log(values);
-    // const serverProps: RegisterDto = {
-    //   user_name: values.nick_name,
-    //   email: values.email,
-    //   password: values.password,
-    // };
-
-    // startTransition(() => {
-    //   try {
-    //     console.log(serverProps);
-    //     signUpClient(serverProps)
-    //       .then((res: any) => {
-    //         if (!res.status) {
-    //           throw new Error("User ile ilgili bir hata oluştu");
-    //         }
-    //         return res.data;
-    //       })
-    //       .then((response: any) => {
-    //         if (response.message === "mail sent") {
-    //           setSuccessMessage("Doğrulama maili gönderildi.");
-    //         }
-    //         console.log(response);
-    //       })
-    //       .catch((err: any) => {
-    //         if (err.response.status) {
-    //           setErrorMessage("Geçersiz kullanıcı bilgileri");
-    //         }
-    //         console.log(err);
-    //       });
-    //   } catch (error) {
-    //     console.log("kullanıcı ile ilgili bir sorun oluştu ", error);
-    //   }
-    // });
   };
   return (
     <Dialog open={openModal} onOpenChange={() => closeModal()}>
@@ -216,22 +184,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                   </FormItem>
                 )}
               />
-
-              {/* Eski hali alttaki gibiydi */}
-              {/* <FormField
-                control={form.control}
-                name="publisher_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Yayınevi</FormLabel>
-                    <FormControl>
-                     
-                      <PublisherComboBox/>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
               <FormField
                 control={form.control}
                 name="status_id"
@@ -266,10 +218,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
             </Button>
           </form>
         </Form>
-
-        {/* <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );
