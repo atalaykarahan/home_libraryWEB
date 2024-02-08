@@ -16,7 +16,7 @@ const optionSchema = z.object({
 
 export const CreateBookSchema = z.object({
   book_title: z.string(),
-  // author_id: z.number(),
+  author_id: z.string(),
   publisher_id: z.string(),
   // status_id: z.number(),
   // book_summary: z.string(),
