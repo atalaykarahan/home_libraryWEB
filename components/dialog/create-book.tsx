@@ -151,7 +151,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              "w-[200px] justify-between",
+                              "justify-between",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -165,7 +165,10 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[200px] p-0">
+                      <PopoverContent
+                        className="p-0"
+                        style={{ maxHeight: "15rem", overflow: "auto" }}
+                      >
                         <Command>
                           <CommandInput
                             placeholder="Yayınevi ara..."
