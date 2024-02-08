@@ -44,6 +44,8 @@ import { Category } from "@/app/_models/category";
 import MultipleSelector, { Option } from "../ui/multiple-selector";
 import { getCategories } from "@/app/_api/services/categoryService";
 import { Author } from "@/app/_models/author";
+import { Status } from "@/app/_models/status";
+import { getAllStatusesClient } from "@/app/_api/services/statusService";
 interface CreateCategoryProps {
   openModal: boolean;
   closeModal: () => void;
@@ -54,10 +56,12 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 }) => {
   //publisher
   const [publishers, setPublishers] = useState<Publisher[]>([]);
-
   //category
   const [categories, setCategories] = useState<Option[]>([]);
+  //author
   const [authors, setAuthors] = useState<Option[]>([]);
+  //status
+  const [statuses, setStatuses] = useState<Status[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -73,8 +77,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
         throw new Error("publisher ile ilgili bir hata oluştu");
       }
 
-      const responsePublisher: Publisher[] = resPublisher.data;
-      setPublishers(responsePublisher);
+      setPublishers(resPublisher.data);
       //#endregion
 
       //#region author query
@@ -86,6 +89,16 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
       // const responseAuthor: Author[] = resPublisher.data;
       setAuthors(resAuthor.data);
+      //#endregion
+
+      //#region status query
+      const resStatus = await getAllStatusesClient();
+
+      if (resStatus.status !== 200) {
+        throw new Error("author ile ilgili bir hata oluştu");
+      }
+
+      setStatuses(resStatus.data);
       //#endregion
 
       //#region category query
@@ -238,8 +251,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                           >
                             {field.value
                               ? authors.find(
-                                  (author) =>
-                                  author.value == field.value
+                                  (author) => author.value == field.value
                                 )?.label
                               : "Yazar seçiniz."}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -262,10 +274,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                 value={author.label}
                                 key={author.value}
                                 onSelect={() => {
-                                  form.setValue(
-                                    "author_id",
-                                    author.value
-                                  );
+                                  form.setValue("author_id", author.value);
                                 }}
                               >
                                 {author.label}
@@ -273,6 +282,75 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                   className={cn(
                                     "ml-auto h-4 w-4",
                                     author.value == field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+
+              {/* status  */}
+              <FormField
+                control={form.control}
+                name="status_id"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Durum</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? statuses.find(
+                                  (status) =>
+                                    status.status_id.toString() == field.value
+                                )?.status_name
+                              : "Durum seçiniz."}
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="p-0"
+                        style={{ maxHeight: "15rem", overflow: "auto" }}
+                      >
+                        <Command>
+                          <CommandInput
+                            placeholder="Durum ara..."
+                            className="h-9"
+                          />
+                          <CommandEmpty>Durum bulunamadı.</CommandEmpty>
+                          <CommandGroup>
+                            {statuses.map((status) => (
+                              <CommandItem
+                                value={status.status_name}
+                                key={status.status_id}
+                                onSelect={() => {
+                                  form.setValue(
+                                    "status_id",
+                                    status.status_id.toString()
+                                  );
+                                }}
+                              >
+                                {status.status_name}
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    status.status_id.toString() == field.value
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
