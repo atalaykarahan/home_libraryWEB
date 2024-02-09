@@ -10,7 +10,6 @@ const PublisherTablePage = () => {
 
   useEffect(() => {
     fetchData();
-    console.log("Kitap ekleme çalıştı");
   }, []);
 
   const fetchData = async () => {
@@ -22,10 +21,9 @@ const PublisherTablePage = () => {
       }
 
       const response = res.data;
-      console.log(response);
       setPublishers(response);
     } catch (error) {
-      console.log("publisher try&catch hata -> ", error);
+      console.warn("publisher try&catch hata -> ", error);
     }
   };
 

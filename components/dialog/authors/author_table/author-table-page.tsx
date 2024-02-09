@@ -20,10 +20,9 @@ const CategoryTablePage = () => {
       }
 
       const response = res.data;
-      console.log(response);
       setcCtegories(response);
     } catch (error) {
-      console.log("Yazar try&catch hata -> ", error);
+      console.warn("Yazar try&catch hata -> ", error);
     }
   };
 

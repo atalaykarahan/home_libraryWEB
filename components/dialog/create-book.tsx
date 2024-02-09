@@ -1,14 +1,11 @@
+import { getAllAuthorsSelectClient } from "@/app/_api/services/authorService";
+import { getCategories } from "@/app/_api/services/categoryService";
+import { getAllPublisherClient } from "@/app/_api/services/publisherService";
+import { getAllStatusesClient } from "@/app/_api/services/statusService";
+import { Category } from "@/app/_models/category";
+import { Publisher } from "@/app/_models/publisher";
+import { Status } from "@/app/_models/status";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
   Command,
   CommandEmpty,
@@ -16,12 +13,12 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -31,21 +28,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { CreateBookSchema } from "@/schemas/book";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { getAllPublisherClient } from "@/app/_api/services/publisherService";
-import { getAllAuthorsSelectClient } from "@/app/_api/services/authorService";
-import { Publisher } from "@/app/_models/publisher";
-import { Category } from "@/app/_models/category";
 import MultipleSelector, { Option } from "../ui/multiple-selector";
-import { getCategories } from "@/app/_api/services/categoryService";
-import { Author } from "@/app/_models/author";
-import { Status } from "@/app/_models/status";
-import { getAllStatusesClient } from "@/app/_api/services/statusService";
+import { Textarea } from "../ui/textarea";
+import { postInsertBookClient } from "@/app/_api/services/bookService";
+import { InsertBook } from "@/app/_models/book";
+import { toast } from "sonner";
 interface CreateCategoryProps {
   openModal: boolean;
   closeModal: () => void;
@@ -65,7 +64,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
   useEffect(() => {
     fetchData();
-    console.log("Kitap ekleme çalıştı");
   }, [openModal]);
 
   const fetchData = async () => {
@@ -119,7 +117,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
       }
       //#endregion
     } catch (error) {
-      console.log("fetchData try&catch hata -> ", error);
+      console.warn("fetchData try&catch hata -> ", error);
     }
   };
 
@@ -127,18 +125,39 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
     resolver: zodResolver(CreateBookSchema),
   });
 
-  // const [loading, setLoading] = useState(false);
+  const onSubmit = async (data: z.infer<typeof CreateBookSchema>) => {
+    // console.log(data);
 
-  function onSubmit(data: z.infer<typeof CreateBookSchema>) {
-    console.log(data);
-  }
+    try {
+      const newBook: InsertBook = {
+        book_title: data.book_title,
+        author_id: parseInt(data.author_id),
+        publisher_id: parseInt(data.publisher_id ?? ""),
+        status_id: parseInt(data.status_id),
+        categories_id: data.categories.map((category: any) =>
+          parseInt(category.key)
+        ),
+        book_summary: data.book_summary,
+      };
+      const resInsertBook = await postInsertBookClient(newBook);
+      if (resInsertBook.status == 201) {
+        form.reset();
+        toast("Event has been created");
+
+        console.log("başarılı");
+      }
+
+      // console.log(resInsertBook);
+    } catch (error) {
+      console.warn("book insert error ", error);
+    }
+  };
 
   return (
     <Dialog open={openModal} onOpenChange={() => closeModal()}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="md:max-w-[825px]">
         <DialogHeader>
           <DialogTitle>Kitap Ekle</DialogTitle>
-          <DialogDescription>açıklama kısmı</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -389,6 +408,26 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                   </FormItem>
                 )}
               />
+
+              {/* summary */}
+              <FormField
+                control={form.control}
+                name="book_summary"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Özet</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Kitabın özeti"
+                        className="resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" className="w-full">
                 Oluştur
               </Button>
