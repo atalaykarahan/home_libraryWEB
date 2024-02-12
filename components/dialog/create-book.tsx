@@ -143,11 +143,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
       if (resInsertBook.status == 201) {
         form.reset();
         toast("Event has been created");
-
-        console.log("başarılı");
       }
-
-      // console.log(resInsertBook);
     } catch (error) {
       console.warn("book insert error ", error);
     }
