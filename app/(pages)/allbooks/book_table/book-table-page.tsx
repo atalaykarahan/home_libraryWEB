@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Publisher } from "../../../_models/publisher";
 import { BookTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getAllBooksClient } from "@/app/_api/services/bookService";
@@ -20,20 +19,21 @@ const BookTablePage = () => {
         throw new Error("User ile ilgili bir hata oluştu");
       }
 
-      console.log(res.data);
-      // const formattedResponse:BookTableModel[] =
-
-      const test = res.data.map((b:any) => {
-        const allah = {
-          text: b.book_title,
+      //we formatted response type for table component
+      const formattedResponse = res.data.map((b:any) => {
+        const myFormat = {
+          book_title: b.book_title,
+          author: b.AUTHOR.author_name + " " + (b.AUTHOR.author_surname == null ? "" : b.AUTHOR.author_surname),
+          publisher: b.PUBLISHER == null ? "" : b.PUBLISHER.publisher_name,
+          status: b.STATUS.status_name
         }
-        return allah
+        return myFormat
       });
 
-      console.log("benim deneme kısmı",test);
+      console.log("benim deneme kısmı",formattedResponse);
 
-      const response = res.data;
-      setBooks(response);
+      // const response = res.data;
+      setBooks(formattedResponse);
     } catch (error) {
       console.warn("publisher try&catch hata -> ", error);
     }
@@ -45,7 +45,5 @@ const BookTablePage = () => {
     </div>
   );
 };
-
-
 
 export default BookTablePage;
