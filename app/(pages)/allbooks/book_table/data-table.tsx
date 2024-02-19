@@ -35,6 +35,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <Button className="mb-5" variant="default">
+        Düzenle
+      </Button>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

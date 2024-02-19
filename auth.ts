@@ -46,8 +46,14 @@ export const {
       // console.log("jwt kısmındaki token kodu",token);
       if (!token.sub) return token;
 
-      await getLoggedInUserServer().then((value: any) => {
-        token.role = value.user_authority_id;
+      await getLoggedInUserServer().then(async (value: any) => {
+        if(value.error){
+          await signOut();
+          console.log("error içine düştü");
+          return;
+        }else {
+          token.role = value.user_authority_id;
+        }
       });
       return token;
     },
