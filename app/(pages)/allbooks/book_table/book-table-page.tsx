@@ -22,6 +22,7 @@ const BookTablePage = () => {
       //we formatted response type for table component
       const formattedResponse = res.data.map((b:any) => {
         const myFormat = {
+          book_id: b.book_id,
           book_title: b.book_title,
           author: b.AUTHOR.author_name + " " + (b.AUTHOR.author_surname == null ? "" : b.AUTHOR.author_surname),
           publisher: b.PUBLISHER == null ? "" : b.PUBLISHER.publisher_name,
@@ -29,8 +30,6 @@ const BookTablePage = () => {
         }
         return myFormat
       });
-
-      console.log("benim deneme kısmı",formattedResponse);
 
       // const response = res.data;
       setBooks(formattedResponse);
