@@ -1,6 +1,8 @@
+import MyBookTablePage from "./my_book_table/my-book-table-page";
+
 const MyBooksPage = () => {
     return ( <div>
-        <p>my books sayfası</p>
+       <MyBookTablePage/>
     </div> );
 }
  

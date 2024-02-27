@@ -1,9 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-// import { Checkbox } from "@/components/ui/checkbox"
 
-export type BookTableModel = {
+export type MyBookTableModel = {
   book_id: number;
   book_title: string;
   author: string;
@@ -11,7 +10,7 @@ export type BookTableModel = {
   status: string;
 };
 
-export const columns: ColumnDef<BookTableModel>[] = [
+export const columns: ColumnDef<MyBookTableModel>[] = [
   {
     accessorKey: "book_title",
     header: "Kitap",

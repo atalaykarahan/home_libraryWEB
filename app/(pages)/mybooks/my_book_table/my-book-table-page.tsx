@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BookTableModel, columns } from "./columns";
+import { MyBookTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getAllBooksClient } from "@/app/_api/services/bookService";
+import { getMyBooks } from "@/app/_api/services/readingService";
 
-const BookTablePage = () => {
-  const [books, setBooks] = useState<BookTableModel[]>([]);
+
+const MyBookTablePage = () => {
+  const [myBooks, setMyBooks] = useState<MyBookTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -13,26 +14,24 @@ const BookTablePage = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllBooksClient();
+      const res = await getMyBooks();
 
       if (res.status !== 200) {
-        throw new Error("User ile ilgili bir hata oluştu");
+        throw new Error("Reading ile ilgili bir hata oluştu");
       }
 
       //we formatted response type for table component
-      const formattedResponse = res.data.map((b:any) => {
+      const formattedResponse = res.data.map((m:any) => {
         const myFormat = {
-          book_id: b.book_id,
-          book_title: b.book_title,
-          author: b.AUTHOR.author_name + " " + (b.AUTHOR.author_surname == null ? "" : b.AUTHOR.author_surname),
-          publisher: b.PUBLISHER == null ? "" : b.PUBLISHER.publisher_name,
-          status: b.STATUS.status_name
+          book_id: m.BOOK.book_id,
+          book_title: m.BOOK.book_title,
+          author: m.BOOK.AUTHOR.author_name + " " + (m.BOOK.AUTHOR.author_surname == null ? "" : m.BOOK.AUTHOR.author_surname),
+          publisher: m.BOOK.PUBLISHER == null ? "" : m.BOOK.PUBLISHER.publisher_name,
+          status: m.STATUS.status_name
         }
         return myFormat
       });
-
-      // const response = res.data;
-      setBooks(formattedResponse);
+      setMyBooks(formattedResponse);
     } catch (error) {
       console.warn("publisher try&catch hata -> ", error);
     }
@@ -40,9 +39,9 @@ const BookTablePage = () => {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={books} />
+      <DataTable columns={columns} data={myBooks} />
     </div>
   );
 };
 
-export default BookTablePage;
+export default MyBookTablePage;
