@@ -1,4 +1,5 @@
 "use client";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,6 +9,8 @@ const NavbarLinks = () => {
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
+
+  const user = useCurrentUser();
 
   return (
     <div className="flex space-x-4">
@@ -44,6 +47,19 @@ const NavbarLinks = () => {
       >
         Üyeler
       </Link>
+      {user ? (
+        <Link
+          className={classNames(
+            pathname === "/mybooks"
+              ? "bg-gray-900 text-white"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+            "rounded-md px-3 py-2 text-sm font-medium"
+          )}
+          href="/mybooks"
+        >
+          Kitaplarım
+        </Link>
+      ) : undefined}
     </div>
   );
 };

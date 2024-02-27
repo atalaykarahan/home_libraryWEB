@@ -1,4 +1,3 @@
-// "use client";
 import { LogoutButton } from "@/components/auth/logout-button";
 import Authors from "@/components/dialog/authors/authors";
 import Categories from "@/components/dialog/categories/categories";
