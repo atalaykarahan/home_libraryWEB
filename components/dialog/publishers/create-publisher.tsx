@@ -1,13 +1,6 @@
 import { getInsertPublisherClient } from "@/app/_api/services/publisherService";
-import { Publisher } from "@/app/_models/publisher";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,

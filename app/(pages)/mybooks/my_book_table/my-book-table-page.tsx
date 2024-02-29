@@ -23,6 +23,7 @@ const MyBookTablePage = () => {
       //we formatted response type for table component
       const formattedResponse = res.data.map((m:any) => {
         const myFormat = {
+          reading_id:m.reading_id,
           book_id: m.BOOK.book_id,
           book_title: m.BOOK.book_title,
           author: m.BOOK.AUTHOR.author_name + " " + (m.BOOK.AUTHOR.author_surname == null ? "" : m.BOOK.AUTHOR.author_surname),

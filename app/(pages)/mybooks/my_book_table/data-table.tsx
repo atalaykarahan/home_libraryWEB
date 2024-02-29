@@ -7,7 +7,6 @@ import {
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
-  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -28,26 +27,15 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-
   const table = useReactTable({
     data,
     columns,
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    state: {
-      columnVisibility,
-    },
   });
-
- 
 
   return (
     <div>
-     
-    
-    
       <div className="rounded-md border">
         <Table>
           <TableHeader>
