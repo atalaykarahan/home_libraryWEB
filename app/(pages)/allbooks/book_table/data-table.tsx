@@ -44,21 +44,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const handleDeleteBooks = () => {
-    if (table.getFilteredSelectedRowModel().rows.length > 0) {
-      const selectedRows:any = table.getFilteredSelectedRowModel().rows;
-      const toBeDeleted = selectedRows.map((row: any) => row.original.book_id);
-      console.log(toBeDeleted);
-      //after this line you can be delete selected books
-    }else {
-      //show toaster at this line
-    }
-  };
+  // const handleDeleteBooks = () => {
+  //   if (table.getFilteredSelectedRowModel().rows.length > 0) {
+  //     const selectedRows:any = table.getFilteredSelectedRowModel().rows;
+  //     const toBeDeleted = selectedRows.map((row: any) => row.original.book_id);
+  //     console.log(toBeDeleted);
+  //     //after this line you can be delete selected books
+  //   }else {
+  //     //show toaster at this line
+  //   }
+  // };
 
   return (
     <div>
       {/* tool buttons */}
-      <Button className="mb-5" variant="default">
+      {/* <Button className="mb-5" variant="default">
         Düzenle
       </Button>
       <Button
@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
         onClick={handleDeleteBooks}
       >
         Sil
-      </Button>
+      </Button> */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -118,8 +118,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {table.getFilteredSelectedRowModel().rows.length} of{" "}
-      {table.getFilteredRowModel().rows.length} row(s) selected.
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
