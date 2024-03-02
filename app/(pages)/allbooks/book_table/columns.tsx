@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { TbDots } from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -30,7 +31,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { ZodCatch, z } from "zod";
 import { Status } from "@/app/_models/status";
 import {
   Popover,
@@ -45,7 +46,8 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { getAllStatusesClient } from "@/app/_api/services/statusService";
+import { getMyStatusesClient } from "@/app/_api/services/statusService";
+import { addMyLibraryClient } from "@/app/_api/services/readingService";
 
 export type BookTableModel = {
   book_id: number;
@@ -54,6 +56,8 @@ export type BookTableModel = {
   publisher: string;
   status: string;
 };
+
+const user = useCurrentUser();
 
 export const columns: ColumnDef<BookTableModel>[] = [
   {
@@ -90,16 +94,44 @@ export const columns: ColumnDef<BookTableModel>[] = [
       }, [addMyLibrary]);
 
       const fetchData = async () => {
-        const resStatus = await getAllStatusesClient();
+        const resStatus = await getMyStatusesClient();
 
         if (resStatus.status !== 200) {
           throw new Error("author ile ilgili bir hata oluştu");
         }
+
+        //if someone already using this book we should not add it to reading library again
+        if(selectedBook.status == 'Kullanılıyor'){
+          resStatus.data = resStatus.data.filter((s:any) => s.status_id !== "1");
+        }
+
         setStatuses(resStatus.data);
       };
 
       const onSubmit = async (data: z.infer<typeof AddMyLibrarySchema>) => {
-        console.log(data);
+        try {
+          const res = await addMyLibraryClient(
+            selectedBook.book_id,
+            parseInt(data.status_id)
+          );
+          if (res.status !== 201) {
+            throw new Error("addMyLibrary ile ilgili bir hata oluştu");
+          } else {
+            console.log(
+              "sonuç başarılı olmalı kitaplarım kısmını test et",
+              res
+            );
+          }
+        } catch (error) {
+          console.warn("addMyReading try&catch hata -> ", error);
+        }
+
+        console.log("status bilgileri: ", data);
+        console.log(
+          "kitap bilgileri",
+          selectedBook.book_title,
+          selectedBook.book_id
+        );
       };
 
       return (
