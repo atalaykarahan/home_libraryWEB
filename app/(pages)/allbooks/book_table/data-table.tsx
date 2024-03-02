@@ -9,6 +9,7 @@ import {
   getPaginationRowModel,
   VisibilityState,
 } from "@tanstack/react-table";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 import {
   Table,
@@ -44,30 +45,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  // const handleDeleteBooks = () => {
-  //   if (table.getFilteredSelectedRowModel().rows.length > 0) {
-  //     const selectedRows:any = table.getFilteredSelectedRowModel().rows;
-  //     const toBeDeleted = selectedRows.map((row: any) => row.original.book_id);
-  //     console.log(toBeDeleted);
-  //     //after this line you can be delete selected books
-  //   }else {
-  //     //show toaster at this line
-  //   }
-  // };
+  const user = useCurrentUser();
+  useEffect(() => {
+    //if user not loggedin than we hide the actions button in grid
+    table
+      .getAllColumns()
+      .filter((column) => column.getCanHide())
+      .map((column) => {
+        if (column.id == "actions" && !user) {
+          column.toggleVisibility(false);
+        }
+      });
+  }, []);
 
   return (
     <div>
-      {/* tool buttons */}
-      {/* <Button className="mb-5" variant="default">
-        Düzenle
-      </Button>
-      <Button
-        className="mb-5 ms-5"
-        variant="destructive"
-        onClick={handleDeleteBooks}
-      >
-        Sil
-      </Button> */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

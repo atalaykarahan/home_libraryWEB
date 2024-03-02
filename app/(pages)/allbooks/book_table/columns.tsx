@@ -57,7 +57,6 @@ export type BookTableModel = {
   status: string;
 };
 
-const user = useCurrentUser();
 
 export const columns: ColumnDef<BookTableModel>[] = [
   {
