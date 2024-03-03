@@ -86,6 +86,26 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  style={{
+                    backgroundColor: (() => {
+                      let color = "inherit";
+                      row.getVisibleCells().find((cell) => {
+                        const value = cell.getValue();
+                        switch (value) {
+                          case "Okunuyor":
+                            color = "rgb(254, 166, 166)";
+                            break;
+                          case "Kitaplıkta":
+                            color = "rgb(199, 236, 199)";
+                            break;
+                          case "Kitaplıkta değil":
+                            color = "lightyellow";
+                            break;
+                        }
+                      });
+                      return color;
+                    })(),
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
