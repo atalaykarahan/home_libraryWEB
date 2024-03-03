@@ -64,6 +64,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import MyBookTablePage from "./my-book-table-page";
+import EventEmitter from "events";
 
 export type MyBookTableModel = {
   reading_id: number;
@@ -72,10 +75,6 @@ export type MyBookTableModel = {
   author: string;
   publisher: string;
   status: string;
-};
-
-const handleRemoveBook = (data: any) => {
-  console.log(data);
 };
 
 const removeBook = async (reading_id: number) => {
@@ -87,6 +86,7 @@ const removeBook = async (reading_id: number) => {
     console.log("silme işlemi başarılı tabloyu yenilemen lazım");
   }
 };
+export const eventEmitter = new EventEmitter();
 
 export const columns: ColumnDef<MyBookTableModel>[] = [
   {
@@ -111,6 +111,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
       const myBook = row.original;
       const [removeBookDialog, setRemoveBookDialog] = useState(false);
       const [openReadingDialog, setOpenReadingDialog] = useState(false);
+      const [statusPopover, setStatusPopover] = useState(false);
       const [statuses, setStatuses] = useState<Status[]>([]);
 
       const form = useForm<z.infer<typeof EditMyReadingSchema>>({
@@ -151,6 +152,21 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
             parseInt(data.status_id ?? "0"),
             data.comment
           );
+          if (resStatus.status === 200) {
+            //this is for update grid
+            eventEmitter.emit("updateGrid");
+
+            setOpenReadingDialog(false);
+            toast.success(`GÜNCELLEME BAŞARILI`,{
+              description: `${myBook.book_title}`,
+              position: "top-right",
+              style:{
+                backgroundColor:"hsl(143, 85%, 96%)",
+                color:"hsl(140, 100%, 27%)",
+                borderColor:"hsl(145, 92%, 91%)",
+              }
+            });
+          }
           console.log("dönen yanıt şu şekilde --> ", resStatus);
         } catch (error) {
           console.warn("addMyReading try&catch hata -> ", error);
@@ -179,7 +195,9 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
           {/* Edit reading dialog */}
           <Dialog
             open={openReadingDialog}
-            onOpenChange={() => setOpenReadingDialog(false)}
+            onOpenChange={() => {
+              setOpenReadingDialog(false), form.reset();
+            }}
           >
             <DialogContent>
               <DialogHeader>
@@ -198,7 +216,10 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
                         render={({ field }) => (
                           <FormItem className="flex flex-col">
                             <FormLabel>Durum</FormLabel>
-                            <Popover>
+                            <Popover
+                              open={statusPopover}
+                              onOpenChange={setStatusPopover}
+                            >
                               <PopoverTrigger asChild>
                                 <FormControl>
                                   <Button
@@ -243,6 +264,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
                                             "status_id",
                                             status.status_id.toString()
                                           );
+                                          setStatusPopover(false);
                                         }}
                                       >
                                         {status.status_name}
@@ -272,7 +294,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
                             <FormLabel>Notlarım</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Kitap hakkında herhangi bir düşünce veya notun varsa yazabilirsin."
+                                placeholder="Notların..."
                                 className="resize-none"
                                 {...field}
                               />

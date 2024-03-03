@@ -1,18 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MyBookTableModel, columns } from "./columns";
+import { MyBookTableModel, columns, eventEmitter } from "./columns";
 import { DataTable } from "./data-table";
 import { getMyBooks } from "@/app/_api/services/readingService";
-
 
 const MyBookTablePage = () => {
   const [myBooks, setMyBooks] = useState<MyBookTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
+
+    //this is for when user update his reading;
+    eventEmitter.on("updateGrid", fetchData);
+    return () => {
+      eventEmitter.off("updateGrid", fetchData);
+    };
   }, []);
 
   const fetchData = async () => {
+    console.log("harbi yeinlendi");
     try {
       const res = await getMyBooks();
 
@@ -21,16 +27,22 @@ const MyBookTablePage = () => {
       }
 
       //we formatted response type for table component
-      const formattedResponse = res.data.map((m:any) => {
+      const formattedResponse = res.data.map((m: any) => {
         const myFormat = {
-          reading_id:m.reading_id,
+          reading_id: m.reading_id,
           book_id: m.BOOK.book_id,
           book_title: m.BOOK.book_title,
-          author: m.BOOK.AUTHOR.author_name + " " + (m.BOOK.AUTHOR.author_surname == null ? "" : m.BOOK.AUTHOR.author_surname),
-          publisher: m.BOOK.PUBLISHER == null ? "" : m.BOOK.PUBLISHER.publisher_name,
-          status: m.STATUS.status_name
-        }
-        return myFormat
+          author:
+            m.BOOK.AUTHOR.author_name +
+            " " +
+            (m.BOOK.AUTHOR.author_surname == null
+              ? ""
+              : m.BOOK.AUTHOR.author_surname),
+          publisher:
+            m.BOOK.PUBLISHER == null ? "" : m.BOOK.PUBLISHER.publisher_name,
+          status: m.STATUS.status_name,
+        };
+        return myFormat;
       });
       setMyBooks(formattedResponse);
     } catch (error) {
