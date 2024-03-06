@@ -49,6 +49,8 @@ import {
 import { cn } from "@/lib/utils";
 import { getMyStatusesClient } from "@/app/_api/services/statusService";
 import { addMyLibraryClient } from "@/app/_api/services/readingService";
+import EventEmitter from "events";
+import { toast } from "sonner";
 
 export type BookTableModel = {
   book_id: number;
@@ -58,7 +60,7 @@ export type BookTableModel = {
   status: string;
 };
 
-
+export const eventEmitter = new EventEmitter();
 export const columns: ColumnDef<BookTableModel>[] = [
   {
     accessorKey: "book_title",
@@ -112,6 +114,7 @@ export const columns: ColumnDef<BookTableModel>[] = [
       const selectedBook = row.original;
       const [addMyLibrary, setAddMyLibrary] = useState(false);
       const [statuses, setStatuses] = useState<Status[]>([]);
+    
 
       const form = useForm<z.infer<typeof AddMyLibrarySchema>>({
         resolver: zodResolver(AddMyLibrarySchema),
@@ -145,15 +148,30 @@ export const columns: ColumnDef<BookTableModel>[] = [
             parseInt(data.status_id)
           );
           if (res.status !== 201) {
+            toast.error(`Bir hata meydana geldi`, {
+              description: `Daha sonra tekrar deneyin!`,
+              position: "top-right",
+            });
             throw new Error("addMyLibrary ile ilgili bir hata oluştu");
           } else {
-            console.log(
-              "sonuç başarılı olmalı kitaplarım kısmını test et",
-              res
-            );
+            eventEmitter.emit("updateGrid");
+            setAddMyLibrary(false);
+            toast.success(`KİTAP KÜTÜPHANENE EKLENDİ`, {
+              description: `${selectedBook.book_title}`,
+              position: "top-right",
+              style: {
+                backgroundColor: "hsl(143, 85%, 96%)",
+                color: "hsl(140, 100%, 27%)",
+                borderColor: "hsl(145, 92%, 91%)",
+              },
+            });
           }
         } catch (error) {
-          console.warn("addMyReading try&catch hata -> ", error);
+          toast.error(`HATA`, {
+            description: `${error}`,
+            position: "top-right",
+          });
+          throw new Error(`addMyReading try&catch hata -> ${error}`);
         }
 
         console.log("status bilgileri: ", data);

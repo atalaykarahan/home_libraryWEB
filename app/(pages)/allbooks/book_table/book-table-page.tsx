@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BookTableModel, columns } from "./columns";
+import { BookTableModel, columns, eventEmitter } from "./columns";
 import { DataTable } from "./data-table";
 import { getAllBooksClient } from "@/app/_api/services/bookService";
 
@@ -9,6 +9,11 @@ const BookTablePage = () => {
 
   useEffect(() => {
     fetchData();
+     //this is for when user update his reading;
+     eventEmitter.on("updateGrid", fetchData);
+     return () => {
+       eventEmitter.off("updateGrid", fetchData);
+     };
   }, []);
 
   const fetchData = async () => {

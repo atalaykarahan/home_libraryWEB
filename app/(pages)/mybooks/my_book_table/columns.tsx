@@ -161,14 +161,14 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
               description: `Daha sonra tekrar deneyin!`,
               position: "top-right",
             });
-            console.warn("updateMyReading error ->", resStatus);
+            throw new Error(`updateMyReading error -> ${resStatus}`);
           }
         } catch (error) {
           toast.error(`HATA`, {
             description: `${error}`,
             position: "top-right",
           });
-          console.warn("addMyReading try&catch hata -> ", error);
+          throw new Error(`addMyReading try&catch hata -> ${error}`);
         }
       };
 
@@ -198,7 +198,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
             description: `${error}`,
             position: "top-right",
           });
-          console.warn("removeMyReading try&catch hata -> ", error);
+          throw new Error(`removeMyReading try&catch hata -> ${error}`);
         }
       };
 
