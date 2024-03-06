@@ -14,8 +14,8 @@ export const addMyLibraryClient = (book_id: number, status_id: number) => {
 
 export const updateMyReadingClient = (reading_id:number, status_id?:number, comment?:string) => {
   const props = {
-    reading_id: reading_id,
-    status_id: status_id,
+    reading_id: reading_id.toString(),
+    status_id: status_id?.toString(),
     comment:comment
   }
   return axios.patch(`/readings`, props);

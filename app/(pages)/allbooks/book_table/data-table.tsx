@@ -8,6 +8,10 @@ import {
   useReactTable,
   getPaginationRowModel,
   VisibilityState,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  SortingState,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
@@ -19,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,6 +36,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data,
@@ -39,9 +46,15 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       rowSelection,
       columnVisibility,
+      columnFilters,
+      sorting,
     },
   });
 
@@ -60,6 +73,18 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Kitap ara..."
+          value={
+            (table.getColumn("book_title")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("book_title")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

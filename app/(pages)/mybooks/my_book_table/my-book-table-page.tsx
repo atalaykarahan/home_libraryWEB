@@ -18,7 +18,6 @@ const MyBookTablePage = () => {
   }, []);
 
   const fetchData = async () => {
-    console.log("harbi yeinlendi");
     try {
       const res = await getMyBooks();
 

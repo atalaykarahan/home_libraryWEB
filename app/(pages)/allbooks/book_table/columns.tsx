@@ -23,6 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { PiArrowsDownUp } from "react-icons/pi";
 import {
   Form,
   FormControl,
@@ -65,15 +66,45 @@ export const columns: ColumnDef<BookTableModel>[] = [
   },
   {
     accessorKey: "author",
-    header: "Yazar",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Yazar
+          <PiArrowsDownUp className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "publisher",
-    header: "Yayınevi",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Yayınevi
+          <PiArrowsDownUp className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "status",
-    header: "Durumu",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Durumu
+          <PiArrowsDownUp className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     id: "actions",
@@ -100,7 +131,7 @@ export const columns: ColumnDef<BookTableModel>[] = [
         }
 
         //if someone already using this book we should not add it to reading library again
-        if(selectedBook.status == 'Kullanılıyor'){
+        if(selectedBook.status == 'Okunuyor'){
           resStatus.data = resStatus.data.filter((s:any) => s.status_id !== "1");
         }
 
