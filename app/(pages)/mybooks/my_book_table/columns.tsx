@@ -124,6 +124,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
         setStatuses(resStatus.data);
         //#endregion
 
+        
         //#region reading info
         const resReading = await getMyReading(myBook.reading_id);
         if (resReading.status !== 200) {

@@ -28,6 +28,9 @@ const CategoryTablePage = () => {
 
       const response = res.data;
       setcCtegories(response);
+
+
+      
     } catch (error) {
       console.warn("kategori try&catch hata -> ", error);
     }
