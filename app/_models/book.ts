@@ -11,9 +11,9 @@ export interface Book {
 
 export interface InsertBook {
   book_title: string;
-  author_id: number;
-  publisher_id?: number;
-  status_id: number;
-  categories_id: number[];
+  author_id: string;
+  publisher_id?: string;
+  status_id: string;
+  categories_id: string[];
   book_summary: string;
 }

@@ -131,14 +131,15 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
     try {
       const newBook: InsertBook = {
         book_title: data.book_title,
-        author_id: parseInt(data.author_id),
-        publisher_id: parseInt(data.publisher_id ?? ""),
-        status_id: parseInt(data.status_id),
+        author_id: data.author_id,
+        publisher_id: data.publisher_id ?? "",
+        status_id: data.status_id,
         categories_id: data.categories.map((category: any) =>
-          parseInt(category.key)
+          category.key
         ),
         book_summary: data.book_summary,
       };
+      console.log("kitap bu ",newBook);
       const resInsertBook = await postInsertBookClient(newBook);
       if (resInsertBook.status == 201) {
         form.reset();

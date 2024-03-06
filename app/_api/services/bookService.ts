@@ -8,3 +8,7 @@ export const postInsertBookClient = (book: InsertBook) => {
 export const getAllBooksClient = () => {
   return axios.get(`/books`);
 };
+
+export const deleteBookClient = (book_id: number) => {
+  return axios.delete(`/books/${book_id}`);
+};

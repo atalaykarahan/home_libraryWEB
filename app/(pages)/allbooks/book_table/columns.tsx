@@ -51,6 +51,17 @@ import { getMyStatusesClient } from "@/app/_api/services/statusService";
 import { addMyLibraryClient } from "@/app/_api/services/readingService";
 import EventEmitter from "events";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { deleteBookClient } from "@/app/_api/services/bookService";
 
 export type BookTableModel = {
   book_id: number;
@@ -77,7 +88,7 @@ export const columns: ColumnDef<BookTableModel>[] = [
           Yazar
           <PiArrowsDownUp className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -91,7 +102,7 @@ export const columns: ColumnDef<BookTableModel>[] = [
           Yayınevi
           <PiArrowsDownUp className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -105,7 +116,7 @@ export const columns: ColumnDef<BookTableModel>[] = [
           Durumu
           <PiArrowsDownUp className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -113,8 +124,8 @@ export const columns: ColumnDef<BookTableModel>[] = [
     cell: ({ row }) => {
       const selectedBook = row.original;
       const [addMyLibrary, setAddMyLibrary] = useState(false);
+      const [deleteBookDialog, setDeleteBookDialog] = useState<boolean>(false);
       const [statuses, setStatuses] = useState<Status[]>([]);
-    
 
       const form = useForm<z.infer<typeof AddMyLibrarySchema>>({
         resolver: zodResolver(AddMyLibrarySchema),
@@ -134,8 +145,10 @@ export const columns: ColumnDef<BookTableModel>[] = [
         }
 
         //if someone already using this book we should not add it to reading library again
-        if(selectedBook.status == 'Okunuyor'){
-          resStatus.data = resStatus.data.filter((s:any) => s.status_id !== "1");
+        if (selectedBook.status == "Okunuyor") {
+          resStatus.data = resStatus.data.filter(
+            (s: any) => s.status_id !== "1"
+          );
         }
 
         setStatuses(resStatus.data);
@@ -182,6 +195,19 @@ export const columns: ColumnDef<BookTableModel>[] = [
         );
       };
 
+      const deleteBook = async (book_id: number) => {
+        try {
+          const res = await deleteBookClient(book_id);
+          console.log(res);
+          
+        } catch (error) {
+          
+        }
+
+
+
+      };
+
       return (
         <>
           <DropdownMenu>
@@ -204,7 +230,9 @@ export const columns: ColumnDef<BookTableModel>[] = [
                 Kitaplığıma Ekle
               </DropdownMenuItem>
               <DropdownMenuItem>Düzenle</DropdownMenuItem>
-              <DropdownMenuItem>Sil</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setDeleteBookDialog(true)}>
+                Sil
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -304,6 +332,34 @@ export const columns: ColumnDef<BookTableModel>[] = [
               </DialogHeader>
             </DialogContent>
           </Dialog>
+
+          <AlertDialog
+            open={deleteBookDialog}
+            onOpenChange={() => setDeleteBookDialog(false)}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  "{selectedBook.book_title}" kitabını kalıcı olarak silmek
+                  istediğine emin misin?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Bu kitabı kaldırırsan bu işlemi geri alamzsın ve eğer bu
+                  kitabı kitaplığına eklemiş kimse yoksa, kitap kalıcı olarak
+                  tüm kitaplıktan kaldırılıcaktır.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>İptal</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-600"
+                  onClick={() => deleteBook(selectedBook.book_id)}
+                >
+                  Sil
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </>
       );
     },
