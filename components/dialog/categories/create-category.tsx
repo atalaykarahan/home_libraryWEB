@@ -14,6 +14,9 @@ import { CreateCategorySchema } from "@/schemas/category";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import EventEmitter from "events";
+
+export const eventEmitter = new EventEmitter();
 
 const CreateCategory: React.FC = ({}) => {
   const form = useForm<z.infer<typeof CreateCategorySchema>>({
@@ -24,12 +27,36 @@ const CreateCategory: React.FC = ({}) => {
   });
 
   const onSubmit = async (values: z.infer<typeof CreateCategorySchema>) => {
-    console.log(values);
-    const res = await getInsertCategoryClient(values.category_name);
-    if (res.status == 201) {
-      form.reset();
-      toast("Event has been created");
+    try {
+      console.log(values);
+      const res = await getInsertCategoryClient(values.category_name);
+      if (res.status == 201) {
+        form.reset();
+        eventEmitter.emit("updateGrid");
+        toast.success(`YENİ KATEGORİ EKLENDİ`, {
+          description: `${values.category_name}`,
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+      }else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error("crateCategory ile ilgili bir hata oluştu");
+      }
+    } catch (error) {
+      toast.error(`HATA`, {
+        description: `${error}`,
+        position: "top-right",
+      });
+      throw new Error(`crateCategory try&catch hata -> ${error}`);
     }
+   
   };
   return (
     <Form {...form}>

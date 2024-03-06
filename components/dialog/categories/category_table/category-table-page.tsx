@@ -3,12 +3,19 @@ import { useEffect, useState } from "react";
 import { CategoryTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getCategoriesAndBooksCount } from "@/app/_api/services/categoryService";
+import { eventEmitter } from "../create-category";
 
 const CategoryTablePage = () => {
   const [categories, setcCtegories] = useState<CategoryTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
+
+    eventEmitter.on("updateGrid", fetchData);
+    return () => {
+      eventEmitter.off("updateGrid", fetchData);
+    };
+
   }, []);
 
   const fetchData = async () => {
