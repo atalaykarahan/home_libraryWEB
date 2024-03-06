@@ -77,15 +77,6 @@ export type MyBookTableModel = {
   status: string;
 };
 
-const removeBook = async (reading_id: number) => {
-  console.log("kaldırılacak olan reading =", reading_id);
-  const resRemoveBook = await removeMyBook(reading_id);
-  if (resRemoveBook.status !== 200) {
-    throw new Error("Reading silinirken bir hata oluştu");
-  } else {
-    console.log("silme işlemi başarılı tabloyu yenilemen lazım");
-  }
-};
 export const eventEmitter = new EventEmitter();
 
 export const columns: ColumnDef<MyBookTableModel>[] = [
@@ -146,7 +137,6 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
 
       const onSubmit = async (data: z.infer<typeof EditMyReadingSchema>) => {
         try {
-          console.log(data, myBook.reading_id);
           const resStatus = await updateMyReadingClient(
             myBook.reading_id,
             parseInt(data.status_id ?? "0"),
@@ -157,19 +147,58 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
             eventEmitter.emit("updateGrid");
 
             setOpenReadingDialog(false);
-            toast.success(`GÜNCELLEME BAŞARILI`,{
+            toast.success(`GÜNCELLEME BAŞARILI`, {
               description: `${myBook.book_title}`,
               position: "top-right",
-              style:{
-                backgroundColor:"hsl(143, 85%, 96%)",
-                color:"hsl(140, 100%, 27%)",
-                borderColor:"hsl(145, 92%, 91%)",
-              }
+              style: {
+                backgroundColor: "hsl(143, 85%, 96%)",
+                color: "hsl(140, 100%, 27%)",
+                borderColor: "hsl(145, 92%, 91%)",
+              },
             });
+          } else {
+            toast.error(`Bir hata meydana geldi`, {
+              description: `Daha sonra tekrar deneyin!`,
+              position: "top-right",
+            });
+            console.warn("updateMyReading error ->", resStatus);
           }
-          console.log("dönen yanıt şu şekilde --> ", resStatus);
         } catch (error) {
+          toast.error(`HATA`, {
+            description: `${error}`,
+            position: "top-right",
+          });
           console.warn("addMyReading try&catch hata -> ", error);
+        }
+      };
+
+      const removeBook = async (reading_id: number) => {
+        try {
+          const resRemoveBook = await removeMyBook(reading_id);
+          if (resRemoveBook.status !== 200) {
+            toast.error(`Bir hata meydana geldi`, {
+              description: `Daha sonra tekrar deneyin!`,
+              position: "top-right",
+            });
+            throw new Error("Reading silinirken bir hata oluştu");
+          } else {
+            toast.success(`KALDIRMA BAŞARILI`, {
+              description: `${myBook.book_title}`,
+              position: "top-right",
+              style: {
+                backgroundColor: "hsl(143, 85%, 96%)",
+                color: "hsl(140, 100%, 27%)",
+                borderColor: "hsl(145, 92%, 91%)",
+              },
+            });
+            eventEmitter.emit("updateGrid");
+          }
+        } catch (error) {
+          toast.error(`HATA`, {
+            description: `${error}`,
+            position: "top-right",
+          });
+          console.warn("removeMyReading try&catch hata -> ", error);
         }
       };
 
