@@ -26,20 +26,6 @@ const CategoryTablePage = () => {
         throw new Error("Yazar ile ilgili bir hata oluştu");
       }
 
-      // const response = res.data;
-      // console.log(response);
-
-      // const formattedReponse = res.data.map((a:any) => {
-      //   const myFormat = {
-      //     author_id: a.AUTHOR.author_id,
-      //     author_name: a.AUTHOR.author_name,
-      //     author_surname: a.AUTHOR.author_surname,
-      //     bookCount: a.bookCount,
-      //   }
-      //   return myFormat;
-      // })
-
-
       setAuthors(res.data);
     } catch (error) {
       console.warn("Yazar try&catch hata -> ", error);
