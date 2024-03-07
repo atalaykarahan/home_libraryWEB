@@ -28,7 +28,6 @@ const CreateCategory: React.FC = ({}) => {
 
   const onSubmit = async (values: z.infer<typeof CreateCategorySchema>) => {
     try {
-      console.log(values);
       const res = await getInsertCategoryClient(values.category_name);
       if (res.status == 201) {
         form.reset();

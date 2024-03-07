@@ -14,6 +14,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CreateAuthorSchema } from "@/schemas/author";
 import { getInsertAuthorClient } from "@/app/_api/services/authorService";
+import EventEmitter from "events";
+
+
+
+export const eventEmitter = new EventEmitter();
 
 const CreateAuthor: React.FC = ({}) => {
   const form = useForm<z.infer<typeof CreateAuthorSchema>>({
@@ -25,14 +30,40 @@ const CreateAuthor: React.FC = ({}) => {
   });
 
   const onSubmit = async (values: z.infer<typeof CreateAuthorSchema>) => {
-    const res = await getInsertAuthorClient(
-      values.author_name,
-      values.author_surname
-    );
-    if (res.status == 201) {
-      form.reset();
-      toast("Event has been created");
+
+    try {
+      const res = await getInsertAuthorClient(
+        values.author_name,
+        values.author_surname
+      );
+      if (res.status == 201) {
+        form.reset();
+        eventEmitter.emit("updateGrid");
+        toast.success(`YENİ YAZAR EKLENDİ`, {
+          description: `${values.author_name} ${values.author_surname}`,
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+      }else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error("createAuthor ile ilgili bir hata oluştu");
+      }
+    } catch (error) {
+      toast.error(`HATA`, {
+        description: `${error}`,
+        position: "top-right",
+      });
+      throw new Error(`crateAuthor try&catch hata -> ${error}`);
     }
+
+   
   };
   return (
     <Form {...form}>

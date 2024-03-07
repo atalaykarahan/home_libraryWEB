@@ -19,3 +19,20 @@ export const getAllAuthorsClient = () => {
 export const getAllAuthorsSelectClient = () => {
   return axios.get(`/authors/select`);
 };
+
+export const patchAuthorClient = (
+  author_id: string,
+  author_name: string,
+  author_surname: string
+) => {
+  const props = {
+    author_id: author_id,
+    author_name: author_name,
+    author_surname: author_surname,
+  };
+  return axios.patch(`/authors`, props);
+};
+
+export const deleteAuthorClient = (author_id: string) => {
+  return axios.delete(`/authors/${author_id}`);
+};
