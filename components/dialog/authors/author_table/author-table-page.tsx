@@ -5,7 +5,7 @@ import { DataTable } from "./data-table";
 import { getAuthorsAndBooksCount } from "@/app/_api/services/authorService";
 
 const CategoryTablePage = () => {
-  const [categories, setcCtegories] = useState<AuthorTableModel[]>([]);
+  const [authors, setAuthors] = useState<AuthorTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -20,7 +20,18 @@ const CategoryTablePage = () => {
       }
 
       const response = res.data;
-      setcCtegories(response);
+
+      const formattedReponse = res.data.map((a:any) => {
+        const myFormat = {
+          author_name: a.AUTHOR.author_name,
+          author_surname: a.AUTHOR.author_surname,
+          bookCount: a.bookCount,
+        }
+        return myFormat;
+      })
+
+
+      setAuthors(formattedReponse);
     } catch (error) {
       console.warn("Yazar try&catch hata -> ", error);
     }
@@ -28,7 +39,7 @@ const CategoryTablePage = () => {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={categories} />
+      <DataTable columns={columns} data={authors} />
     </div>
   );
 };

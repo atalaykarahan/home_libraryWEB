@@ -22,3 +22,7 @@ export const patchCategoryClient = (
   };
   return axios.patch(`/categories`, props);
 };
+
+export const deleteCategoryClient = (category_id: string) => {
+  return axios.delete(`/categories/${category_id}`);
+}
