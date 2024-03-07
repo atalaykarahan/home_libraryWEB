@@ -45,6 +45,9 @@ import { Textarea } from "../ui/textarea";
 import { postInsertBookClient } from "@/app/_api/services/bookService";
 import { InsertBook } from "@/app/_models/book";
 import { toast } from "sonner";
+import EventEmitter from "events";
+
+export const eventEmitter = new EventEmitter();
 interface CreateCategoryProps {
   openModal: boolean;
   closeModal: () => void;
@@ -123,30 +126,49 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
   const form = useForm<z.infer<typeof CreateBookSchema>>({
     resolver: zodResolver(CreateBookSchema),
+    defaultValues: {
+      book_title: "",
+      book_summary: "",
+      categories: [],
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof CreateBookSchema>) => {
-    // console.log(data);
-
     try {
       const newBook: InsertBook = {
         book_title: data.book_title,
         author_id: data.author_id,
         publisher_id: data.publisher_id ?? "",
         status_id: data.status_id,
-        categories_id: data.categories.map((category: any) =>
-          category.key
-        ),
+        categories_id: data.categories.map((category: any) => category.key),
         book_summary: data.book_summary,
       };
-      console.log("kitap bu ",newBook);
+      console.log("kitap bu ", newBook);
       const resInsertBook = await postInsertBookClient(newBook);
       if (resInsertBook.status == 201) {
         form.reset();
-        toast("Event has been created");
+        toast.success(`KİTAP BAŞARIYLA EKLENDİ`, {
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+        eventEmitter.emit("updateGrid");
+      } else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error("Book eklenirken bir hata oluştu");
       }
     } catch (error) {
-      console.warn("book insert error ", error);
+      toast.error(`HATA`, {
+        description: `${error}`,
+        position: "top-right",
+      });
+      throw new Error(`createBookError try&catch hata -> ${error}`);
     }
   };
 

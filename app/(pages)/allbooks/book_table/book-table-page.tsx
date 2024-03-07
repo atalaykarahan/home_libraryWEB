@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { BookTableModel, columns, eventEmitter } from "./columns";
+import { eventEmitter as createBookEmitter } from "@/components/dialog/create-book";
 import { DataTable } from "./data-table";
 import { getAllBooksClient } from "@/app/_api/services/bookService";
 
@@ -9,11 +10,13 @@ const BookTablePage = () => {
 
   useEffect(() => {
     fetchData();
-     //this is for when user update his reading;
-     eventEmitter.on("updateGrid", fetchData);
-     return () => {
-       eventEmitter.off("updateGrid", fetchData);
-     };
+    //this is for when user update his reading;
+    eventEmitter.on("updateGrid", fetchData);
+    createBookEmitter.on("updateGrid", fetchData);
+    return () => {
+      eventEmitter.off("updateGrid", fetchData);
+      createBookEmitter.off("updateGrid", fetchData);
+    };
   }, []);
 
   const fetchData = async () => {
@@ -25,15 +28,18 @@ const BookTablePage = () => {
       }
 
       //we formatted response type for table component
-      const formattedResponse = res.data.map((b:any) => {
+      const formattedResponse = res.data.map((b: any) => {
         const myFormat = {
           book_id: b.book_id,
           book_title: b.book_title,
-          author: b.AUTHOR.author_name + " " + (b.AUTHOR.author_surname == null ? "" : b.AUTHOR.author_surname),
+          author:
+            b.AUTHOR.author_name +
+            " " +
+            (b.AUTHOR.author_surname == null ? "" : b.AUTHOR.author_surname),
           publisher: b.PUBLISHER == null ? "" : b.PUBLISHER.publisher_name,
-          status: b.STATUS.status_name
-        }
-        return myFormat
+          status: b.STATUS.status_name,
+        };
+        return myFormat;
       });
 
       // const response = res.data;

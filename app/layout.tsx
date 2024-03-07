@@ -30,7 +30,7 @@ export default async function RootLayout({
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
-          <Toaster />
+          <Toaster closeButton />
         </body>
       </html>
     </SessionProvider>

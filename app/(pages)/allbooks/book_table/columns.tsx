@@ -186,26 +186,46 @@ export const columns: ColumnDef<BookTableModel>[] = [
           });
           throw new Error(`addMyReading try&catch hata -> ${error}`);
         }
-
-        console.log("status bilgileri: ", data);
-        console.log(
-          "kitap bilgileri",
-          selectedBook.book_title,
-          selectedBook.book_id
-        );
       };
 
       const deleteBook = async (book_id: number) => {
         try {
           const res = await deleteBookClient(book_id);
-          console.log(res);
-          
-        } catch (error) {
-          
+          if (res.status == 204) {
+            eventEmitter.emit("updateGrid");
+            toast.success(`KİTAP BAŞARIYLA SİLİNDİ`, {
+              position: "top-right",
+              style: {
+                backgroundColor: "hsl(143, 85%, 96%)",
+                color: "hsl(140, 100%, 27%)",
+                borderColor: "hsl(145, 92%, 91%)",
+              },
+            });
+          } else {
+            toast.error(`Bir hata meydana geldi`, {
+              description: `Daha sonra tekrar deneyin!`,
+              position: "top-right",
+            });
+            throw new Error("deleteBook ile ilgili bir hata oluştu");
+          }
+        } catch (error: any) {
+          switch (error.response.status) {
+            case 403:
+              toast.error(`YETKİ HATASI`, {
+                description: `Bu kitabı silebilmek için yetkininiz bulunmamaktadır.`,
+                position: "top-right",
+              });
+              break;
+            case 409:
+              toast.error(`KİTAP KULLANIMDA`, {
+                description: `Bu kitap şu anda başkasının kütüphanesinde bulunmakta. Kitabı silebilmek için önce herkesin kitaplığından kaldırması gerekmektedir!`,
+                position: "top-right",
+              });
+              break;
+          }
+
+          throw new Error(`deleteBook try&catch hata -> ${error}`);
         }
-
-
-
       };
 
       return (
