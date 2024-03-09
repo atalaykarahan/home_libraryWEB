@@ -10,7 +10,7 @@ interface CreateCategoryProps {
   openModal: boolean;
   closeModal: () => void;
 }
-const Cateogries: React.FC<CreateCategoryProps> = ({
+const Authors: React.FC<CreateCategoryProps> = ({
   openModal,
   closeModal,
 }) => {
@@ -35,4 +35,4 @@ const Cateogries: React.FC<CreateCategoryProps> = ({
   );
 };
 
-export default Cateogries;
+export default Authors;
