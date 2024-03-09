@@ -19,7 +19,6 @@ const CategoryTablePage = () => {
 
   const fetchData = async () => {
     try {
-      console.log("tetiklendi");
       const res = await getAuthorsAndBooksCount();
 
       if (res.status !== 200) {

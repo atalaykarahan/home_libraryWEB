@@ -1,6 +1,8 @@
 "use client";
-
-import { deleteAuthorClient, patchAuthorClient } from "@/app/_api/services/authorService";
+import {
+  deleteAuthorClient,
+  patchAuthorClient,
+} from "@/app/_api/services/authorService";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,15 +38,13 @@ import { EditAuthorSchema } from "@/schemas/author";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import EventEmitter from "events";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TbDots } from "react-icons/tb";
-import { toast } from "sonner";
 import { z } from "zod";
 import { eventEmitter } from "../create-author";
-
-
+import PatchCaller from "@/api-caller/patch-caller";
+import DeleteCaller from "@/api-caller/delete-caller";
 
 export type AuthorTableModel = {
   author_id: string;
@@ -82,86 +82,33 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
         },
       });
 
+      //#region EDIT & UPDATE & PATCH AUTHOR
       const handleEditOnSubmit = async (
         data: z.infer<typeof EditAuthorSchema>
       ) => {
-        try {
-          const res = await patchAuthorClient(
+        PatchCaller({
+          apiCall: patchAuthorClient(
             author.author_id,
             data.author_name,
             data.author_surname
-          );
-
-          if (res.status == 200) {
-            eventEmitter.emit("updateGrid");
-            setEditAuthorDialog(false);
-            toast.success(`GÜNCELLEME BAŞARILI`, {
-              description: `${author.author_name}`,
-              position: "top-right",
-              style: {
-                backgroundColor: "hsl(143, 85%, 96%)",
-                color: "hsl(140, 100%, 27%)",
-                borderColor: "hsl(145, 92%, 91%)",
-              },
-            });
-          } else {
-            toast.error(`Bir hata meydana geldi`, {
-              description: `Daha sonra tekrar deneyin!`,
-              position: "top-right",
-            });
-            throw new Error(`updateAuthor error -> ${res}`);
-          }
-        } catch (error) {
-          toast.error(`HATA`, {
-            description: `${error}`,
-            position: "top-right",
-          });
-          throw new Error(`updateAuthor try&catch hata -> ${error}`);
-        }
+          ),
+          eventEmitter: eventEmitter,
+          emitterFnc: "updateGrid",
+          description: "Yazar başarıyla güncellendi",
+        });
+        setEditAuthorDialog(false);
       };
+      //#endregion
 
+      //#region DELETE AUTHOR
       const handleDeleteAuthor = async () => {
-        try {
-          console.log("id değeri burdaaa---",author.author_id);;
-          const res = await deleteAuthorClient(author.author_id);
-          console.log(res);
-          if (res.status == 204) {
-            eventEmitter.emit("updateGrid");
-            toast.success(`YAZAR BAŞARIYLA SİLİNDİ`, {
-              position: "top-right",
-              style: {
-                backgroundColor: "hsl(143, 85%, 96%)",
-                color: "hsl(140, 100%, 27%)",
-                borderColor: "hsl(145, 92%, 91%)",
-              },
-            });
-          } else {
-            toast.error(`Bir hata meydana geldi`, {
-              description: `Daha sonra tekrar deneyin!`,
-              position: "top-right",
-            });
-            throw new Error("deleteAuthor ile ilgili bir hata oluştu");
-          }
-        } catch (error: any) {
-          console.log(error.response);
-          switch (error.response.status) {
-            case 403:
-              toast.error(`YETKİ HATASI`, {
-                description: `Bu yazarı silebilmek için yetkininiz bulunmamaktadır.`,
-                position: "top-right",
-              });
-              break;
-            case 409:
-              toast.error(`YAZAR KULLANIMDA`, {
-                description: `Bu yazara ait şu anda bir kitap bulunmakta. Yazarı silebilmek için önce ilişkili kitapları sildiğinizden emin olun!`,
-                position: "top-right",
-              });
-              break;
-          }
-
-          throw new Error(`deleteAuthor try&catch hata -> ${error}`);
-        }
+        DeleteCaller({
+          apiCall: deleteAuthorClient(author.author_id),
+          eventEmitter: eventEmitter,
+          emitterFnc: "updateGrid",
+        });
       };
+      //#endregion
 
       return (
         <>
@@ -207,10 +154,7 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
                           <FormItem>
                             <FormLabel>Yazar Adı</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                type="text"
-                              />
+                              <Input {...field} type="text" />
                             </FormControl>
                             {/* <FormMessage /> */}
                           </FormItem>
@@ -223,10 +167,7 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
                           <FormItem>
                             <FormLabel>Yazar Soyadı</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                type="text"
-                              />
+                              <Input {...field} type="text" />
                             </FormControl>
                             {/* <FormMessage /> */}
                           </FormItem>
@@ -251,8 +192,8 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
-                  {author.author_name} {author.author_surname} yazarını kalıcı olarak silmek
-                  istediğine emin misin?
+                  {author.author_name} {author.author_surname} yazarını kalıcı
+                  olarak silmek istediğine emin misin?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   Bu yazarı silersen bu işlemi geri alamzsın!

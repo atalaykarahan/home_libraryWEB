@@ -36,3 +36,14 @@ export const patchAuthorClient = (
 export const deleteAuthorClient = (author_id: string) => {
   return axios.delete(`/authors/${author_id}`);
 };
+
+// export const patchAuthorClient = (
+//   author_id: string,
+// ) => {
+//   const props = {
+//     author_id: author_id,
+//   };
+//   return axios.patch(`/authors`, props);
+// };
+
+
