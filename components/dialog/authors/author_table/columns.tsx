@@ -9,8 +9,10 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { TbDots } from "react-icons/tb";
-import DeleteAuthorDialog from "../dialogs/delete-author";
 import EditAuthorDialog from "../dialogs/edit-author";
+import DeleteDialog from "../../alert-dialog/delete-dialog";
+import { eventEmitter } from "../create-author";
+import { deleteAuthorClient } from "@/app/_api/services/authorService";
 
 export type AuthorTableModel = {
   author_id: string;
@@ -67,10 +69,14 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
           />
 
           {/* DELETE AUTHOR DIALOG */}
-          <DeleteAuthorDialog
+          <DeleteDialog
             isOpen={deleteAuthorDialog}
             setIsOpen={setDeleteAuthorDialog}
-            author={author}
+            dialogTitle={`${author.author_name} ${author.author_surname} yazarını kalıcı olarak silmek istediğine emin misin?`}
+            dialogDescription="Bu yazarı silersen bu işlemi geri alamazsın!"
+            eventEmitter={eventEmitter}
+            emitterFnc="updateGrid"
+            apiCall={deleteAuthorClient(author.author_id)}
           />
         </>
       );
