@@ -1,3 +1,6 @@
+import PatchCaller from "@/api-caller/patch-caller";
+import { patchPublisherClient } from "@/app/_api/services/publisherService";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -5,11 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { EditPublisherSchema } from "@/schemas/publisher";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { PublisherTableModel } from "./publisher_table/columns";
 import {
   Form,
   FormControl,
@@ -17,16 +15,21 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { EditPublisherSchema } from "@/schemas/publisher";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { eventEmitter } from "./create-publisher";
+import { PublisherTableModel } from "./publisher_table/columns";
 
-interface FormEditProps {
+interface EditPublisherDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   publisher: PublisherTableModel;
 }
 
-const FormEdit: React.FC<FormEditProps> = ({
+const EditPublisherDialog: React.FC<EditPublisherDialogProps> = ({
   isOpen,
   setIsOpen,
   publisher,
@@ -38,48 +41,28 @@ const FormEdit: React.FC<FormEditProps> = ({
     },
   });
 
+  //#region EDIT & UPDATE & PATCH AUTHOR
   const handleEditOnSubmit = async (
     data: z.infer<typeof EditPublisherSchema>
   ) => {
-    // try {
-    //   const res = await patchCategoryClient(
-    //     category.category_id.toString(),
-    //     data.category_name
-    //   );
-
-    //   if (res.status == 200) {
-    //     eventEmitter.emit("updateGrid");
-    //     setEditCategoryDialog(false);
-    //     toast.success(`GÜNCELLEME BAŞARILI`, {
-    //       description: `${category.category_name}`,
-    //       position: "top-right",
-    //       style: {
-    //         backgroundColor: "hsl(143, 85%, 96%)",
-    //         color: "hsl(140, 100%, 27%)",
-    //         borderColor: "hsl(145, 92%, 91%)",
-    //       },
-    //     });
-    //   } else {
-    //     toast.error(`Bir hata meydana geldi`, {
-    //       description: `Daha sonra tekrar deneyin!`,
-    //       position: "top-right",
-    //     });
-    //     throw new Error(`updateMyReading error -> ${res}`);
-    //   }
-    // } catch (error) {
-    //   toast.error(`HATA`, {
-    //     description: `${error}`,
-    //     position: "top-right",
-    //   });
-    //   throw new Error(`addMyReading try&catch hata -> ${error}`);
-    // }
+    PatchCaller({
+      apiCall: patchPublisherClient(
+        publisher.publisher_id.toString(),
+        data.publisher_name
+      ),
+      eventEmitter: eventEmitter,
+      emitterFnc: "updateGrid",
+      description: "Yayınevi başarıyla güncellendi",
+    });
+    setIsOpen(false);
   };
+  //#endregion
 
   return (
     <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Kategori düzenle</DialogTitle>
+          <DialogTitle>Yayınevi düzenle</DialogTitle>
           <DialogDescription>{publisher.publisher_name}</DialogDescription>
 
           <Form {...form}>
@@ -113,4 +96,4 @@ const FormEdit: React.FC<FormEditProps> = ({
   );
 };
 
-export default FormEdit;
+export default EditPublisherDialog;

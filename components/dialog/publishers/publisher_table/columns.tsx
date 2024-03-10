@@ -13,6 +13,7 @@ import { TbDots } from "react-icons/tb";
 import DeleteDialog from "../../alert-dialog/delete-dialog";
 import { deletePublisherClient } from "@/app/_api/services/publisherService";
 import { eventEmitter } from "../create-publisher";
+import EditPublisherDialog from "../edit-publisher";
 
 export type PublisherTableModel = {
   publisher_id: string;
@@ -33,11 +34,10 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
     id: "actions",
     cell: ({ row }) => {
       const publisher = row.original;
-      // const [editCategoryDialog, setEditCategoryDialog] =
-      //   useState<boolean>(false);
+      const [editPublisherDialog, setEditPublisherDialog] =
+        useState<boolean>(false);
       const [deletePublisherDialog, setDeletePublisherDialog] =
         useState<boolean>(false);
-
 
       return (
         <>
@@ -56,6 +56,14 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
             </DropdownMenuContent>
           </DropdownMenu>
 
+          {/* EDIT PUBLISHER DIALOG */}
+          <EditPublisherDialog
+            isOpen={editPublisherDialog}
+            setIsOpen={setEditPublisherDialog}
+            publisher={publisher}
+          />
+
+          {/* henüz publisher id değeri gelmiyor olabilir o yüzden silemeyebilirsin onu kontrol et!!!!! */}
           {/* DELETE PUBLISHER DIALOG */}
           <DeleteDialog
             isOpen={deletePublisherDialog}
