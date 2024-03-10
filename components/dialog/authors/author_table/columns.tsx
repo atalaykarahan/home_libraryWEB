@@ -76,7 +76,7 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
             dialogDescription="Bu yazarı silersen bu işlemi geri alamazsın!"
             eventEmitter={eventEmitter}
             emitterFnc="updateGrid"
-            apiCall={deleteAuthorClient(author.author_id)}
+            onDelete={()=> deleteAuthorClient(author.author_id)}
           />
         </>
       );

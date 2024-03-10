@@ -17,7 +17,7 @@ interface DeleteDialogProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dialogTitle: string;
   dialogDescription?: string;
-  apiCall: Promise<AxiosResponse<any,any>>;
+  onDelete: () => Promise<AxiosResponse<any,any>>;
   eventEmitter: EventEmitter;
   emitterFnc: string;
 }
@@ -27,14 +27,14 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
   setIsOpen,
   dialogTitle,
   dialogDescription,
-  apiCall,
+  onDelete,
   eventEmitter,
   emitterFnc,
 }) => {
 
   const handleDelete = async () => {
     try {
-      const res = await apiCall;
+      const res = await onDelete();
       if (res.status == 204) {
         eventEmitter.emit(emitterFnc);
         toast.success(`YOK ETME BAŞARILI`, {
