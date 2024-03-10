@@ -1,6 +1,5 @@
 import { getInsertPublisherClient } from "@/app/_api/services/publisherService";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -12,9 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { CreatePublisherSchema } from "@/schemas/publisher";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import EventEmitter from "events";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const eventEmitter = new EventEmitter();
 

@@ -1,9 +1,9 @@
 "use client";
+import { getCategoriesAndBooksCount } from "@/app/_api/services/categoryService";
 import { useEffect, useState } from "react";
+import { eventEmitter } from "../create-category";
 import { CategoryTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getCategoriesAndBooksCount } from "@/app/_api/services/categoryService";
-import { eventEmitter } from "../create-category";
 
 const CategoryTablePage = () => {
   const [categories, setcCtegories] = useState<CategoryTableModel[]>([]);
@@ -15,7 +15,6 @@ const CategoryTablePage = () => {
     return () => {
       eventEmitter.off("updateGrid", fetchData);
     };
-
   }, []);
 
   const fetchData = async () => {
@@ -28,9 +27,6 @@ const CategoryTablePage = () => {
 
       const response = res.data;
       setcCtegories(response);
-
-
-      
     } catch (error) {
       console.warn("kategori try&catch hata -> ", error);
     }

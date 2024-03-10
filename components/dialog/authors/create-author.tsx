@@ -1,5 +1,5 @@
+import { getInsertAuthorClient } from "@/app/_api/services/authorService";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -9,14 +9,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { CreateAuthorSchema } from "@/schemas/author";
-import { getInsertAuthorClient } from "@/app/_api/services/authorService";
+import { zodResolver } from "@hookform/resolvers/zod";
 import EventEmitter from "events";
-
-
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const eventEmitter = new EventEmitter();
 
@@ -30,7 +28,6 @@ const CreateAuthor: React.FC = ({}) => {
   });
 
   const onSubmit = async (values: z.infer<typeof CreateAuthorSchema>) => {
-
     try {
       const res = await getInsertAuthorClient(
         values.author_name,
@@ -48,7 +45,7 @@ const CreateAuthor: React.FC = ({}) => {
             borderColor: "hsl(145, 92%, 91%)",
           },
         });
-      }else {
+      } else {
         toast.error(`Bir hata meydana geldi`, {
           description: `Daha sonra tekrar deneyin!`,
           position: "top-right",
@@ -62,8 +59,6 @@ const CreateAuthor: React.FC = ({}) => {
       });
       throw new Error(`crateAuthor try&catch hata -> ${error}`);
     }
-
-   
   };
   return (
     <Form {...form}>
@@ -96,8 +91,6 @@ const CreateAuthor: React.FC = ({}) => {
             )}
           />
         </div>
-        {/* <FormError message={errorMessage} />
-            <FormSuccess message={successMessage} /> */}
         <Button type="submit" className="w-full">
           Oluştur
         </Button>

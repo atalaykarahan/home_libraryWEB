@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AuthorTableModel } from "../author_table/columns";
+import { AuthorTableModel } from "./author_table/columns";
 import {
   Form,
   FormControl,
@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import PatchCaller from "@/api-caller/patch-caller";
 import { patchAuthorClient } from "@/app/_api/services/authorService";
-import { eventEmitter } from "../create-author";
+import { eventEmitter } from "./create-author";
 
 interface EditAuthorDialogProps {
   isOpen: boolean;

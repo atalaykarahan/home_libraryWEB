@@ -1,41 +1,19 @@
 "use client";
 
-import {
-  deleteCategoryClient,
-  patchCategoryClient,
-} from "@/app/_api/services/categoryService";
+import { deleteCategoryClient } from "@/app/_api/services/categoryService";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { EditCategorySchema } from "@/schemas/category";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { TbDots } from "react-icons/tb";
-import { toast } from "sonner";
-import { z } from "zod";
 import DeleteDialog from "../../alert-dialog/delete-dialog";
 import { eventEmitter } from "../create-category";
+import EditCategoryDialog from "../edit-category";
 
 export type CategoryTableModel = {
   category_id: string;
@@ -61,50 +39,6 @@ export const columns: ColumnDef<CategoryTableModel>[] = [
       const [deleteCategoryDialog, setDeleteCategoryDialog] =
         useState<boolean>(false);
 
-      const form = useForm<z.infer<typeof EditCategorySchema>>({
-        resolver: zodResolver(EditCategorySchema),
-        defaultValues: {
-          category_name: category.category_name,
-        },
-      });
-
-      const handleEditOnSubmit = async (
-        data: z.infer<typeof EditCategorySchema>
-      ) => {
-        try {
-          const res = await patchCategoryClient(
-            category.category_id.toString(),
-            data.category_name
-          );
-
-          if (res.status == 200) {
-            eventEmitter.emit("updateGrid");
-            setEditCategoryDialog(false);
-            toast.success(`GÜNCELLEME BAŞARILI`, {
-              description: `${category.category_name}`,
-              position: "top-right",
-              style: {
-                backgroundColor: "hsl(143, 85%, 96%)",
-                color: "hsl(140, 100%, 27%)",
-                borderColor: "hsl(145, 92%, 91%)",
-              },
-            });
-          } else {
-            toast.error(`Bir hata meydana geldi`, {
-              description: `Daha sonra tekrar deneyin!`,
-              position: "top-right",
-            });
-            throw new Error(`updateMyReading error -> ${res}`);
-          }
-        } catch (error) {
-          toast.error(`HATA`, {
-            description: `${error}`,
-            position: "top-right",
-          });
-          throw new Error(`addMyReading try&catch hata -> ${error}`);
-        }
-      };
-
       return (
         <>
           <DropdownMenu>
@@ -125,43 +59,11 @@ export const columns: ColumnDef<CategoryTableModel>[] = [
           </DropdownMenu>
 
           {/* EDIT CATEGORY DIALOG */}
-          <Dialog
-            open={editCategoryDialog}
-            onOpenChange={() => setEditCategoryDialog(false)}
-          >
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Kategori düzenle</DialogTitle>
-                <DialogDescription>{category.category_name}</DialogDescription>
-
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(handleEditOnSubmit)}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="category_name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Kategori</FormLabel>
-                            <FormControl>
-                              <Input {...field} type="text" />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-
-                      <Button type="submit" className="w-full">
-                        Kaydet
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <EditCategoryDialog
+            isOpen={editCategoryDialog}
+            setIsOpen={setEditCategoryDialog}
+            category={category}
+          />
 
           {/* DELETE CATEGORY DIALOG */}
           <DeleteDialog

@@ -9,7 +9,7 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { TbDots } from "react-icons/tb";
-import EditAuthorDialog from "../dialogs/edit-author";
+import EditAuthorDialog from "../edit-author";
 import DeleteDialog from "../../alert-dialog/delete-dialog";
 import { eventEmitter } from "../create-author";
 import { deleteAuthorClient } from "@/app/_api/services/authorService";
