@@ -41,21 +41,20 @@ const CreateCategory: React.FC = ({}) => {
             borderColor: "hsl(145, 92%, 91%)",
           },
         });
-      }else {
+      } else {
         toast.error(`Bir hata meydana geldi`, {
           description: `Daha sonra tekrar deneyin!`,
           position: "top-right",
         });
-        throw new Error("crateCategory ile ilgili bir hata oluştu");
+        console.log("crateCategory ile ilgili bir hata oluştu");
       }
     } catch (error) {
       toast.error(`HATA`, {
         description: `${error}`,
         position: "top-right",
       });
-      throw new Error(`crateCategory try&catch hata -> ${error}`);
+      console.log(`crateCategory try&catch hata -> ${error}`);
     }
-   
   };
   return (
     <Form {...form}>
@@ -75,8 +74,6 @@ const CreateCategory: React.FC = ({}) => {
             )}
           />
         </div>
-        {/* <FormError message={errorMessage} />
-            <FormSuccess message={successMessage} /> */}
         <Button type="submit" className="w-full">
           Oluştur
         </Button>

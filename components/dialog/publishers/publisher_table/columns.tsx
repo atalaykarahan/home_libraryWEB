@@ -11,8 +11,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { TbDots } from "react-icons/tb";
 import DeleteDialog from "../../alert-dialog/delete-dialog";
+import { deletePublisherClient } from "@/app/_api/services/publisherService";
+import { eventEmitter } from "../create-publisher";
 
 export type PublisherTableModel = {
+  publisher_id: string;
   publisher_name: string;
   bookCount: number;
 };
@@ -35,47 +38,6 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
       const [deletePublisherDialog, setDeletePublisherDialog] =
         useState<boolean>(false);
 
-      const handleDeletePublisher = async () => {
-        console.log("üst kısım tetiklendi");
-        // try {
-        //   const res = await deleteCategoryClient(category.category_id);
-        //   console.log(res);
-        //   if (res.status == 204) {
-        //     eventEmitter.emit("updateGrid");
-        //     toast.success(`KATEGORİ BAŞARIYLA SİLİNDİ`, {
-        //       position: "top-right",
-        //       style: {
-        //         backgroundColor: "hsl(143, 85%, 96%)",
-        //         color: "hsl(140, 100%, 27%)",
-        //         borderColor: "hsl(145, 92%, 91%)",
-        //       },
-        //     });
-        //   } else {
-        //     toast.error(`Bir hata meydana geldi`, {
-        //       description: `Daha sonra tekrar deneyin!`,
-        //       position: "top-right",
-        //     });
-        //     throw new Error("deleteCategory ile ilgili bir hata oluştu");
-        //   }
-        // } catch (error: any) {
-        //   switch (error.response.status) {
-        //     case 403:
-        //       toast.error(`YETKİ HATASI`, {
-        //         description: `Bu kategoriyi silebilmek için yetkininiz bulunmamaktadır.`,
-        //         position: "top-right",
-        //       });
-        //       break;
-        //     case 409:
-        //       toast.error(`KİTAP KULLANIMDA`, {
-        //         description: `Bu kategori şu anda başka bir kitapta kullanılmakta. Kategoriyi silebilmek için önce ilişkili kitapları sildiğinizden emin olun!`,
-        //         position: "top-right",
-        //       });
-        //       break;
-        //   }
-
-        //   throw new Error(`deleteCategory try&catch hata -> ${error}`);
-        // }
-      };
 
       return (
         <>
@@ -96,10 +58,13 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
 
           {/* DELETE PUBLISHER DIALOG */}
           <DeleteDialog
-            onConfirm={handleDeletePublisher}
             isOpen={deletePublisherDialog}
             setIsOpen={setDeletePublisherDialog}
-            dialogTitle={[publisher.publisher_name, "yayınevini"]}
+            dialogTitle={`${publisher.publisher_name} yayınevini kalıcı olarak silmek istediğine emin misin?`}
+            eventEmitter={eventEmitter}
+            emitterFnc="updateGrid"
+            dialogDescription="Bu yayınevini silersen bu işlemi geri alamazsın!"
+            onDelete={() => deletePublisherClient(publisher.publisher_id)}
           />
         </>
       );

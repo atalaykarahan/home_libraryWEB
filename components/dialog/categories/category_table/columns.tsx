@@ -4,16 +4,6 @@ import {
   deleteCategoryClient,
   patchCategoryClient,
 } from "@/app/_api/services/categoryService";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -44,8 +34,8 @@ import { useForm } from "react-hook-form";
 import { TbDots } from "react-icons/tb";
 import { toast } from "sonner";
 import { z } from "zod";
-import { eventEmitter } from "../create-category";
 import DeleteDialog from "../../alert-dialog/delete-dialog";
+import { eventEmitter } from "../create-category";
 
 export type CategoryTableModel = {
   category_id: string;

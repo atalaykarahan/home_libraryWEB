@@ -11,3 +11,7 @@ export const getInsertPublisherClient = (publisher: string) => {
 export const getPublishersAndBooksCount = () => {
   return axios.get(`/publishers/getPublishersAndBooksCount`);
 };
+
+export const deletePublisherClient = (publisher_id: string) => {
+  return axios.delete(`/publishers/${publisher_id}`);
+}

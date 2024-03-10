@@ -4,12 +4,18 @@ import { Publisher } from "../../../../app/_models/publisher";
 import { PublisherTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getPublishersAndBooksCount } from "@/app/_api/services/publisherService";
+import { eventEmitter } from "../create-publisher";
 
 const PublisherTablePage = () => {
   const [publishers, setPublishers] = useState<PublisherTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
+
+    eventEmitter.on("updateGrid", fetchData);
+    return () => {
+      eventEmitter.off("updateGrid", fetchData);
+    };
   }, []);
 
   const fetchData = async () => {
