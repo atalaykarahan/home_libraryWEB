@@ -37,9 +37,9 @@
 
 /* bu kisim kitap ekleme gibi yerlerde sorun çıkartabilir sonrasında kontrol et */
 @media screen and (max-width: 768px) and (min-width: 640px){
-    .krhn-dialog > form > div{
+    /* .krhn-dialog > form > div{
         display: flex;
         justify-content: space-between;
         margin-top: 1rem;
-    }
+    } */
 }

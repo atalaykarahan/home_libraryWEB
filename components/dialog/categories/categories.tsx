@@ -18,16 +18,8 @@ const Cateogries: React.FC<CreateCategoryProps> = ({ openModal, closeModal }) =>
         <DialogHeader>
           <DialogTitle>Kategori bilgileri</DialogTitle>
         </DialogHeader>
-
-        {/* <p>kategori ekranı genel</p> */}
-
         <CreateCategory />
         <CategoryTablePage/>
-        {/* <PublisherTablePage /> */}
-
-        {/* <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

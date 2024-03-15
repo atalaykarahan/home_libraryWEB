@@ -63,7 +63,6 @@ const EditCategoryDialog: React.FC<EditCategoryDialogProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Kategori düzenle</DialogTitle>
-          <DialogDescription>{category.category_name}</DialogDescription>
 
           <Form {...form}>
             <form
@@ -76,7 +75,7 @@ const EditCategoryDialog: React.FC<EditCategoryDialogProps> = ({
                   name="category_name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Kategori</FormLabel>
+                      <FormLabel>Kategori Adı</FormLabel>
                       <FormControl>
                         <Input {...field} type="text" />
                       </FormControl>

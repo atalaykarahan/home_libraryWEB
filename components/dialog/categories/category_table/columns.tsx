@@ -69,10 +69,10 @@ export const columns: ColumnDef<CategoryTableModel>[] = [
           <DeleteDialog
             isOpen={deleteCategoryDialog}
             setIsOpen={setDeleteCategoryDialog}
-            dialogTitle={`${category.category_name} kategorisini kalıcı olarak silmek istediğine emin misin?`}
+            dialogTitle="Bu kategoriyi silersen bu işlemi geri alamazsın!"
             eventEmitter={eventEmitter}
             emitterFnc="updateGrid"
-            dialogDescription="Bu kategoriyi silersen bu işlemi geri alamazsın!"
+            dialogDescription={`${category.category_name} kategorisini kalıcı olarak silmek istediğine emin misin?`}
             onDelete={() => deleteCategoryClient(category.category_id)}
           />
         </>

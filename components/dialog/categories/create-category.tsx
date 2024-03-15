@@ -67,7 +67,7 @@ const CreateCategory: React.FC = ({}) => {
               <FormItem>
                 <FormLabel>Kategori Adı</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Korku" type="text" />
+                  <Input {...field}  type="text" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
