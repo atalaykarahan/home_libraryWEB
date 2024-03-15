@@ -62,7 +62,7 @@ const CreateAuthor: React.FC = ({}) => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-11/12 sm:w-auto lg:w-fit create-author_form">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 sm:w-auto lg:w-fit create-author_form">
         <div className="space-y-4">
           <FormField
             control={form.control}
@@ -71,7 +71,7 @@ const CreateAuthor: React.FC = ({}) => {
               <FormItem>
                 <FormLabel>Yazar Adı</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Korku" type="text" />
+                  <Input {...field} type="text" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,7 +84,7 @@ const CreateAuthor: React.FC = ({}) => {
               <FormItem>
                 <FormLabel>Yazar Soyadı</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Korku" type="text" />
+                  <Input {...field} type="text" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

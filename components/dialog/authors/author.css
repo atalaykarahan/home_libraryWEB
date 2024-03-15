@@ -1,24 +1,41 @@
 
 .create-author_dialog{
-    height: 80%;
+    max-height: 85%;
     overflow-y: auto;
     max-width: 725px;
     display: inline;
     border-radius: 0.5rem;
 }
 
+.create-author_form{
+    width: auto;
+    margin-top: 1rem;
+}
+
 /* sm'a kadar  */
 @media screen and (max-width: 640px){
     .create-author_dialog{
         width: 90%;
-        /* display: flex; */
         flex-direction: column;
         align-items: center;
-        /* padding-left: 0;
-        padding-right: 0; */
         padding:1.5rem;
         display: inline;
-        
+    }
+
+    /* table ustundeki container */
+    .create-author_dialog > .container{
+        padding-right:0;
+        padding-left:0;
+    }
+    /* table kismi */
+    .create-author_dialog > .container table{
+        white-space: nowrap;
+    }
+
+    .create-author_dialog > .container table tbody tr, .create-author_dialog > .container table tbody td{
+        height: 5px!important;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 }
 
@@ -32,5 +49,9 @@
 
     .create-author_form > div > div:nth-child(2){
         margin-top:0!important;
+      }
+
+      .create-author_form > div div{
+        width: 45%;
       }
   }

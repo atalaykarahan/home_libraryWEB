@@ -11,7 +11,6 @@ const NavbarLinks = () => {
   }
 
   const user = useCurrentUser();
-  console.log(user);
 
   return (
     <div className="flex space-x-4">
