@@ -18,14 +18,8 @@ const Publishers: React.FC<Publishers> = ({ openModal, closeModal }) => {
           <DialogTitle>Yayınevi bilgileri</DialogTitle>
         </DialogHeader>
 
-        <p>publisher ekranı genel</p>
-
         <CreatePublisher />
         <PublisherTablePage />
-
-        {/* <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

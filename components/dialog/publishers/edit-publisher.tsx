@@ -63,7 +63,6 @@ const EditPublisherDialog: React.FC<EditPublisherDialogProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Yayınevi düzenle</DialogTitle>
-          <DialogDescription>{publisher.publisher_name}</DialogDescription>
 
           <Form {...form}>
             <form

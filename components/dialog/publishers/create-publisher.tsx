@@ -67,7 +67,7 @@ const CreatePublisher: React.FC = ({}) => {
               <FormItem>
                 <FormLabel>Yayınevi adı</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="SÖZCÜ KİTABEVİ" type="text" />
+                  <Input {...field} type="text" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

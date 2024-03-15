@@ -68,10 +68,10 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
           <DeleteDialog
             isOpen={deletePublisherDialog}
             setIsOpen={setDeletePublisherDialog}
-            dialogTitle={`${publisher.publisher_name} yayınevini kalıcı olarak silmek istediğine emin misin?`}
+            dialogTitle="Bu yayınevini silersen bu işlemi geri alamazsın!"
             eventEmitter={eventEmitter}
             emitterFnc="updateGrid"
-            dialogDescription="Bu yayınevini silersen bu işlemi geri alamazsın!"
+            dialogDescription={`${publisher.publisher_name} yayınevini kalıcı olarak silmek istediğine emin misin?`}
             onDelete={() => deletePublisherClient(publisher.publisher_id)}
           />
         </>
