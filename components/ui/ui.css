@@ -6,6 +6,11 @@
     border-radius: 0.5rem;
 }
 
+.krhn-dialog > form{
+    width: auto;
+    margin-top: 1rem;
+}
+
 @media screen and (max-width: 640px){
     .krhn-dialog{
         width: 90%;
@@ -18,5 +23,23 @@
     .krhn-dialog > .container{
         padding-right: 0;
         padding-left:0;
+    }
+
+    .krhn-dialog > .container table{
+        white-space: nowrap;
+    }
+
+    .krhn-dialog > .container table tbody tr,  .krhn-dialog > .container table tbody td {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+/* bu kisim kitap ekleme gibi yerlerde sorun çıkartabilir sonrasında kontrol et */
+@media screen and (max-width: 768px) and (min-width: 640px){
+    .krhn-dialog > form > div{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
     }
 }

@@ -33,7 +33,6 @@
     }
 
     .create-author_dialog > .container table tbody tr, .create-author_dialog > .container table tbody td{
-        height: 5px!important;
         padding-top: 0;
         padding-bottom: 0;
     }

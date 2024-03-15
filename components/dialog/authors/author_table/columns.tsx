@@ -72,8 +72,8 @@ export const columns: ColumnDef<AuthorTableModel>[] = [
           <DeleteDialog
             isOpen={deleteAuthorDialog}
             setIsOpen={setDeleteAuthorDialog}
-            dialogTitle={`${author.author_name} ${author.author_surname} yazarını kalıcı olarak silmek istediğine emin misin?`}
-            dialogDescription="Bu yazarı silersen bu işlemi geri alamazsın!"
+            dialogTitle="Bu yazarı silersen bu işlemi geri alamazsın!"
+            dialogDescription={`${author.author_name} ${author.author_surname} yazarını kalıcı olarak silmek istediğine emin misin?`}
             eventEmitter={eventEmitter}
             emitterFnc="updateGrid"
             onDelete={()=> deleteAuthorClient(author.author_id)}
