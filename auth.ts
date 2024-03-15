@@ -43,21 +43,20 @@ export const {
       return session;
     },
     async jwt({ token }) {
-      // console.log("jwt kısmındaki token kodu",token);
       if (!token.sub) return token;
-
       await getLoggedInUserServer().then(async (value: any) => {
-        if(value.error){
+        if (value.error) {
           await signOut();
           console.log("error içine düştü");
           return;
-        }else {
+        } else {
           token.role = value.user_authority_id;
         }
       });
       return token;
     },
     async signIn({ account, profile }) {
+      // if user try to login with google
       if (
         account &&
         account.provider === "google" &&
@@ -67,15 +66,10 @@ export const {
         profile.email &&
         profile.email.endsWith("@gmail.com")
       ) {
-        const user: RegisterDto = {
-          user_name: profile.given_name,
-          password: profile.sub,
-          email: profile.email,
-        };
-
         const signUpServerApi = await signInServer(
           profile.given_name,
           profile.email,
+          profile.sub,
           profile.sub
         );
         if (signUpServerApi.error) {
@@ -84,8 +78,10 @@ export const {
         }
 
         return true;
+      } else if (account && account.provider == "credentials" && !profile) {
+        return true;
       }
-      return true;
+      return false;
     },
   },
   session: { strategy: "jwt" },

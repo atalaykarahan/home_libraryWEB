@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import AuthorTablePage from "./author_table/author-table-page";
 import CreateAuthor from "./create-author";
+import "./author.css";
 interface CreateCategoryProps {
   openModal: boolean;
   closeModal: () => void;
@@ -13,8 +14,9 @@ interface CreateCategoryProps {
 const Authors: React.FC<CreateCategoryProps> = ({ openModal, closeModal }) => {
   return (
     <Dialog open={openModal} onOpenChange={() => closeModal()}>
-      <DialogContent className="md:max-w-[725px]">
-        <DialogHeader>
+      <DialogContent className="
+      create-author_dialog">
+        <DialogHeader className="max-sm:w-fit">
           <DialogTitle>Yazar bilgileri</DialogTitle>
         </DialogHeader>
         <CreateAuthor />

@@ -49,7 +49,7 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Düzenle</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setEditPublisherDialog(true)}>Düzenle</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setDeletePublisherDialog(true)}>
                 Sil
               </DropdownMenuItem>

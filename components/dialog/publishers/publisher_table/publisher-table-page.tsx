@@ -22,9 +22,10 @@ const PublisherTablePage = () => {
       const res = await getPublishersAndBooksCount();
 
       if (res.status !== 200) {
-        throw new Error("User ile ilgili bir hata oluştu");
+        throw new Error("Publihser ile ilgili bir hata oluştu");
       }
 
+      console.log(res);
       const response = res.data;
       setPublishers(response);
     } catch (error) {

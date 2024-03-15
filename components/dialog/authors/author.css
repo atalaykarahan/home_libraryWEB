@@ -1,0 +1,36 @@
+
+.create-author_dialog{
+    height: 80%;
+    overflow-y: auto;
+    max-width: 725px;
+    display: inline;
+    border-radius: 0.5rem;
+}
+
+/* sm'a kadar  */
+@media screen and (max-width: 640px){
+    .create-author_dialog{
+        width: 90%;
+        /* display: flex; */
+        flex-direction: column;
+        align-items: center;
+        /* padding-left: 0;
+        padding-right: 0; */
+        padding:1.5rem;
+        display: inline;
+        
+    }
+}
+
+/* sm ve md arası */
+@media screen and (max-width: 768px) and (min-width: 640px)  {
+    .create-author_form > div{
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .create-author_form > div > div:nth-child(2){
+        margin-top:0!important;
+      }
+  }

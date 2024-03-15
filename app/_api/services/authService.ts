@@ -57,12 +57,13 @@ export const signUpServer = async (user: RegisterDto) => {
 export const signInServer = async (
   user_name: string,
   email: string,
-  google_id: string
+  password?:string,
+  google_id?: string
 ) => {
   const props = {
     user_name: user_name,
     email: email,
-    password: google_id,
+    password: password,
     google_id: google_id,
   };
   const query = await fetch(`${process.env.BASE_URL}/users/login`, {
