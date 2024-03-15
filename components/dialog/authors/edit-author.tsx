@@ -63,10 +63,6 @@ const EditAuthorDialog: React.FC<EditAuthorDialogProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Yazar düzenle</DialogTitle>
-          <DialogDescription>
-            {author.author_name} {author.author_surname}
-          </DialogDescription>
-
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleEditOnSubmit)}
