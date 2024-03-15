@@ -58,12 +58,15 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 }) => {
   //publisher
   const [publishers, setPublishers] = useState<Publisher[]>([]);
+  const [openPublishers, setOpenPublishers] = useState(false)
   //category
   const [categories, setCategories] = useState<Option[]>([]);
   //author
   const [authors, setAuthors] = useState<Option[]>([]);
+  const [openAuthors, setOpenAuthors] = useState(false)
   //status
   const [statuses, setStatuses] = useState<Status[]>([]);
+  const [openStatuses, setOpenStatuses] = useState(false)
 
   useEffect(() => {
     fetchData();
@@ -207,7 +210,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Yayınevi</FormLabel>
-                    <Popover>
+                    <Popover open={openPublishers} onOpenChange={setOpenPublishers}>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -248,6 +251,8 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                     "publisher_id",
                                     p.publisher_id.toString()
                                   );
+                                  setOpenPublishers(false);
+
                                 }}
                               >
                                 {p.publisher_name}
@@ -276,7 +281,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Yazar</FormLabel>
-                    <Popover>
+                    <Popover open={openAuthors} onOpenChange={setOpenAuthors}>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -313,6 +318,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                 key={author.value}
                                 onSelect={() => {
                                   form.setValue("author_id", author.value);
+                                  setOpenAuthors(false);
                                 }}
                               >
                                 {author.label}
@@ -341,7 +347,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Durum</FormLabel>
-                    <Popover>
+                    <Popover open={openStatuses} onOpenChange={setOpenStatuses}>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -382,6 +388,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                     "status_id",
                                     status.status_id.toString()
                                   );
+                                  setOpenStatuses(false);
                                 }}
                               >
                                 {status.status_name}

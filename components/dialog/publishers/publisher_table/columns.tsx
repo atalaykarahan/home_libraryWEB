@@ -62,8 +62,7 @@ export const columns: ColumnDef<PublisherTableModel>[] = [
             setIsOpen={setEditPublisherDialog}
             publisher={publisher}
           />
-
-          {/* henüz publisher id değeri gelmiyor olabilir o yüzden silemeyebilirsin onu kontrol et!!!!! */}
+          
           {/* DELETE PUBLISHER DIALOG */}
           <DeleteDialog
             isOpen={deletePublisherDialog}
