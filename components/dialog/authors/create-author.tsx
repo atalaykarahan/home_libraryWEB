@@ -46,23 +46,35 @@ const CreateAuthor: React.FC = ({}) => {
           },
         });
       } else {
+        console.log("buraya düşdü müüüü------------");
         toast.error(`Bir hata meydana geldi`, {
           description: `Daha sonra tekrar deneyin!`,
           position: "top-right",
         });
-        throw new Error("createAuthor ile ilgili bir hata oluştu");
+        console.log("createAuthor ile ilgili bir hata oluştu");
       }
-    } catch (error) {
-      toast.error(`HATA`, {
-        description: `${error}`,
-        position: "top-right",
-      });
-      throw new Error(`crateAuthor try&catch hata -> ${error}`);
+    } catch (error: any) {
+      if (error.response.data.error == "This author already exists.") {
+        toast.error(`HATA`, {
+          description:
+            "Bu yazar zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
+          position: "top-right",
+        });
+      } else {
+        toast.error(`HATA`, {
+          description: `${error}`,
+          position: "top-right",
+        });
+        console.log(`crateAuthor try&catch hata -> ${error}`);
+      }
     }
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 sm:w-auto lg:w-fit create-author_form">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 sm:w-auto lg:w-fit create-author_form"
+      >
         <div className="space-y-4">
           <FormField
             control={form.control}

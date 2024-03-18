@@ -194,7 +194,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="ömer seyfettinin kaşağı"
                         type="text"
                       />
                     </FormControl>
@@ -226,7 +225,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                   (p) =>
                                     p.publisher_id.toString() == field.value
                                 )?.publisher_name
-                              : "Yayınevi seçiniz."}
+                              : ""}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
@@ -296,7 +295,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                               ? authors.find(
                                   (author) => author.value == field.value
                                 )?.label
-                              : "Yazar seçiniz."}
+                              : ""}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
@@ -363,7 +362,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                   (status) =>
                                     status.status_id.toString() == field.value
                                 )?.status_name
-                              : "Durum seçiniz."}
+                              : ""}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
@@ -422,7 +421,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                         value={field.value}
                         onChange={field.onChange}
                         defaultOptions={categories}
-                        placeholder="Kitaba uygun kategorileri seçiniz.."
+                        placeholder=""
                         emptyIndicator={
                           <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
                             kategori bulunamadı.
