@@ -19,18 +19,13 @@ const NavBar = () => {
 
   const navigation = [
     { name: "Anasyfa", href: "/", current: true },
-    { name: "Tüm Kitaplar", href: "#", current: false },
-    { name: "Üyeler", href: "#", current: false },
-    { name: "Giriş Yap", href: "/login", current: false },
+    { name: "Tüm Kitaplar", href: "/allbooks", current: false },
+    { name: "Üyeler", href: "/users", current: false },
   ];
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
   }
-
-  // const homeScreenRedirect(){
-  //   router.push
-  // }
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
