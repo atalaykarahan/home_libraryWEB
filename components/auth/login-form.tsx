@@ -91,7 +91,7 @@ const LoginForm: React.FC = () => {
                 <FormItem>
                   <FormLabel>Kullanıcı Adı</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="krhnatalay" type="text" />
+                    <Input {...field} type="text" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
