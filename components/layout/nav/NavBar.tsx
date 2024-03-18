@@ -27,6 +27,10 @@ const NavBar = () => {
     return classes.filter(Boolean).join(" ");
   }
 
+  // if user login in mobil view he can see private books link
+  if (user)
+    navigation.push({ name: "Kitaplarım", href: "/mybooks", current: false });
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
