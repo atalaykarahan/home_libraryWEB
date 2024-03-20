@@ -69,63 +69,65 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   const [openStatuses, setOpenStatuses] = useState(false);
 
   useEffect(() => {
-    fetchData();
+    const fetchData = async () => {
+      try {
+        //#region publisher query
+        const resPublisher = await getAllPublisherClient();
+  
+        if (resPublisher.status !== 200) {
+          throw new Error("publisher ile ilgili bir hata oluştu");
+        }
+  
+        setPublishers(resPublisher.data);
+        //#endregion
+  
+        //#region author query
+        const resAuthor = await getAllAuthorsSelectClient();
+  
+        if (resAuthor.status !== 200) {
+          throw new Error("author ile ilgili bir hata oluştu");
+        }
+  
+        // const responseAuthor: Author[] = resPublisher.data;
+        setAuthors(resAuthor.data);
+        //#endregion
+  
+        //#region status query
+        const resStatus = await getAllStatusesClient();
+  
+        if (resStatus.status !== 200) {
+          throw new Error("author ile ilgili bir hata oluştu");
+        }
+  
+        setStatuses(resStatus.data);
+        //#endregion
+  
+        //#region category query
+        const resCategory = await getCategories();
+        if (resCategory.status !== 200) {
+          throw new Error("category ile ilgili bir hata oluştu");
+        }
+        const responseCategory: Category[] = await resCategory.data;
+  
+        const transformedCategories = responseCategory.map((category) => ({
+          label: category.category_name,
+          value: category.category_name,
+          key: category.category_id.toString(),
+        }));
+  
+        if (transformedCategories) {
+          setCategories(transformedCategories);
+        }
+        //#endregion
+      } catch (error) {
+        console.warn("fetchData try&catch hata -> ", error);
+      }
+    };
+    
+     fetchData();
   }, [openModal]);
 
-  const fetchData = async () => {
-    try {
-      //#region publisher query
-      const resPublisher = await getAllPublisherClient();
 
-      if (resPublisher.status !== 200) {
-        throw new Error("publisher ile ilgili bir hata oluştu");
-      }
-
-      setPublishers(resPublisher.data);
-      //#endregion
-
-      //#region author query
-      const resAuthor = await getAllAuthorsSelectClient();
-
-      if (resAuthor.status !== 200) {
-        throw new Error("author ile ilgili bir hata oluştu");
-      }
-
-      // const responseAuthor: Author[] = resPublisher.data;
-      setAuthors(resAuthor.data);
-      //#endregion
-
-      //#region status query
-      const resStatus = await getAllStatusesClient();
-
-      if (resStatus.status !== 200) {
-        throw new Error("author ile ilgili bir hata oluştu");
-      }
-
-      setStatuses(resStatus.data);
-      //#endregion
-
-      //#region category query
-      const resCategory = await getCategories();
-      if (resCategory.status !== 200) {
-        throw new Error("category ile ilgili bir hata oluştu");
-      }
-      const responseCategory: Category[] = resCategory.data;
-
-      const transformedCategories = responseCategory.map((category) => ({
-        label: category.category_name,
-        value: category.category_name,
-        key: category.category_id.toString(),
-      }));
-
-      if (transformedCategories) {
-        setCategories(transformedCategories);
-      }
-      //#endregion
-    } catch (error) {
-      console.warn("fetchData try&catch hata -> ", error);
-    }
-  };
 
   const form = useForm<z.infer<typeof CreateBookSchema>>({
     resolver: zodResolver(CreateBookSchema),
