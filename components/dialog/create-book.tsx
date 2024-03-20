@@ -58,15 +58,15 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 }) => {
   //publisher
   const [publishers, setPublishers] = useState<Publisher[]>([]);
-  const [openPublishers, setOpenPublishers] = useState(false)
+  const [openPublishers, setOpenPublishers] = useState(false);
   //category
   const [categories, setCategories] = useState<Option[]>([]);
   //author
   const [authors, setAuthors] = useState<Option[]>([]);
-  const [openAuthors, setOpenAuthors] = useState(false)
+  const [openAuthors, setOpenAuthors] = useState(false);
   //status
   const [statuses, setStatuses] = useState<Status[]>([]);
-  const [openStatuses, setOpenStatuses] = useState(false)
+  const [openStatuses, setOpenStatuses] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -166,12 +166,20 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
         });
         throw new Error("Book eklenirken bir hata oluştu");
       }
-    } catch (error) {
-      toast.error(`HATA`, {
-        description: `${error}`,
-        position: "top-right",
-      });
-      throw new Error(`createBookError try&catch hata -> ${error}`);
+    } catch (error: any) {
+      if (error.response.data.error == "This book already exists.") {
+        toast.error(`HATA`, {
+          description:
+            "Bu kitap zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
+          position: "top-right",
+        });
+      } else {
+        toast.error(`HATA`, {
+          description: `${error}`,
+          position: "top-right",
+        });
+        console.log(`createBookError try&catch hata -> ${error}`);
+      }
     }
   };
 
@@ -192,10 +200,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                   <FormItem>
                     <FormLabel>Kitap Adı</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        type="text"
-                      />
+                      <Input {...field} type="text" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -209,7 +214,10 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Yayınevi</FormLabel>
-                    <Popover open={openPublishers} onOpenChange={setOpenPublishers}>
+                    <Popover
+                      open={openPublishers}
+                      onOpenChange={setOpenPublishers}
+                    >
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -251,7 +259,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                                     p.publisher_id.toString()
                                   );
                                   setOpenPublishers(false);
-
                                 }}
                               >
                                 {p.publisher_name}
