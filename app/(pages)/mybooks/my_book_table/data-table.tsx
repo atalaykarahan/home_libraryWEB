@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import {
   ColumnDef,
@@ -30,9 +30,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -40,9 +38,9 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    state:{
+    state: {
       columnFilters,
-    }
+    },
   });
 
   return (
@@ -89,30 +87,26 @@ export function DataTable<TData, TValue>({
                     backgroundColor: (() => {
                       let color = "inherit";
                       row.getVisibleCells().find((cell) => {
-                        if(cell.column.id == "status"){
+                        if (cell.column.id == "status") {
                           const value = cell.getValue();
-                        switch (value) {
-                          case "Yarım bırakıldı":
-                            color = "rgb(254, 166, 166)";
-                            break;
-                          case "Okundu":
-                            color = "rgb(199, 236, 199)";
-                            break;
-                          case "Okunuyor":
-                            color = "rgb(130, 152, 254)";
-                            break;
-                        }
+                          switch (value) {
+                            case "Yarım bırakıldı":
+                              color = "rgb(254, 166, 166)";
+                              break;
+                            case "Okundu":
+                              color = "rgb(199, 236, 199)";
+                              break;
+                            case "Okunuyor":
+                              color = "rgb(130, 152, 254)";
+                              break;
+                          }
                         }
                       });
                       return color;
                     })(),
                   }}
-                
                 >
-              
                   {row.getVisibleCells().map((cell) => (
-
-              console.log(cell.column.id),
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,

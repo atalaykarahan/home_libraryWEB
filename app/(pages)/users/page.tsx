@@ -1,7 +1,11 @@
+import UserTablePage from "./user_table/user-table-page";
+
 const AllUsersPage = () => {
-    return ( <div>
-        <p>users sayfası</p>
-    </div> );
-}
- 
+  return (
+    <div>
+      <UserTablePage />
+    </div>
+  );
+};
+
 export default AllUsersPage;
