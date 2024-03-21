@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-export type UserTableModel = {
+export type UserCollapsibleModel = {
   user_id: string;
   user_name: string;
   interacted_book_count: string;
@@ -12,7 +12,7 @@ export type UserTableModel = {
 };
 
 
-export const columns: ColumnDef<UserTableModel>[] = [
+export const columns: ColumnDef<UserCollapsibleModel>[] = [
   
   {
     accessorKey: "user_name",

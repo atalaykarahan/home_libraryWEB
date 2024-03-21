@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { UserTableModel, columns } from "./columns";
+import { UserCollapsibleModel, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getUserBookGridList } from "@/app/_api/services/userService";
 
 const UserTablePage = () => {
-  const [users, setUsers] = useState<UserTableModel[]>([]);
+  const [users, setUsers] = useState<UserCollapsibleModel[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -26,9 +26,8 @@ const UserTablePage = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
       <DataTable columns={columns} data={users} />
-    </div>
+   
   );
 };
 

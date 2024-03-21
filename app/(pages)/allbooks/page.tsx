@@ -4,6 +4,7 @@ const AllBooksPage = () => {
   return (
     <div>
       <BookTablePage />
+      
     </div>
   );
 };
