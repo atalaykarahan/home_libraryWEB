@@ -22,6 +22,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import BookTablePage from "../../allbooks/book_table/book-table-page";
+import UserCollapsibleTablePage from "../user-collapsible-table/page";
+import { VscTriangleRight } from "react-icons/vsc";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,7 +33,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData | any, TValue>) {
   const table = useReactTable({
     data,
     columns,
@@ -73,7 +75,7 @@ export function DataTable<TData, TValue>({
                     >
                       <TableCell>
                         <CollapsibleTrigger asChild>
-                          <div>▸</div>
+                          <VscTriangleRight />
                         </CollapsibleTrigger>
                       </TableCell>
                       {row.getVisibleCells().map((cell) => (
@@ -89,9 +91,10 @@ export function DataTable<TData, TValue>({
                     <CollapsibleContent asChild>
                       <tr>
                         <td colSpan={6}>
-                          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis facilis autem repellat accusantium, quasi officiis delectus nostrum facere necessitatibus ad quibusdam natus earum praesentium deserunt tempore ea laboriosam assumenda eligendi!</p>
+                          <UserCollapsibleTablePage
+                            user_id={row.original.user_id}
+                          />
                         </td>
-                      
                       </tr>
                     </CollapsibleContent>
                   </>

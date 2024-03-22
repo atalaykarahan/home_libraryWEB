@@ -12,3 +12,7 @@ export const getAllBooksClient = () => {
 export const deleteBookClient = (book_id: number) => {
   return axios.delete(`/books/${book_id}`);
 };
+
+export const getUserBookGridCollapseList = (user_id: string) => {
+  return axios.get(`/books/userBookGridCollapseList/${user_id}`);
+};

@@ -2,10 +2,16 @@
 import { useEffect, useState } from "react";
 import { UserCollapsibleModel, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getUserBookGridList } from "@/app/_api/services/userService";
+import { getUserBookGridCollapseList } from "@/app/_api/services/bookService";
 
-const UserTablePage = () => {
-  const [users, setUsers] = useState<UserCollapsibleModel[]>([]);
+interface UserCollapsibleTablePage {
+  user_id: string;
+}
+
+const UserCollapsibleTablePage: React.FC<UserCollapsibleTablePage> = ({
+  user_id,
+}) => {
+  const [userDetail, setUserDetail] = useState<UserCollapsibleModel[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -13,22 +19,19 @@ const UserTablePage = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getUserBookGridList();
+      const res = await getUserBookGridCollapseList(user_id);
 
       if (res.status !== 200) {
-        throw new Error("User ile ilgili bir hata oluştu");
+        throw new Error("User collapse ile ilgili bir hata oluştu");
       }
 
-      setUsers(res.data);
+      setUserDetail(res.data);
     } catch (error) {
-      console.warn("user try&catch hata -> ", error);
+      console.warn("user collapse try&catch hata -> ", error);
     }
   };
 
-  return (
-      <DataTable columns={columns} data={users} />
-   
-  );
+  return <DataTable columns={columns} data={userDetail} />;
 };
 
-export default UserTablePage;
+export default UserCollapsibleTablePage;

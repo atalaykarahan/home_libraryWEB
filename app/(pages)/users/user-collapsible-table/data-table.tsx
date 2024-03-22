@@ -46,7 +46,6 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                <TableHead></TableHead>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -65,17 +64,10 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <Collapsible key={row.id} asChild>
-                  <>
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
                     >
-                      <TableCell>
-                        <CollapsibleTrigger asChild>
-                          <div>▸</div>
-                        </CollapsibleTrigger>
-                      </TableCell>
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
                           {flexRender(
@@ -85,17 +77,6 @@ export function DataTable<TData, TValue>({
                         </TableCell>
                       ))}
                     </TableRow>
-
-                    <CollapsibleContent asChild>
-                      <tr>
-                        <td colSpan={6}>
-                          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis facilis autem repellat accusantium, quasi officiis delectus nostrum facere necessitatibus ad quibusdam natus earum praesentium deserunt tempore ea laboriosam assumenda eligendi!</p>
-                        </td>
-                      
-                      </tr>
-                    </CollapsibleContent>
-                  </>
-                </Collapsible>
               ))
             ) : (
               <TableRow>
