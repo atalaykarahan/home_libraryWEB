@@ -30,7 +30,7 @@ const UserCollapsibleTablePage: React.FC<UserCollapsibleTablePage> = ({
     }
   };
 
-  return <DataTable columns={columns} data={userDetail} />;
+  return <DataTable height={"25rem"} columns={columns} data={userDetail} />;
 };
 
 export default UserCollapsibleTablePage;

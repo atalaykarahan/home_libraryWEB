@@ -40,6 +40,7 @@
     "react-hook-form": "^7.49.3",
     "react-icons": "^4.12.0",
     "react-spinners": "^0.13.8",
+    "react-virtuoso": "^4.7.4",
     "set-cookie-parser": "^2.6.0",
     "sonner": "^1.4.0",
     "tailwind-merge": "^2.2.0",
