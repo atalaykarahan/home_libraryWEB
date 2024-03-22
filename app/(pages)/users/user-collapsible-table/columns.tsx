@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type UserCollapsibleModel = {
@@ -15,7 +16,14 @@ export const columns: ColumnDef<UserCollapsibleModel>[] = [
     header: "Kitap Adı",
   },
   {
-    accessorKey: "status",
     header: "Durumu",
+    cell: ({ row }) => {
+      const book = row.original;
+      return book.status == "Okundu" ? (
+        <Badge>{book.status}</Badge>
+      ) : (
+        <Badge variant="destructive">{book.status}</Badge>
+      );
+    },
   },
 ];

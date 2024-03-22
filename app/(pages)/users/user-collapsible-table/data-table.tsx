@@ -4,9 +4,12 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
+import Image from "next/image";
+
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import {
   Table,
@@ -16,12 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import BookTablePage from "../../allbooks/book_table/book-table-page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,6 +43,8 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                {/* bu kisim resmin durucaği yer için */}
+                <TableHead></TableHead>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -64,19 +63,33 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  <TableCell>
+                    {/* bu kisimda resim olmali */}
+                    <div className="w-[50px]">
+                      <AspectRatio ratio={7 / 11} className="flex content-center flex-row flex-wrap">
+                        <Image
+                          src="https://img.kitapyurdu.com/v1/getImage/fn:1109383/wh:true/wi:220"
+                          width={220}
+                          height={310}
+                          alt="Image"
+                          className="rounded-md object-cover"
+                        />
+                      </AspectRatio>
+                    </div>
+                  </TableCell>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
               ))
             ) : (
               <TableRow>

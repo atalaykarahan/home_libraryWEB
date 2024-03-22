@@ -73,7 +73,7 @@ export function DataTable<TData, TValue>({
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
                     >
-                      <TableCell>
+                      <TableCell style={{ cursor: "pointer" }}>
                         <CollapsibleTrigger asChild>
                           <VscTriangleRight />
                         </CollapsibleTrigger>

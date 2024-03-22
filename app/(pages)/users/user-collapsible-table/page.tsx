@@ -24,7 +24,6 @@ const UserCollapsibleTablePage: React.FC<UserCollapsibleTablePage> = ({
       if (res.status !== 200) {
         throw new Error("User collapse ile ilgili bir hata oluştu");
       }
-
       setUserDetail(res.data);
     } catch (error) {
       console.warn("user collapse try&catch hata -> ", error);
