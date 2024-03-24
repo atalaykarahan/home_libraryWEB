@@ -37,10 +37,13 @@ import { cn } from "@/lib/utils";
 import { CreateBookSchema } from "@/schemas/book";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import MultipleSelector, { Option } from "../ui/multiple-selector";
+import MultipleSelector, {
+  MultipleSelectorRef,
+  Option,
+} from "../ui/multiple-selector";
 import { Textarea } from "../ui/textarea";
 import { postInsertBookClient } from "@/app/_api/services/bookService";
 import { InsertBook } from "@/app/_models/book";
@@ -57,64 +60,85 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   closeModal,
 }) => {
   //publisher
-  const [publishers, setPublishers] = useState<Publisher[]>([]);
-  const [openPublishers, setOpenPublishers] = useState(false);
+  const [publishers, setPublishers] = useState<Option[]>([]);
+  const publisherInputRef = useRef<MultipleSelectorRef>(null);
   //category
   const [categories, setCategories] = useState<Option[]>([]);
   //author
   const [authors, setAuthors] = useState<Option[]>([]);
-  const [openAuthors, setOpenAuthors] = useState(false);
+  const authorInputRef = useRef<MultipleSelectorRef>(null);
   //status
-  const [statuses, setStatuses] = useState<Status[]>([]);
-  const [openStatuses, setOpenStatuses] = useState(false);
+  const [statuses, setStatuses] = useState<Option[]>([]);
+  const statusInputRef = useRef<MultipleSelectorRef>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         //#region publisher query
         const resPublisher = await getAllPublisherClient();
-  
+
         if (resPublisher.status !== 200) {
           throw new Error("publisher ile ilgili bir hata oluştu");
         }
-  
-        setPublishers(resPublisher.data);
+
+        const responsePublisher: Publisher[] = await resPublisher.data;
+
+        const transformedPublishers = responsePublisher.map((publisher) => ({
+          label: publisher.publisher_name,
+          value: publisher.publisher_name,
+          key: publisher.publisher_id.toString(),
+        }));
+
+        if (transformedPublishers) setPublishers(transformedPublishers);
         //#endregion
-  
+
         //#region author query
         const resAuthor = await getAllAuthorsSelectClient();
-  
+
         if (resAuthor.status !== 200) {
           throw new Error("author ile ilgili bir hata oluştu");
         }
-  
+
         // const responseAuthor: Author[] = resPublisher.data;
-        setAuthors(resAuthor.data);
+        const responseAuthor: Option[] = resAuthor.data;
+        const transformedAuthors = responseAuthor.map((author) => ({
+          label: author.label,
+          value: author.label,
+          key: author.value,
+        }));
+        if (transformedAuthors) setAuthors(transformedAuthors);
         //#endregion
-  
+
         //#region status query
         const resStatus = await getAllStatusesClient();
-  
-        if (resStatus.status !== 200) {
-          throw new Error("author ile ilgili bir hata oluştu");
-        }
-  
-        setStatuses(resStatus.data);
+
+        if (resStatus.status !== 200)
+          throw new Error("status ile ilgili bir hata oluştu");
+   
+        const responseStatus: Status[] = await resStatus.data;
+
+        const transformedStatuses = responseStatus.map((status) => ({
+          label: status.status_name,
+          value: status.status_name,
+          key: status.status_id.toString(),
+        }));
+        if(transformedStatuses)
+        setStatuses(transformedStatuses);
         //#endregion
-  
+
         //#region category query
         const resCategory = await getCategories();
         if (resCategory.status !== 200) {
           throw new Error("category ile ilgili bir hata oluştu");
         }
         const responseCategory: Category[] = await resCategory.data;
-  
+
         const transformedCategories = responseCategory.map((category) => ({
           label: category.category_name,
           value: category.category_name,
           key: category.category_id.toString(),
         }));
-  
+
         if (transformedCategories) {
           setCategories(transformedCategories);
         }
@@ -123,66 +147,70 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
         console.warn("fetchData try&catch hata -> ", error);
       }
     };
-    
-     fetchData();
+
+    fetchData();
   }, [openModal]);
-
-
 
   const form = useForm<z.infer<typeof CreateBookSchema>>({
     resolver: zodResolver(CreateBookSchema),
     defaultValues: {
+      book_image:"",
       book_title: "",
       book_summary: "",
       categories: [],
+      publisher:[],
+      status:[],
+      author:[],
     },
   });
 
   const onSubmit = async (data: z.infer<typeof CreateBookSchema>) => {
-    try {
-      const newBook: InsertBook = {
-        book_title: data.book_title,
-        author_id: data.author_id,
-        publisher_id: data.publisher_id ?? "",
-        status_id: data.status_id,
-        categories_id: data.categories.map((category: any) => category.key),
-        book_summary: data.book_summary,
-      };
-      console.log("kitap bu ", newBook);
-      const resInsertBook = await postInsertBookClient(newBook);
-      if (resInsertBook.status == 201) {
-        form.reset();
-        toast.success(`KİTAP BAŞARIYLA EKLENDİ`, {
-          position: "top-right",
-          style: {
-            backgroundColor: "hsl(143, 85%, 96%)",
-            color: "hsl(140, 100%, 27%)",
-            borderColor: "hsl(145, 92%, 91%)",
-          },
-        });
-        eventEmitter.emit("updateGrid");
-      } else {
-        toast.error(`Bir hata meydana geldi`, {
-          description: `Daha sonra tekrar deneyin!`,
-          position: "top-right",
-        });
-        throw new Error("Book eklenirken bir hata oluştu");
-      }
-    } catch (error: any) {
-      if (error.response.data.error == "This book already exists.") {
-        toast.error(`HATA`, {
-          description:
-            "Bu kitap zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
-          position: "top-right",
-        });
-      } else {
-        toast.error(`HATA`, {
-          description: `${error}`,
-          position: "top-right",
-        });
-        console.log(`createBookError try&catch hata -> ${error}`);
-      }
-    }
+    console.log(data);
+    //şu anlık kitap ekleme kapatıldı inputlar değiştirildikten sonra bu aşağıdaki bazı kodlar değiştirilecek aynı şekilde endpointte öyle
+    // try {
+    //   const newBook: InsertBook = {
+    //     book_title: data.book_title,
+    //     author_id: data.author_id,
+    //     publisher_id: data.publisher_id ?? "",
+    //     status_id: data.status_id,
+    //     categories_id: data.categories.map((category: any) => category.key),
+    //     book_summary: data.book_summary,
+    //   };
+    //   console.log("kitap bu ", newBook);
+    //   const resInsertBook = await postInsertBookClient(newBook);
+    //   if (resInsertBook.status == 201) {
+    //     form.reset();
+    //     toast.success(`KİTAP BAŞARIYLA EKLENDİ`, {
+    //       position: "top-right",
+    //       style: {
+    //         backgroundColor: "hsl(143, 85%, 96%)",
+    //         color: "hsl(140, 100%, 27%)",
+    //         borderColor: "hsl(145, 92%, 91%)",
+    //       },
+    //     });
+    //     eventEmitter.emit("updateGrid");
+    //   } else {
+    //     toast.error(`Bir hata meydana geldi`, {
+    //       description: `Daha sonra tekrar deneyin!`,
+    //       position: "top-right",
+    //     });
+    //     throw new Error("Book eklenirken bir hata oluştu");
+    //   }
+    // } catch (error: any) {
+    //   if (error.response.data.error == "This book already exists.") {
+    //     toast.error(`HATA`, {
+    //       description:
+    //         "Bu kitap zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
+    //       position: "top-right",
+    //     });
+    //   } else {
+    //     toast.error(`HATA`, {
+    //       description: `${error}`,
+    //       position: "top-right",
+    //     });
+    //     console.log(`createBookError try&catch hata -> ${error}`);
+    //   }
+    // }
   };
 
   return (
@@ -194,6 +222,21 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
+              {/* book image */}
+              <FormField
+                control={form.control}
+                name="book_image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kitap Resmi</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="file" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* book name */}
               <FormField
                 control={form.control}
@@ -212,72 +255,36 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
               {/* publisher  */}
               <FormField
                 control={form.control}
-                name="publisher_id"
+                name="publisher"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Yayınevi</FormLabel>
-                    <Popover
-                      open={openPublishers}
-                      onOpenChange={setOpenPublishers}
-                    >
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? publishers.find(
-                                  (p) =>
-                                    p.publisher_id.toString() == field.value
-                                )?.publisher_name
-                              : ""}
-                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="p-0"
-                        style={{ maxHeight: "15rem", overflow: "auto" }}
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Yayınevi ara..."
-                            className="h-9"
-                          />
-                          <CommandEmpty>Yayınevi bulunamadı.</CommandEmpty>
-                          <CommandGroup>
-                            {publishers.map((p) => (
-                              <CommandItem
-                                value={p.publisher_name}
-                                key={p.publisher_id}
-                                onSelect={() => {
-                                  form.setValue(
-                                    "publisher_id",
-                                    p.publisher_id.toString()
-                                  );
-                                  setOpenPublishers(false);
-                                }}
-                              >
-                                {p.publisher_name}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    p.publisher_id.toString() == field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <MultipleSelector
+                        maxSelected={1}
+                        value={field.value}
+                        onMaxSelected={(maxLimit) => {
+                          toast.warning(`SINIR`, {
+                            description: `Yalnızca ${maxLimit} adet Yayınevi seçebilirsiniz.`,
+                            position: "bottom-center",
+                          });
+                        }}
+                        ref={publisherInputRef}
+                        onChange={(selectedOptions) => {
+                          field.onChange(selectedOptions)
+                          if (selectedOptions.length > 0)
+                            publisherInputRef.current?.input.blur();
+                        }}
+                        defaultOptions={publishers}
+                        placeholder=""
+                        creatable
+                        emptyIndicator={
+                          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                            Yayınevi bulunamadı.
+                          </p>
+                        }
+                      />
+                    </FormControl>
                   </FormItem>
                 )}
               />
@@ -285,65 +292,36 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
               {/* author  */}
               <FormField
                 control={form.control}
-                name="author_id"
+                name="author"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Yazar</FormLabel>
-                    <Popover open={openAuthors} onOpenChange={setOpenAuthors}>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? authors.find(
-                                  (author) => author.value == field.value
-                                )?.label
-                              : ""}
-                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="p-0"
-                        style={{ maxHeight: "15rem", overflow: "auto" }}
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Yazar ara..."
-                            className="h-9"
-                          />
-                          <CommandEmpty>Yazar bulunamadı.</CommandEmpty>
-                          <CommandGroup>
-                            {authors.map((author) => (
-                              <CommandItem
-                                value={author.label}
-                                key={author.value}
-                                onSelect={() => {
-                                  form.setValue("author_id", author.value);
-                                  setOpenAuthors(false);
-                                }}
-                              >
-                                {author.label}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    author.value == field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <MultipleSelector
+                        maxSelected={1}
+                        value={field.value}
+                        onMaxSelected={(maxLimit) => {
+                          toast.warning(`SINIR`, {
+                            description: `Yalnızca ${maxLimit} adet Yazar seçebilirsiniz.`,
+                            position: "bottom-center",
+                          });
+                        }}
+                        ref={authorInputRef}
+                        onChange={(selectedOptions) => {
+                          field.onChange(selectedOptions)
+                          if (selectedOptions.length > 0)
+                            authorInputRef.current?.input.blur();
+                        }}
+                        defaultOptions={authors}
+                        placeholder=""
+                        creatable
+                        emptyIndicator={
+                          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                            Yazar bulunamadı.
+                          </p>
+                        }
+                      />
+                    </FormControl>
                   </FormItem>
                 )}
               />
@@ -351,69 +329,35 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
               {/* status  */}
               <FormField
                 control={form.control}
-                name="status_id"
+                name="status"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Durum</FormLabel>
-                    <Popover open={openStatuses} onOpenChange={setOpenStatuses}>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? statuses.find(
-                                  (status) =>
-                                    status.status_id.toString() == field.value
-                                )?.status_name
-                              : ""}
-                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="p-0"
-                        style={{ maxHeight: "15rem", overflow: "auto" }}
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Durum ara..."
-                            className="h-9"
-                          />
-                          <CommandEmpty>Durum bulunamadı.</CommandEmpty>
-                          <CommandGroup>
-                            {statuses.map((status) => (
-                              <CommandItem
-                                value={status.status_name}
-                                key={status.status_id}
-                                onSelect={() => {
-                                  form.setValue(
-                                    "status_id",
-                                    status.status_id.toString()
-                                  );
-                                  setOpenStatuses(false);
-                                }}
-                              >
-                                {status.status_name}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    status.status_id.toString() == field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <MultipleSelector
+                        maxSelected={1}
+                        value={field.value}
+                        onMaxSelected={(maxLimit) => {
+                          toast.warning(`SINIR`, {
+                            description: `Yalnızca ${maxLimit} adet durum seçebilirsiniz.`,
+                            position: "bottom-center",
+                          });
+                        }}
+                        ref={statusInputRef}
+                        onChange={(selectedOptions) => {
+                          field.onChange(selectedOptions)
+                          if (selectedOptions.length > 0)
+                            statusInputRef.current?.input.blur();
+                        }}
+                        options={statuses}
+                        placeholder=""
+                        emptyIndicator={
+                          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                            Durum bulunamadı.
+                          </p>
+                        }
+                      />
+                    </FormControl>
                   </FormItem>
                 )}
               />
@@ -427,10 +371,11 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                     <FormLabel>Kategoriler</FormLabel>
                     <FormControl>
                       <MultipleSelector
-                        value={field.value}
-                        onChange={field.onChange}
+                      value={field.value}
                         defaultOptions={categories}
                         placeholder=""
+                        creatable
+                        onChange={field.onChange}
                         emptyIndicator={
                           <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
                             kategori bulunamadı.
@@ -454,6 +399,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                       <Textarea
                         placeholder="Kitabın özeti"
                         className="resize-none"
+                        style={{ minHeight: "6rem" }}
                         {...field}
                       />
                     </FormControl>
