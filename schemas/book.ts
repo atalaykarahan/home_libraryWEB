@@ -8,11 +8,35 @@ const optionSchema = z.object({
 
 const imageExtensions = /\.(jpg|jpeg|png|webp)$/i;
 
+// export const ACCEPTED_IMAGE_TYPES = [
+//   'image/jpeg',
+//   'image/jpg',
+//   'image/png',
+//   'image/webp',
+// ];
+
+export const MAX_FILE_SIZE = 1024 * 1024 * 5;
+
+
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
+export const ImageTestSchema = z.object({
+  book_image: z
+    .array(z.string()).min(1),
+});
+
+
+
+
+
+
 
 export const CreateBookSchema = z.object({
-  book_image: z.string().refine((file) => {
-    return imageExtensions.test(file);
-  },{message: "Lütfen bir resim dosyası yükleyin (jpg, jpeg, png, webp)."}),
   book_title: z.string().min(1),
   author: z.array(optionSchema).min(1).max(1),
   publisher: z.array(optionSchema).min(1).max(1),

@@ -34,7 +34,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CreateBookSchema } from "@/schemas/book";
+import { CreateBookSchema, ImageTestSchema } from "@/schemas/book";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useEffect, useRef, useState } from "react";
@@ -45,10 +45,14 @@ import MultipleSelector, {
   Option,
 } from "../ui/multiple-selector";
 import { Textarea } from "../ui/textarea";
-import { postInsertBookClient } from "@/app/_api/services/bookService";
+import {
+  postInsertBookClient,
+  testFormData,
+} from "@/app/_api/services/bookService";
 import { InsertBook } from "@/app/_models/book";
 import { toast } from "sonner";
 import EventEmitter from "events";
+import axios from "@/app/_api/axios";
 
 export const eventEmitter = new EventEmitter();
 interface CreateCategoryProps {
@@ -114,7 +118,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
         if (resStatus.status !== 200)
           throw new Error("status ile ilgili bir hata oluştu");
-   
+
         const responseStatus: Status[] = await resStatus.data;
 
         const transformedStatuses = responseStatus.map((status) => ({
@@ -122,8 +126,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
           value: status.status_name,
           key: status.status_id.toString(),
         }));
-        if(transformedStatuses)
-        setStatuses(transformedStatuses);
+        if (transformedStatuses) setStatuses(transformedStatuses);
         //#endregion
 
         //#region category query
@@ -154,64 +157,100 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   const form = useForm<z.infer<typeof CreateBookSchema>>({
     resolver: zodResolver(CreateBookSchema),
     defaultValues: {
-      book_image:"",
       book_title: "",
       book_summary: "",
       categories: [],
-      publisher:[],
-      status:[],
-      author:[],
+      publisher: [],
+      status: [],
+      author: [],
     },
   });
 
+  const [uploading, setUploading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [caption, setCaption] = useState("");
+
   const onSubmit = async (data: z.infer<typeof CreateBookSchema>) => {
-    console.log(data);
-    //şu anlık kitap ekleme kapatıldı inputlar değiştirildikten sonra bu aşağıdaki bazı kodlar değiştirilecek aynı şekilde endpointte öyle
-    // try {
-    //   const newBook: InsertBook = {
-    //     book_title: data.book_title,
-    //     author_id: data.author_id,
-    //     publisher_id: data.publisher_id ?? "",
-    //     status_id: data.status_id,
-    //     categories_id: data.categories.map((category: any) => category.key),
-    //     book_summary: data.book_summary,
-    //   };
-    //   console.log("kitap bu ", newBook);
-    //   const resInsertBook = await postInsertBookClient(newBook);
-    //   if (resInsertBook.status == 201) {
-    //     form.reset();
-    //     toast.success(`KİTAP BAŞARIYLA EKLENDİ`, {
-    //       position: "top-right",
-    //       style: {
-    //         backgroundColor: "hsl(143, 85%, 96%)",
-    //         color: "hsl(140, 100%, 27%)",
-    //         borderColor: "hsl(145, 92%, 91%)",
-    //       },
-    //     });
-    //     eventEmitter.emit("updateGrid");
-    //   } else {
-    //     toast.error(`Bir hata meydana geldi`, {
-    //       description: `Daha sonra tekrar deneyin!`,
-    //       position: "top-right",
-    //     });
-    //     throw new Error("Book eklenirken bir hata oluştu");
-    //   }
-    // } catch (error: any) {
-    //   if (error.response.data.error == "This book already exists.") {
-    //     toast.error(`HATA`, {
-    //       description:
-    //         "Bu kitap zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
-    //       position: "top-right",
-    //     });
-    //   } else {
-    //     toast.error(`HATA`, {
-    //       description: `${error}`,
-    //       position: "top-right",
-    //     });
-    //     console.log(`createBookError try&catch hata -> ${error}`);
-    //   }
-    // }
+    try {
+      console.log(data);
+      const formData = new FormData();
+      formData.append("book_title",data.book_title);
+      formData.append("book_summary",data.book_summary);
+      formData.append("author", JSON.stringify(data.author));
+      formData.append("categories", JSON.stringify(data.categories));
+      formData.append("publisher", JSON.stringify(data.publisher));
+      formData.append("status", JSON.stringify(data.status));
+      if (selectedFile) {
+        formData.append("book_image",selectedFile);
+      }
+
+
+      await testFormData(formData);
+
+
+
+   
+      console.log(formData);
+
+      //   const newBook: InsertBook = {
+      //     book_title: data.book_title,
+      //     author_id: data.author_id,
+      //     publisher_id: data.publisher_id ?? "",
+      //     status_id: data.status_id,
+      //     categories_id: data.categories.map((category: any) => category.key),
+      //     book_summary: data.book_summary,
+      //   };
+      //   console.log("kitap bu ", newBook);
+      //   const resInsertBook = await postInsertBookClient(newBook);
+      //   if (resInsertBook.status == 201) {
+      //     form.reset();
+      //     toast.success(`KİTAP BAŞARIYLA EKLENDİ`, {
+      //       position: "top-right",
+      //       style: {
+      //         backgroundColor: "hsl(143, 85%, 96%)",
+      //         color: "hsl(140, 100%, 27%)",
+      //         borderColor: "hsl(145, 92%, 91%)",
+      //       },
+      //     });
+      //     eventEmitter.emit("updateGrid");
+      //   } else {
+      //     toast.error(`Bir hata meydana geldi`, {
+      //       description: `Daha sonra tekrar deneyin!`,
+      //       position: "top-right",
+      //     });
+      //     throw new Error("Book eklenirken bir hata oluştu");
+      //   }
+    } catch (error: any) {
+      if (error.response.data.error == "This book already exists.") {
+        toast.error(`HATA`, {
+          description:
+            "Bu kitap zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
+          position: "top-right",
+        });
+      } else {
+        toast.error(`HATA`, {
+          description: `${error}`,
+          position: "top-right",
+        });
+        console.log(`createBookError try&catch hata -> ${error}`);
+      }
+    }
   };
+
+  // const submit = async (event: { preventDefault: () => void }) => {
+  //   event.preventDefault();
+
+  //   console.log("henüz içine girmeid")
+  //   if(selectedFile){
+  //     console.log("içinde girdi",selectedFile);
+  //     const formData = new FormData();
+  //     formData.append("image", selectedFile)
+  //     formData.append("caption", caption)
+  //     await testFormData(formData);
+  //     // await axios.post("/api/posts", formData, { headers: {'Content-Type': 'multipart/form-data'}})
+  //   }
+  // };
 
   return (
     <Dialog open={openModal} onOpenChange={() => closeModal()}>
@@ -224,13 +263,21 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
             <div className="space-y-4">
               {/* book image */}
               <FormField
-                control={form.control}
                 name="book_image"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Kitap Resmi</FormLabel>
                     <FormControl>
-                      <Input {...field} type="file" />
+                      <Input
+                        type="file"
+                        onChange={({ target }) => {
+                          if (target.files) {
+                            const file = target.files[0];
+                            setSelectedImage(URL.createObjectURL(file));
+                            setSelectedFile(file);
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -271,7 +318,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                         }}
                         ref={publisherInputRef}
                         onChange={(selectedOptions) => {
-                          field.onChange(selectedOptions)
+                          field.onChange(selectedOptions);
                           if (selectedOptions.length > 0)
                             publisherInputRef.current?.input.blur();
                         }}
@@ -308,7 +355,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                         }}
                         ref={authorInputRef}
                         onChange={(selectedOptions) => {
-                          field.onChange(selectedOptions)
+                          field.onChange(selectedOptions);
                           if (selectedOptions.length > 0)
                             authorInputRef.current?.input.blur();
                         }}
@@ -345,7 +392,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                         }}
                         ref={statusInputRef}
                         onChange={(selectedOptions) => {
-                          field.onChange(selectedOptions)
+                          field.onChange(selectedOptions);
                           if (selectedOptions.length > 0)
                             statusInputRef.current?.input.blur();
                         }}
@@ -371,7 +418,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                     <FormLabel>Kategoriler</FormLabel>
                     <FormControl>
                       <MultipleSelector
-                      value={field.value}
+                        value={field.value}
                         defaultOptions={categories}
                         placeholder=""
                         creatable
@@ -414,6 +461,30 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
             </div>
           </form>
         </Form>
+
+        {/* <form
+          onSubmit={submit}
+          style={{ width: 650 }}
+          className="flex flex-col space-y-5 px-5 py-14"
+        >
+          <input
+            type="file"
+            onChange={({ target }) => {
+              if (target.files) {
+                const file = target.files[0];
+                setSelectedImage(URL.createObjectURL(file));
+                setSelectedFile(file);
+              }
+            }}
+          />
+          <input
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            type="text"
+            placeholder="Caption"
+          ></input>
+          <button type="submit">Submit</button>
+        </form> */}
       </DialogContent>
     </Dialog>
   );
