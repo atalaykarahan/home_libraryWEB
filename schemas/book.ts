@@ -17,7 +17,6 @@ const imageExtensions = /\.(jpg|jpeg|png|webp)$/i;
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 5;
 
-
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -26,27 +25,18 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
 ];
 const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
 export const ImageTestSchema = z.object({
-  book_image: z
-    .array(z.string()).min(1),
+  book_image: z.array(z.string()).min(1),
 });
-
-
-
-
-
-
 
 export const CreateBookSchema = z.object({
   book_title: z.string().min(1),
   author: z.array(optionSchema).min(1).max(1),
   publisher: z.array(optionSchema).min(1).max(1),
   status: z.array(optionSchema).min(1).max(1),
-  categories: z
-    .array(optionSchema)
-    .min(1, {
-      message:
-        "Her kitabın en azından 1 adet kategorisi vardır öyle değil mi? :)",
-    }),
+  categories: z.array(optionSchema).min(1, {
+    message:
+      "Her kitabın en azından 1 adet kategorisi vardır öyle değil mi? :)",
+  }),
   book_summary: z.string().min(10, {
     message: "Kitap özeti minimum 10 karakter uzunluğunda olmalıdır.",
   }),

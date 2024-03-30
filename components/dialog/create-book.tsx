@@ -45,10 +45,7 @@ import MultipleSelector, {
   Option,
 } from "../ui/multiple-selector";
 import { Textarea } from "../ui/textarea";
-import {
-  postInsertBookClient,
-  testFormData,
-} from "@/app/_api/services/bookService";
+import { postInsertBookClient } from "@/app/_api/services/bookService";
 import { InsertBook } from "@/app/_models/book";
 import { toast } from "sonner";
 import EventEmitter from "events";
@@ -74,6 +71,8 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   //status
   const [statuses, setStatuses] = useState<Option[]>([]);
   const statusInputRef = useRef<MultipleSelectorRef>(null);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,61 +165,45 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
     },
   });
 
-  const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [caption, setCaption] = useState("");
 
   const onSubmit = async (data: z.infer<typeof CreateBookSchema>) => {
     try {
-      console.log(data);
       const formData = new FormData();
-      formData.append("book_title",data.book_title);
-      formData.append("book_summary",data.book_summary);
+      formData.append("book_title", data.book_title);
+      formData.append("book_summary", data.book_summary);
       formData.append("author", JSON.stringify(data.author));
       formData.append("categories", JSON.stringify(data.categories));
       formData.append("publisher", JSON.stringify(data.publisher));
       formData.append("status", JSON.stringify(data.status));
       if (selectedFile) {
-        formData.append("book_image",selectedFile);
+        formData.append("book_image", selectedFile);
       }
 
+      const resInsertBook = await postInsertBookClient(formData);
 
-      await testFormData(formData);
-
-
-
-   
-      console.log(formData);
-
-      //   const newBook: InsertBook = {
-      //     book_title: data.book_title,
-      //     author_id: data.author_id,
-      //     publisher_id: data.publisher_id ?? "",
-      //     status_id: data.status_id,
-      //     categories_id: data.categories.map((category: any) => category.key),
-      //     book_summary: data.book_summary,
-      //   };
-      //   console.log("kitap bu ", newBook);
-      //   const resInsertBook = await postInsertBookClient(newBook);
-      //   if (resInsertBook.status == 201) {
-      //     form.reset();
-      //     toast.success(`KİTAP BAŞARIYLA EKLENDİ`, {
-      //       position: "top-right",
-      //       style: {
-      //         backgroundColor: "hsl(143, 85%, 96%)",
-      //         color: "hsl(140, 100%, 27%)",
-      //         borderColor: "hsl(145, 92%, 91%)",
-      //       },
-      //     });
-      //     eventEmitter.emit("updateGrid");
-      //   } else {
-      //     toast.error(`Bir hata meydana geldi`, {
-      //       description: `Daha sonra tekrar deneyin!`,
-      //       position: "top-right",
-      //     });
-      //     throw new Error("Book eklenirken bir hata oluştu");
-      //   }
+      if (resInsertBook.status == 201) {
+        form.reset();
+        if (inputRef.current) {
+          inputRef.current.value = "";
+        }
+        toast.success(`${resInsertBook.data.book_title} BAŞARIYLA EKLENDİ`, {
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+        eventEmitter.emit("updateGrid");
+      } else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error("Book eklenirken bir hata oluştu");
+      }
     } catch (error: any) {
       if (error.response.data.error == "This book already exists.") {
         toast.error(`HATA`, {
@@ -237,20 +220,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
       }
     }
   };
-
-  // const submit = async (event: { preventDefault: () => void }) => {
-  //   event.preventDefault();
-
-  //   console.log("henüz içine girmeid")
-  //   if(selectedFile){
-  //     console.log("içinde girdi",selectedFile);
-  //     const formData = new FormData();
-  //     formData.append("image", selectedFile)
-  //     formData.append("caption", caption)
-  //     await testFormData(formData);
-  //     // await axios.post("/api/posts", formData, { headers: {'Content-Type': 'multipart/form-data'}})
-  //   }
-  // };
 
   return (
     <Dialog open={openModal} onOpenChange={() => closeModal()}>
@@ -269,6 +238,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                     <FormLabel>Kitap Resmi</FormLabel>
                     <FormControl>
                       <Input
+                        ref={inputRef}
                         type="file"
                         onChange={({ target }) => {
                           if (target.files) {
@@ -461,30 +431,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
             </div>
           </form>
         </Form>
-
-        {/* <form
-          onSubmit={submit}
-          style={{ width: 650 }}
-          className="flex flex-col space-y-5 px-5 py-14"
-        >
-          <input
-            type="file"
-            onChange={({ target }) => {
-              if (target.files) {
-                const file = target.files[0];
-                setSelectedImage(URL.createObjectURL(file));
-                setSelectedFile(file);
-              }
-            }}
-          />
-          <input
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            type="text"
-            placeholder="Caption"
-          ></input>
-          <button type="submit">Submit</button>
-        </form> */}
       </DialogContent>
     </Dialog>
   );
