@@ -1,35 +1,36 @@
 import {
-    getMyReading,
-    updateMyReadingClient,
+  getMyReading,
+  updateMyReadingClient,
 } from "@/app/_api/services/readingService";
 import { getMyStatusesClient } from "@/app/_api/services/statusService";
 import { Status } from "@/app/_models/status";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
 } from "@/components/ui/command";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
 } from "@/components/ui/form";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -42,6 +43,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { MyBookTableModel } from "../my_book_table/columns";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface EditMyBookDialogProps {
   isOpen: boolean;
@@ -59,13 +61,14 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
   const [statuses, setStatuses] = useState<Status[]>([]);
 
   useEffect(() => {
+    console.log(book);
     if (isOpen) {
       fetchData();
     }
   }, [isOpen]);
 
   const fetchData = async () => {
-    //#region  Get statuses for select box
+    //#region Get statuses for select box
     const resStatus = await getMyStatusesClient();
     if (resStatus.status !== 200) {
       throw new Error("Statuses ile ilgili bir hata oluştu");
@@ -89,7 +92,6 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
   });
 
   const onSubmit = async (data: z.infer<typeof EditMyReadingSchema>) => {
-    console.log(data);
     try {
       const resStatus = await updateMyReadingClient(
         book.reading_id,
@@ -137,6 +139,19 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Kitap: {book.book_title}</DialogTitle>
           <DialogDescription>Yazar: {book.author}</DialogDescription>
+          <div style={{ maxWidth: "110px", maxHeight: "310px" }}>
+            <AspectRatio ratio={220 / 310} className="bg-muted">
+              <Image
+                src={
+                  book.book_image ??
+                  "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
+                }
+                alt={book.book_title}
+                fill
+                className="rounded-md object-cover"
+              />
+            </AspectRatio>
+          </div>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

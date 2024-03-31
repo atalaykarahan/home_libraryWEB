@@ -24,10 +24,10 @@ const MyBookTablePage = () => {
       if (res.status !== 200) {
         throw new Error("Reading ile ilgili bir hata oluştu");
       }
-
       //we formatted response type for table component
       const formattedResponse = res.data.map((m: any) => {
         const myFormat = {
+          book_image: m.BOOK.book_image,
           reading_id: m.reading_id,
           book_id: m.BOOK.book_id,
           book_title: m.BOOK.book_title,

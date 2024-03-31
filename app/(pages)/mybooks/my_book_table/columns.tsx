@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import EditMyBookDialog from "../edit-dialog/edit-dialog";
 
 export type MyBookTableModel = {
+  book_image:string;
   reading_id: number;
   book_id: number;
   book_title: string;
