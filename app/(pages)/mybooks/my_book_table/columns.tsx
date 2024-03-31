@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import {
+  removeMyBook
+} from "@/app/_api/services/readingService";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,54 +22,12 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import { useEffect, useState } from "react";
-import {
-  getMyReading,
-  removeMyBook,
-  updateMyReadingClient,
-} from "@/app/_api/services/readingService";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { Status } from "@/app/_models/status";
-import { getMyStatusesClient } from "@/app/_api/services/statusService";
-import { EditMyReadingSchema } from "@/schemas/reading";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import MyBookTablePage from "./my-book-table-page";
 import EventEmitter from "events";
+import { useState } from "react";
+import { toast } from "sonner";
+import EditMyBookDialog from "../edit-dialog/edit-dialog";
 
 export type MyBookTableModel = {
   reading_id: number;
@@ -102,76 +63,6 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
       const myBook = row.original;
       const [removeBookDialog, setRemoveBookDialog] = useState(false);
       const [openReadingDialog, setOpenReadingDialog] = useState(false);
-      const [statusPopover, setStatusPopover] = useState(false);
-      const [statuses, setStatuses] = useState<Status[]>([]);
-
-      const form = useForm<z.infer<typeof EditMyReadingSchema>>({
-        resolver: zodResolver(EditMyReadingSchema),
-      });
-
-      useEffect(() => {
-        if (openReadingDialog) {
-          fetchData();
-        }
-      }, [openReadingDialog]);
-
-      const fetchData = async () => {
-        //#region  Get statuses for select box
-        const resStatus = await getMyStatusesClient();
-        if (resStatus.status !== 200) {
-          throw new Error("Statuses ile ilgili bir hata oluştu");
-        }
-        setStatuses(resStatus.data);
-        //#endregion
-
-        
-        //#region reading info
-        const resReading = await getMyReading(myBook.reading_id);
-        if (resReading.status !== 200) {
-          throw new Error("Reading ile ilgili bir hata oluştu");
-        }
-        if (resReading.data.comment)
-          form.setValue("comment", resReading.data.comment);
-
-        //#endregion
-      };
-
-      const onSubmit = async (data: z.infer<typeof EditMyReadingSchema>) => {
-        try {
-          const resStatus = await updateMyReadingClient(
-            myBook.reading_id,
-            parseInt(data.status_id ?? "0"),
-            data.comment
-          );
-          if (resStatus.status === 200) {
-            //this is for update grid
-            eventEmitter.emit("updateGrid");
-
-            setOpenReadingDialog(false);
-            toast.success(`GÜNCELLEME BAŞARILI`, {
-              description: `${myBook.book_title}`,
-              position: "top-right",
-              style: {
-                backgroundColor: "hsl(143, 85%, 96%)",
-                color: "hsl(140, 100%, 27%)",
-                borderColor: "hsl(145, 92%, 91%)",
-              },
-            });
-          } else {
-            toast.error(`Bir hata meydana geldi`, {
-              description: `Daha sonra tekrar deneyin!`,
-              position: "top-right",
-            });
-            throw new Error(`updateMyReading error -> ${resStatus}`);
-          }
-        } catch (error) {
-          toast.error(`HATA`, {
-            description: `${error}`,
-            position: "top-right",
-          });
-          throw new Error(`addMyReading try&catch hata -> ${error}`);
-        }
-      };
 
       const removeBook = async (reading_id: number) => {
         try {
@@ -214,7 +105,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setOpenReadingDialog(true)}>
-                Aç
+                Düzenle
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setRemoveBookDialog(true)}>
                 Kitaplığımdan Kaldır
@@ -223,124 +114,13 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
           </DropdownMenu>
 
           {/* Edit reading dialog */}
-          <Dialog
-            open={openReadingDialog}
-            onOpenChange={() => {
-              setOpenReadingDialog(false), form.reset();
-            }}
-          >
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Kitap: {myBook.book_title}</DialogTitle>
-                <DialogDescription>Yazar: {myBook.author}</DialogDescription>
-
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="status_id"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col">
-                            <FormLabel>Durum</FormLabel>
-                            <Popover
-                              open={statusPopover}
-                              onOpenChange={setStatusPopover}
-                            >
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant="outline"
-                                    role="combobox"
-                                    className={cn(
-                                      "justify-between",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value
-                                      ? statuses.find(
-                                          (status) =>
-                                            status.status_id.toString() ==
-                                            field.value
-                                        )?.status_name
-                                      : myBook.status}
-                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="p-0"
-                                style={{
-                                  maxHeight: "15rem",
-                                  overflow: "auto",
-                                }}
-                              >
-                                <Command>
-                                  <CommandInput
-                                    placeholder="Durum ara..."
-                                    className="h-9"
-                                  />
-                                  <CommandEmpty>Durum bulunamadı.</CommandEmpty>
-                                  <CommandGroup>
-                                    {statuses.map((status) => (
-                                      <CommandItem
-                                        value={status.status_name}
-                                        key={status.status_id}
-                                        onSelect={() => {
-                                          form.setValue(
-                                            "status_id",
-                                            status.status_id.toString()
-                                          );
-                                          setStatusPopover(false);
-                                        }}
-                                      >
-                                        {status.status_name}
-                                        <CheckIcon
-                                          className={cn(
-                                            "ml-auto h-4 w-4",
-                                            status.status_id.toString() ==
-                                              field.value
-                                              ? "opacity-100"
-                                              : "opacity-0"
-                                          )}
-                                        />
-                                      </CommandItem>
-                                    ))}
-                                  </CommandGroup>
-                                </Command>
-                              </PopoverContent>
-                            </Popover>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="comment"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Notlarım</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="Notların..."
-                                className="resize-none"
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <Button type="submit" className="w-full">
-                        Kaydet
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          {openReadingDialog && (
+            <EditMyBookDialog
+              isOpen={openReadingDialog}
+              setIsOpen={setOpenReadingDialog}
+              book={myBook}
+            />
+          )}
 
           {/* delete book dialog */}
           <AlertDialog

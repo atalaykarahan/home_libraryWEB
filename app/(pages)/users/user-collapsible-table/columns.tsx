@@ -9,7 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 export type UserCollapsibleModel = {
   book_id: string;
   book_title: string;
-  image_path: string;
+  book_image: string;
   status: string;
 };
 
@@ -22,7 +22,7 @@ export const columns: ColumnDef<UserCollapsibleModel>[] = [
         <div className="w-[50px]">
           <AspectRatio ratio={7 / 11} className="flex flex-row">
             <Image
-              src="https://img.kitapyurdu.com/v1/getImage/fn:1109383/wh:true/wi:220"
+              src={book.book_image ?? "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"}
               width={220}
               height={310}
               alt="Image"
