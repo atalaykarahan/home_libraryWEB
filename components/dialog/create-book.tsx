@@ -34,7 +34,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CreateBookSchema, ImageTestSchema } from "@/schemas/book";
+import { CreateBookSchema } from "@/schemas/book";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useEffect, useRef, useState } from "react";

@@ -4,8 +4,8 @@ import {
 } from "@/app/_api/services/readingService";
 import { getMyStatusesClient } from "@/app/_api/services/statusService";
 import { Status } from "@/app/_models/status";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import {
   Command,
   CommandEmpty,
@@ -26,7 +26,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -38,12 +40,12 @@ import { EditMyReadingSchema } from "@/schemas/reading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import EventEmitter from "events";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { MyBookTableModel } from "../my_book_table/columns";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface EditMyBookDialogProps {
   isOpen: boolean;
@@ -59,10 +61,16 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
 }) => {
   const [statusPopover, setStatusPopover] = useState(false);
   const [statuses, setStatuses] = useState<Status[]>([]);
+  const [selectedImage, setSelectedImage] = useState(
+    "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
+  );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    console.log(book);
     if (isOpen) {
+      if (book.book_image) setSelectedImage(book.book_image);
+
       fetchData();
     }
   }, [isOpen]);
@@ -93,32 +101,45 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
 
   const onSubmit = async (data: z.infer<typeof EditMyReadingSchema>) => {
     try {
-      const resStatus = await updateMyReadingClient(
-        book.reading_id,
-        data.status_id,
-        data.comment
-      );
-      if (resStatus.status === 200) {
-        //this is for update grid
-        eventEmitter.emit("updateGrid");
+      const formData = new FormData();
+      formData.append("reading_id", book.reading_id.toString());
 
-        setIsOpen(false);
-        toast.success(`GÜNCELLEME BAŞARILI`, {
-          description: `${book.book_title}`,
-          position: "top-right",
-          style: {
-            backgroundColor: "hsl(143, 85%, 96%)",
-            color: "hsl(140, 100%, 27%)",
-            borderColor: "hsl(145, 92%, 91%)",
-          },
-        });
-      } else {
-        toast.error(`Bir hata meydana geldi`, {
-          description: `Daha sonra tekrar deneyin!`,
-          position: "top-right",
-        });
-        throw new Error(`updateMyReading error -> ${resStatus}`);
-      }
+      //if user change a status
+      if (data.status_id)
+        formData.append("status_id", data.status_id.toString());
+
+      // if user change a comment
+      if (data.comment) formData.append("comment", data.comment);
+
+      //if user add a image
+      if (selectedFile) formData.append("book_image", selectedFile);
+
+
+        const resStatus = await updateMyReadingClient(formData);
+        if (resStatus.status === 200) {
+          //this is for update grid
+          eventEmitter.emit("updateGrid");
+          if (inputRef.current) {
+            inputRef.current.value = "";
+          }
+
+          setIsOpen(false);
+          toast.success(`GÜNCELLEME BAŞARILI`, {
+            description: `${book.book_title}`,
+            position: "top-right",
+            style: {
+              backgroundColor: "hsl(143, 85%, 96%)",
+              color: "hsl(140, 100%, 27%)",
+              borderColor: "hsl(145, 92%, 91%)",
+            },
+          });
+        } else {
+          toast.error(`Bir hata meydana geldi`, {
+            description: `Daha sonra tekrar deneyin!`,
+            position: "top-right",
+          });
+          throw new Error(`updateMyReading error -> ${resStatus}`);
+        }
     } catch (error) {
       toast.error(`HATA`, {
         description: `${error}`,
@@ -142,10 +163,7 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
           <div style={{ maxWidth: "110px", maxHeight: "310px" }}>
             <AspectRatio ratio={220 / 310} className="bg-muted">
               <Image
-                src={
-                  book.book_image ??
-                  "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
-                }
+                src={selectedImage}
                 alt={book.book_title}
                 fill
                 className="rounded-md object-cover"
@@ -156,6 +174,31 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-4">
+                {/* book image */}
+                <FormField
+                  name="book_image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kitap Resmi</FormLabel>
+                      <FormControl>
+                        <Input
+                          ref={inputRef}
+                          type="file"
+                          onChange={({ target }) => {
+                            if (target.files) {
+                              const file = target.files[0];
+                              setSelectedImage(URL.createObjectURL(file));
+                              setSelectedFile(file);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* status */}
                 <FormField
                   control={form.control}
                   name="status_id"
@@ -230,6 +273,7 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
                     </FormItem>
                   )}
                 />
+                {/* personel command */}
                 <FormField
                   control={form.control}
                   name="comment"
