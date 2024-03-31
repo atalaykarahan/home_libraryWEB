@@ -90,40 +90,40 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
 
   const onSubmit = async (data: z.infer<typeof EditMyReadingSchema>) => {
     console.log(data);
-    // try {
-    //   const resStatus = await updateMyReadingClient(
-    //     book.reading_id,
-    //     parseInt(data.status_id ?? "0"),
-    //     data.comment
-    //   );
-    //   if (resStatus.status === 200) {
-    //     //this is for update grid
-    //     eventEmitter.emit("updateGrid");
+    try {
+      const resStatus = await updateMyReadingClient(
+        book.reading_id,
+        data.status_id,
+        data.comment
+      );
+      if (resStatus.status === 200) {
+        //this is for update grid
+        eventEmitter.emit("updateGrid");
 
-    //     setIsOpen(false);
-    //     toast.success(`GÜNCELLEME BAŞARILI`, {
-    //       description: `${book.book_title}`,
-    //       position: "top-right",
-    //       style: {
-    //         backgroundColor: "hsl(143, 85%, 96%)",
-    //         color: "hsl(140, 100%, 27%)",
-    //         borderColor: "hsl(145, 92%, 91%)",
-    //       },
-    //     });
-    //   } else {
-    //     toast.error(`Bir hata meydana geldi`, {
-    //       description: `Daha sonra tekrar deneyin!`,
-    //       position: "top-right",
-    //     });
-    //     throw new Error(`updateMyReading error -> ${resStatus}`);
-    //   }
-    // } catch (error) {
-    //   toast.error(`HATA`, {
-    //     description: `${error}`,
-    //     position: "top-right",
-    //   });
-    //   throw new Error(`addMyReading try&catch hata -> ${error}`);
-    // }
+        setIsOpen(false);
+        toast.success(`GÜNCELLEME BAŞARILI`, {
+          description: `${book.book_title}`,
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+      } else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error(`updateMyReading error -> ${resStatus}`);
+      }
+    } catch (error) {
+      toast.error(`HATA`, {
+        description: `${error}`,
+        position: "top-right",
+      });
+      throw new Error(`addMyReading try&catch hata -> ${error}`);
+    }
   };
 
   return (

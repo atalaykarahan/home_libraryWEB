@@ -12,7 +12,7 @@ export const addMyLibraryClient = (book_id: number, status_id: number) => {
   return axios.get(`/readings/addMyReading/${book_id}/${status_id}`);
 };
 
-export const updateMyReadingClient = (reading_id:number, status_id?:number, comment?:string) => {
+export const updateMyReadingClient = (reading_id:number, status_id?:string, comment?:string) => {
   const props = {
     reading_id: reading_id.toString(),
     status_id: status_id?.toString(),
