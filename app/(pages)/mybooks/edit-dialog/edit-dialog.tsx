@@ -59,11 +59,11 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
   setIsOpen,
   book,
 }) => {
+  const defaultImageUrl =
+    "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg";
   const [statusPopover, setStatusPopover] = useState(false);
   const [statuses, setStatuses] = useState<Status[]>([]);
-  const [selectedImage, setSelectedImage] = useState(
-    "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
-  );
+  const [selectedImage, setSelectedImage] = useState(defaultImageUrl);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -112,34 +112,37 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
       if (data.comment) formData.append("comment", data.comment);
 
       //if user add a image
-      if (selectedFile) formData.append("book_image", selectedFile);
+      if (selectedFile) {
+        formData.append("book_image", selectedFile);
+      } else if (book.book_image && selectedImage == defaultImageUrl) {
+        formData.append("remove_book_image", "true");
+      }
 
-
-        const resStatus = await updateMyReadingClient(formData);
-        if (resStatus.status === 200) {
-          //this is for update grid
-          eventEmitter.emit("updateGrid");
-          if (inputRef.current) {
-            inputRef.current.value = "";
-          }
-
-          setIsOpen(false);
-          toast.success(`GÜNCELLEME BAŞARILI`, {
-            description: `${book.book_title}`,
-            position: "top-right",
-            style: {
-              backgroundColor: "hsl(143, 85%, 96%)",
-              color: "hsl(140, 100%, 27%)",
-              borderColor: "hsl(145, 92%, 91%)",
-            },
-          });
-        } else {
-          toast.error(`Bir hata meydana geldi`, {
-            description: `Daha sonra tekrar deneyin!`,
-            position: "top-right",
-          });
-          throw new Error(`updateMyReading error -> ${resStatus}`);
+      const resStatus = await updateMyReadingClient(formData);
+      if (resStatus.status === 200) {
+        //this is for update grid
+        eventEmitter.emit("updateGrid");
+        if (inputRef.current) {
+          inputRef.current.value = "";
         }
+
+        setIsOpen(false);
+        toast.success(`GÜNCELLEME BAŞARILI`, {
+          description: `${book.book_title}`,
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+      } else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error(`updateMyReading error -> ${resStatus}`);
+      }
     } catch (error) {
       toast.error(`HATA`, {
         description: `${error}`,
@@ -169,6 +172,13 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
                 className="rounded-md object-cover"
               />
             </AspectRatio>
+            <Button
+              variant="destructive"
+              className="mt-3"
+              onClick={() => setSelectedImage(defaultImageUrl)}
+            >
+              Resmi Çıkar
+            </Button>
           </div>
 
           <Form {...form}>
