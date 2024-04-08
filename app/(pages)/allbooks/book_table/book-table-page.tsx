@@ -5,6 +5,7 @@ import { eventEmitter as createBookEmitter } from "@/components/dialog/create-bo
 import { DataTable } from "./data-table";
 import { getAllBooksClient } from "@/app/_api/services/bookService";
 import { deleteBookEmitter } from "../delete-dialog/delete-dialog";
+import { addMyLibraryEmitter } from "../add-my-library-dialog/add-my-library-dialog";
 
 const BookTablePage = () => {
   const [books, setBooks] = useState<BookTableModel[]>([]);
@@ -15,6 +16,7 @@ const BookTablePage = () => {
     eventEmitter.on("updateGrid", fetchData);
     createBookEmitter.on("updateGrid", fetchData);
     deleteBookEmitter.on("updateGrid", fetchData);
+    addMyLibraryEmitter.on("updateGrid",fetchData);
     return () => {
       eventEmitter.off("updateGrid", fetchData);
       createBookEmitter.off("updateGrid", fetchData);
