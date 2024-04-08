@@ -30,6 +30,7 @@ const BookTablePage = () => {
       //we formatted response type for table component
       const formattedResponse = res.data.map((b: any) => {
         const myFormat = {
+          book_image: b.book_image,
           book_id: b.book_id,
           book_title: b.book_title,
           author:

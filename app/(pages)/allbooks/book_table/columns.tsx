@@ -51,6 +51,7 @@ import { getMyStatusesClient } from "@/app/_api/services/statusService";
 import { addMyLibraryClient } from "@/app/_api/services/readingService";
 import EventEmitter from "events";
 import { toast } from "sonner";
+import Image from "next/image";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -62,8 +63,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { deleteBookClient } from "@/app/_api/services/bookService";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export type BookTableModel = {
+  book_image: string;
   book_id: number;
   book_title: string;
   author: string;
@@ -73,6 +76,28 @@ export type BookTableModel = {
 
 export const eventEmitter = new EventEmitter();
 export const columns: ColumnDef<BookTableModel>[] = [
+  {
+    id: "image",
+    cell: ({ row }) => {
+      const book = row.original;
+      return (
+        <div className="w-[50px]">
+          <AspectRatio ratio={7 / 11} className="flex flex-row">
+            <Image
+              src={
+                book.book_image ??
+                "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
+              }
+              width={220}
+              height={310}
+              alt="Image"
+              className="rounded-md object-cover"
+            />
+          </AspectRatio>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "book_title",
     header: "Kitap",
