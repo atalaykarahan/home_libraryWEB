@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TbDots } from "react-icons/tb";
 
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +29,7 @@ import EventEmitter from "events";
 import { useState } from "react";
 import { toast } from "sonner";
 import EditMyBookDialog from "../edit-dialog/edit-dialog";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export type MyBookTableModel = {
   book_image:string;
@@ -42,6 +44,28 @@ export type MyBookTableModel = {
 export const eventEmitter = new EventEmitter();
 
 export const columns: ColumnDef<MyBookTableModel>[] = [
+  {
+    id: "image",
+    cell: ({ row }) => {
+      const book = row.original;
+      return (
+        <div className="w-[50px]">
+          <AspectRatio ratio={7 / 11} className="flex flex-row">
+            <Image
+              src={
+                book.book_image ??
+                "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
+              }
+              width={220}
+              height={310}
+              alt="Image"
+              className="rounded-md object-cover"
+            />
+          </AspectRatio>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "book_title",
     header: "Kitap",

@@ -24,6 +24,7 @@ const MyBookTablePage = () => {
       if (res.status !== 200) {
         throw new Error("Reading ile ilgili bir hata oluştu");
       }
+
       //we formatted response type for table component
       const formattedResponse = res.data.map((m: any) => {
         const myFormat = {
