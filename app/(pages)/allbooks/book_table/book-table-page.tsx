@@ -4,6 +4,7 @@ import { BookTableModel, columns, eventEmitter } from "./columns";
 import { eventEmitter as createBookEmitter } from "@/components/dialog/create-book";
 import { DataTable } from "./data-table";
 import { getAllBooksClient } from "@/app/_api/services/bookService";
+import { deleteBookEmitter } from "../delete-dialog/delete-dialog";
 
 const BookTablePage = () => {
   const [books, setBooks] = useState<BookTableModel[]>([]);
@@ -13,6 +14,7 @@ const BookTablePage = () => {
     //this is for when user update his reading;
     eventEmitter.on("updateGrid", fetchData);
     createBookEmitter.on("updateGrid", fetchData);
+    deleteBookEmitter.on("updateGrid", fetchData);
     return () => {
       eventEmitter.off("updateGrid", fetchData);
       createBookEmitter.off("updateGrid", fetchData);

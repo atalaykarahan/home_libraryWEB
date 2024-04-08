@@ -91,7 +91,6 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
     }
     if (resReading.data.comment)
       form.setValue("comment", resReading.data.comment);
-
     //#endregion
   };
 

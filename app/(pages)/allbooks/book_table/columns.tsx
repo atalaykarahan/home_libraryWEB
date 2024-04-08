@@ -1,44 +1,10 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { TbDots } from "react-icons/tb";
-import { useForm } from "react-hook-form";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { AddMyLibrarySchema } from "@/schemas/reading";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { PiArrowsDownUp } from "react-icons/pi";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ZodCatch, z } from "zod";
+import { addMyLibraryClient } from "@/app/_api/services/readingService";
+import { getMyStatusesClient } from "@/app/_api/services/statusService";
 import { Status } from "@/app/_models/status";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -46,24 +12,44 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { getMyStatusesClient } from "@/app/_api/services/statusService";
-import { addMyLibraryClient } from "@/app/_api/services/readingService";
-import EventEmitter from "events";
-import { toast } from "sonner";
-import Image from "next/image";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { deleteBookClient } from "@/app/_api/services/bookService";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { AddMyLibrarySchema } from "@/schemas/reading";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { ColumnDef } from "@tanstack/react-table";
+import EventEmitter from "events";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { PiArrowsDownUp } from "react-icons/pi";
+import { TbDots } from "react-icons/tb";
+import { toast } from "sonner";
+import { z } from "zod";
+import DeleteGeneralBookDialog from "../delete-dialog/delete-dialog";
 
 export type BookTableModel = {
   book_image: string;
@@ -213,46 +199,6 @@ export const columns: ColumnDef<BookTableModel>[] = [
         }
       };
 
-      const deleteBook = async (book_id: number) => {
-        try {
-          const res = await deleteBookClient(book_id);
-          if (res.status == 204) {
-            eventEmitter.emit("updateGrid");
-            toast.success(`KİTAP BAŞARIYLA SİLİNDİ`, {
-              position: "top-right",
-              style: {
-                backgroundColor: "hsl(143, 85%, 96%)",
-                color: "hsl(140, 100%, 27%)",
-                borderColor: "hsl(145, 92%, 91%)",
-              },
-            });
-          } else {
-            toast.error(`Bir hata meydana geldi`, {
-              description: `Daha sonra tekrar deneyin!`,
-              position: "top-right",
-            });
-            throw new Error("deleteBook ile ilgili bir hata oluştu");
-          }
-        } catch (error: any) {
-          switch (error.response.status) {
-            case 403:
-              toast.error(`YETKİ HATASI`, {
-                description: `Bu kitabı silebilmek için yetkininiz bulunmamaktadır.`,
-                position: "top-right",
-              });
-              break;
-            case 409:
-              toast.error(`KİTAP KULLANIMDA`, {
-                description: `Bu kitap şu anda başkasının kütüphanesinde bulunmakta. Kitabı silebilmek için önce herkesin kitaplığından kaldırması gerekmektedir!`,
-                position: "top-right",
-              });
-              break;
-          }
-
-          throw new Error(`deleteBook try&catch hata -> ${error}`);
-        }
-      };
-
       return (
         <>
           <DropdownMenu>
@@ -281,7 +227,7 @@ export const columns: ColumnDef<BookTableModel>[] = [
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* modal section */}
+          {/* add my library modal */}
           <Dialog
             open={addMyLibrary}
             onOpenChange={() => setAddMyLibrary(false)}
@@ -378,33 +324,14 @@ export const columns: ColumnDef<BookTableModel>[] = [
             </DialogContent>
           </Dialog>
 
-          <AlertDialog
-            open={deleteBookDialog}
-            onOpenChange={() => setDeleteBookDialog(false)}
-          >
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  "{selectedBook.book_title}" kitabını kalıcı olarak silmek
-                  istediğine emin misin?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Bu kitabı kaldırırsan bu işlemi geri alamzsın ve eğer bu
-                  kitabı kitaplığına eklemiş kimse yoksa, kitap kalıcı olarak
-                  tüm kitaplıktan kaldırılıcaktır.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>İptal</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-red-600"
-                  onClick={() => deleteBook(selectedBook.book_id)}
-                >
-                  Sil
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {/* delete book dialog */}
+          {deleteBookDialog && (
+            <DeleteGeneralBookDialog
+              isOpen={deleteBookDialog}
+              setIsOpen={setDeleteBookDialog}
+              book={selectedBook}
+            />
+          )}
         </>
       );
     },
