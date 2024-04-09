@@ -59,8 +59,7 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
   setIsOpen,
   book,
 }) => {
-  const defaultImageUrl =
-    "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg";
+  const defaultImageUrl = process.env.DEFAULT_IMAGE ?? "";
   const [statusPopover, setStatusPopover] = useState(false);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [selectedImage, setSelectedImage] = useState(defaultImageUrl);
