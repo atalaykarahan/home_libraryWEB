@@ -7,10 +7,10 @@ import LastBook from "./lastBook/lastBook";
 const Home = () => {
   return (
     <>
-    <Banner/>
-      <Brand/>
-      <LastBook/>
-      <ByCategory/>
+      <Banner />
+      <Brand />
+      <LastBook />
+      <ByCategory />
     </>
   );
 };

@@ -62,31 +62,27 @@ const Banner = () => {
               w576:max-w767:text-[40px]
               text-[52px] text-white capitalize font-bold pb-[15px]"
               >
-                We are a Dynamic SEO & Digital Marketing Agency
+                Atalay Karahan Back-End Developer
               </h2>
               <p className="subtitle">
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form.There are
-                many variations of passages of Lorem Ipsum available,{" "}
+              Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri bulundurmaktadır. Kaynak kodları için GitHub hesabımı ziyaret edebilirsiniz.{" "}
               </p>
               <ul className="flex justify-center">
                 <li>
-                  <Link href="#">
-                    <span>get started</span>
+                  <Link href="https://github.com/atalaykarahan">
+                    <span>Github</span>
                   </Link>
                 </li>
                 <li>
                   <a className="special-btn items-center flex"
-                    data-autoplay="true"
-                    data-vbtype="video"
-                    href="https://www.youtube.com/watch?v=LCmsrVOXzZc"
+                    href="https://www.linkedin.com/in/atalay-karahan-050985250/"
                   >
                     <div className="vid-btn flex items-center justify-center">
                       <span className="btn-inner">
                         <FaPlay className="play-icon" />
                       </span>
                     </div>
-                    How we work
+                    LinkedIn
                   </a>
                 </li>
               </ul>
