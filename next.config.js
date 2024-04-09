@@ -11,6 +11,7 @@ const nextConfig = {
   },
   env: {
     BASE_URL: process.env.BASE_URL,
+    DEFAULT_IMAGE: process.env.DEFAULT_IMAGE,
   },
 };
 

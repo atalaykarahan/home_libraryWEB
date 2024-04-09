@@ -1,8 +1,6 @@
 "use client";
-import Image from "next/image";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-
+import TableBookImage from "@/components/table-book-image";
 import { Badge } from "@/components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -18,22 +16,7 @@ export const columns: ColumnDef<UserCollapsibleModel>[] = [
     id: "image",
     cell: ({ row }) => {
       const book = row.original;
-      return (
-        <div className="w-[50px]">
-          <AspectRatio ratio={7 / 11} className="flex flex-row">
-            <Image
-              src={
-                book.book_image ??
-                "https://img.freepik.com/premium-vector/manual-book-with-instructions-vector-icon_116137-9345.jpg"
-              }
-              width={220}
-              height={310}
-              alt="Image"
-              className="rounded-md object-cover"
-            />
-          </AspectRatio>
-        </div>
-      );
+      return <TableBookImage bookImage={book.book_image} />;
     },
   },
   {
