@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { MyBookTableModel, columns, eventEmitter } from "./columns";
-import { DataTable } from "./data-table";
 import { getMyBooks } from "@/app/_api/services/readingService";
+import { useEffect, useState } from "react";
+import { deleteMyBookEmitter } from "../delete-dialog/delete-dialog";
+import { MyBookTableModel, columns } from "./columns";
+import { DataTable } from "./data-table";
 
 const MyBookTablePage = () => {
   const [myBooks, setMyBooks] = useState<MyBookTableModel[]>([]);
@@ -11,9 +12,9 @@ const MyBookTablePage = () => {
     fetchData();
 
     //this is for when user update his reading;
-    eventEmitter.on("updateGrid", fetchData);
+    deleteMyBookEmitter.on("updateGrid", fetchData);
     return () => {
-      eventEmitter.off("updateGrid", fetchData);
+      deleteMyBookEmitter.off("updateGrid", fetchData);
     };
   }, []);
 

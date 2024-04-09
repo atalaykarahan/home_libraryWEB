@@ -4,35 +4,22 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TbDots } from "react-icons/tb";
 
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
-import {
-  removeMyBook
-} from "@/app/_api/services/readingService";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from "@/components/ui/alert-dialog";
-import EventEmitter from "events";
-import { useState } from "react";
-import { toast } from "sonner";
-import EditMyBookDialog from "../edit-dialog/edit-dialog";
+// import EventEmitter from "events";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { useState } from "react";
+import DeleteMyBookDialog from "../delete-dialog/delete-dialog";
+import EditMyBookDialog from "../edit-dialog/edit-dialog";
 
 export type MyBookTableModel = {
-  book_image:string;
+  book_image: string;
   reading_id: number;
   book_id: number;
   book_title: string;
@@ -41,7 +28,7 @@ export type MyBookTableModel = {
   status: string;
 };
 
-export const eventEmitter = new EventEmitter();
+// export const eventEmitter = new EventEmitter();
 
 export const columns: ColumnDef<MyBookTableModel>[] = [
   {
@@ -89,36 +76,6 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
       const [removeBookDialog, setRemoveBookDialog] = useState(false);
       const [openReadingDialog, setOpenReadingDialog] = useState(false);
 
-      const removeBook = async (reading_id: number) => {
-        try {
-          const resRemoveBook = await removeMyBook(reading_id);
-          if (resRemoveBook.status !== 204) {
-            toast.error(`Bir hata meydana geldi`, {
-              description: `Daha sonra tekrar deneyin!`,
-              position: "top-right",
-            });
-            throw new Error("Reading silinirken bir hata oluştu");
-          } else {
-            toast.success(`KALDIRMA BAŞARILI`, {
-              description: `${myBook.book_title}`,
-              position: "top-right",
-              style: {
-                backgroundColor: "hsl(143, 85%, 96%)",
-                color: "hsl(140, 100%, 27%)",
-                borderColor: "hsl(145, 92%, 91%)",
-              },
-            });
-            eventEmitter.emit("updateGrid");
-          }
-        } catch (error) {
-          toast.error(`HATA`, {
-            description: `${error}`,
-            position: "top-right",
-          });
-          throw new Error(`removeMyReading try&catch hata -> ${error}`);
-        }
-      };
-
       return (
         <>
           <DropdownMenu>
@@ -148,34 +105,13 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
           )}
 
           {/* delete book dialog */}
-          <AlertDialog
-            open={removeBookDialog}
-            onOpenChange={() => setRemoveBookDialog(false)}
-          >
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  "{myBook.book_title}" kitabını kitaplığından kaldırmak
-                  istediğine emin misin?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Eğer bu kitap hakkında herhangi bir notun varsa bunlar silinir
-                  ve bir daha geri getiremezsin! Bu işlem kitabı yalnızca
-                  kitaplığından kaldıracaktır. Kitabı daha sonra kütüphaneden
-                  yeniden ekleyebilirsin.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>İptal</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-red-600"
-                  onClick={() => removeBook(myBook.reading_id)}
-                >
-                  Kaldır
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {removeBookDialog && (
+            <DeleteMyBookDialog
+              isOpen={removeBookDialog}
+              setIsOpen={setRemoveBookDialog}
+              book={myBook}
+            />
+          )}
         </>
       );
     },
