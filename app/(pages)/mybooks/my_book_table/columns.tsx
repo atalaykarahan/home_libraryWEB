@@ -92,7 +92,7 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
       const removeBook = async (reading_id: number) => {
         try {
           const resRemoveBook = await removeMyBook(reading_id);
-          if (resRemoveBook.status !== 200) {
+          if (resRemoveBook.status !== 204) {
             toast.error(`Bir hata meydana geldi`, {
               description: `Daha sonra tekrar deneyin!`,
               position: "top-right",

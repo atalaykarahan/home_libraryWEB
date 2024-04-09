@@ -16,10 +16,12 @@ const BookTablePage = () => {
     eventEmitter.on("updateGrid", fetchData);
     createBookEmitter.on("updateGrid", fetchData);
     deleteBookEmitter.on("updateGrid", fetchData);
-    addMyLibraryEmitter.on("updateGrid",fetchData);
+    addMyLibraryEmitter.on("updateGrid", fetchData);
     return () => {
       eventEmitter.off("updateGrid", fetchData);
       createBookEmitter.off("updateGrid", fetchData);
+      deleteBookEmitter.off("updateGrid", fetchData);
+      addMyLibraryEmitter.off("updateGrid", fetchData);
     };
   }, []);
 
