@@ -46,39 +46,27 @@ const LastBook = () => {
   };
   if (book)
     return (
-      <section
-        className="last-book"
-        style={{
-          backgroundImage: `url(${bg.src})`,
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "initial",
-          backgroundOrigin: "initial",
-          backgroundClip: "initial",
-          backgroundColor: "initial",
-        }}
-      >
-        <div className="container mx-auto">
-          <div className="row items-center grid lg:grid-cols-2 justify-items-center">
-            <div className="order-2 lg:order-1">
-              <div className="section-title">
+      <section>
+        <div>
+          <div>
+            <div>
+              <div>
                 <h6>En Son Eklenen</h6>
                 <h3>{book.book_title}</h3>
               </div>
-              <div className="content">
+              <div>
                 {book.book_summary && <p>{book.book_summary}</p>}
-                <ul className="block">
-                  <li className="group">
+                <ul>
+                  <li>
                     <p>
-                      <VscTriangleRight className="inline text-black group-hover:text-orange-400" />
+                      <VscTriangleRight />
                       YAZAR: {book.AUTHOR.author_name}{" "}
                       {book.AUTHOR.author_surname}
                     </p>
                   </li>
-                  <li className="group">
+                  <li>
                     <p>
-                      <VscTriangleRight className="inline text-black group-hover:text-orange-400" />
+                      <VscTriangleRight />
                       KATEGORI:{" "}
                       <Each
                         of={book.categories}
@@ -90,9 +78,9 @@ const LastBook = () => {
                       />
                     </p>
                   </li>
-                  <li className="group">
+                  <li>
                     <p>
-                      <VscTriangleRight className="inline text-black group-hover:text-orange-400" />
+                      <VscTriangleRight />
                       YAYINEVI: {book.PUBLISHER.publisher_name}
                     </p>
                   </li>
@@ -100,11 +88,8 @@ const LastBook = () => {
               </div>
             </div>
 
-            <div
-              className="order-1 lg:order-2"
-              style={{ width: "fit-content" }}
-            >
-              <div className="last-book-image">
+            <div>
+              <div>
                 <Image
                   src={book.book_image ?? lBook}
                   alt="Son eklenen kitap"
