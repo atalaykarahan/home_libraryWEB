@@ -17,3 +17,7 @@ export const deleteBookClient = (book_id: number) => {
 export const getUserBookGridCollapseList = (user_id: string) => {
   return axios.get(`/books/userBookGridCollapseList/${user_id}`);
 };
+
+export const getLastInsertedReachableBook = () => {
+  return axios.get("/books/lastInsertedReachableBook");
+};
