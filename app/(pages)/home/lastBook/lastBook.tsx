@@ -8,7 +8,6 @@ import { VscTriangleRight } from "react-icons/vsc";
 import bg from "../../../../public/images/last_book_bg.png";
 import lBook from "../../../../public/images/placeHolders/lastBook.png";
 import "./LastBook.css";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Category {
   category_id: number;

@@ -21,3 +21,7 @@ export const getUserBookGridCollapseList = (user_id: string) => {
 export const getLastInsertedReachableBook = () => {
   return axios.get("/books/lastInsertedReachableBook");
 };
+
+export const getRandomBookRecommendation = () => {
+  return axios.get("/books/randomBookRecommendation");
+};
