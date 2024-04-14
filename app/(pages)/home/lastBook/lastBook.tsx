@@ -53,7 +53,7 @@ const LastBook = () => {
       >
         <div className="container 2xl:max-w-7xl xl:max-w-6xl lg:max-w-5xl md:max-w-3xl sm:max-w-lg">
           {/* buraya sonradan gap ekleyebilirsin araya boşluk koyuyor */}
-          <div className="flex flex-wrap items-center lg:grid grid-cols-2">
+          <div className="flex flex-wrap items-center justify-center lg:grid grid-cols-2">
             {/* book part */}
             <div className="max-lg:order-2">
               <div className="last-book-section-title">
