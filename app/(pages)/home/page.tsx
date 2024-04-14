@@ -1,7 +1,6 @@
 import Banner from "./banner/banner";
-import HomeBanner from "./banner/banner";
 import Brand from "./brand/brand";
-import ByCategory from "./byCategory/byCategory";
+import BookRecommendation from "./book_recommendation/book-recommendation";
 import LastBook from "./lastBook/lastBook";
 
 const Home = () => {
@@ -10,7 +9,7 @@ const Home = () => {
       <Banner />
       <Brand />
       <LastBook />
-      <ByCategory />
+      <BookRecommendation />
     </>
   );
 };
