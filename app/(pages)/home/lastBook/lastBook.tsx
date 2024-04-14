@@ -61,7 +61,14 @@ const LastBook = () => {
                 <h3>{book.book_title}</h3>
               </div>
               <div className="last-book-content">
-                {book.book_summary && <p>{book.book_summary}</p>}
+                {book.book_summary && (
+                  <p>
+                    {" "}
+                    {book.book_summary.length > 221
+                      ? `${book.book_summary.substring(0, 221)}...`
+                      : book.book_summary}
+                  </p>
+                )}
                 <ul>
                   <li>
                     <VscTriangleRight />
