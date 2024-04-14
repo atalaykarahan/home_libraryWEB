@@ -8,6 +8,7 @@ import { VscTriangleRight } from "react-icons/vsc";
 import bg from "../../../../public/images/last_book_bg.png";
 import lBook from "../../../../public/images/placeHolders/lastBook.png";
 import "./LastBook.css";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Category {
   category_id: number;
@@ -46,27 +47,32 @@ const LastBook = () => {
   };
   if (book)
     return (
-      <section>
-        <div>
-          <div>
-            <div>
-              <div>
+      <section
+        className="last-book-section"
+        style={{ backgroundImage: `url(${bg.src})` }}
+      >
+        <div className="container 2xl:max-w-7xl xl:max-w-6xl lg:max-w-5xl md:max-w-3xl sm:max-w-lg">
+          {/* buraya sonradan gap ekleyebilirsin araya boşluk koyuyor */}
+          <div className="flex flex-wrap items-center lg:grid grid-cols-2">
+            {/* book part */}
+            <div className="max-lg:order-2">
+              <div className="last-book-section-title">
                 <h6>En Son Eklenen</h6>
                 <h3>{book.book_title}</h3>
               </div>
-              <div>
+              <div className="last-book-content">
                 {book.book_summary && <p>{book.book_summary}</p>}
                 <ul>
                   <li>
+                    <VscTriangleRight />
                     <p>
-                      <VscTriangleRight />
                       YAZAR: {book.AUTHOR.author_name}{" "}
                       {book.AUTHOR.author_surname}
                     </p>
                   </li>
                   <li>
+                    <VscTriangleRight />
                     <p>
-                      <VscTriangleRight />
                       KATEGORI:{" "}
                       <Each
                         of={book.categories}
@@ -79,22 +85,27 @@ const LastBook = () => {
                     </p>
                   </li>
                   <li>
-                    <p>
-                      <VscTriangleRight />
-                      YAYINEVI: {book.PUBLISHER.publisher_name}
-                    </p>
+                    <VscTriangleRight />
+                    <p>YAYINEVI: {book.PUBLISHER.publisher_name}</p>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div>
-              <div>
+            {/* image part */}
+            <div className="max-lg:order-1">
+              <div className="max-lg:mb-10">
                 <Image
+                  style={{
+                    width: "100%",
+                    maxHeight: "557px",
+                    height: "auto",
+                    objectFit: "contain",
+                  }}
                   src={book.book_image ?? lBook}
-                  alt="Son eklenen kitap"
-                  width={549}
                   height={557}
+                  width={549}
+                  alt="Son eklenen kitap"
                 />
               </div>
             </div>

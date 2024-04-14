@@ -1,0 +1,110 @@
+.last-book-section {
+  margin-top: -85px;
+  padding-top: 210px;
+  padding-bottom: 35px;
+}
+
+.last-book-section .container > div {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  margin-top: calc(var(--bs-gutter-y) * -1);
+  margin-right: calc(var(--bs-gutter-x) / -2);
+  margin-left: calc(var(--bs-gutter-x) / -2);
+}
+
+.last-book-section-title {
+  padding-bottom: 15px;
+  margin-top: -6px;
+}
+
+.last-book-section-title h6 {
+  background: linear-gradient(to bottom, #ffbc45, #ff5959);
+  background-clip: padding-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: capitalize;
+  font-weight: 500;
+  font-family: "Heebo", sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.last-book-section-title h3 {
+  font-size: 40px;
+  font-family: "Roboto", sans-serif;
+  color: #1c1c25;
+  font-weight: 700;
+  text-transform: capitalize;
+  line-height: 53px;
+}
+
+.last-book-content > p {
+  font-size: 16px;
+  line-height: 26px;
+  color: #888888;
+  font-family: "Heebo", sans-serif;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 0;
+  transition: all linear 0.3s;
+}
+
+.last-book-content > ul {
+  padding: 20px 0;
+  transition: all linear 0.3s;
+  list-style: none;
+  margin: 0;
+}
+
+.last-book-content > ul li {
+  position: relative;
+  transition: all linear 0.3s;
+}
+
+.last-book-content > ul li svg {
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: 0;
+  font-size: 20px;
+  color: #1c1c25;
+}
+
+.last-book-content > ul li p {
+  padding-left: 20px;
+}
+
+
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .last-book-section {
+    margin-top: 0;
+    padding-top: 120px;
+    background: #f2f7fd !important;
+  }
+
+
+
+
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  .last-book-section {
+    margin-top: 0;
+    padding-top: 80px;
+    background: #f2f7fd !important;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 575px) {
+  .last-book-section {
+    margin-top: 0;
+    padding-top: 80px;
+    background: #f2f7fd !important;
+  }
+
+  .last-book-section-title h3 {
+    font-size: 30px;
+    line-height: 44px;
+  }
+}
