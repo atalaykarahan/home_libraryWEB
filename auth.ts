@@ -12,6 +12,8 @@ import { RegisterDto } from "./app/_models/DTOs/registerDto";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: 1 | 2 | 3;
+  user_visibility: boolean;
+  user_library_visibility: boolean;
 };
 
 declare module "next-auth" {
@@ -39,6 +41,9 @@ export const {
       if (token.role && session.user) {
         //auth.js new version is making some error so we fix it like this
         session.user.role = token.role as 1 | 2 | 3;
+        session.user.user_visibility = token.user_visibility as boolean;
+        session.user.user_library_visibility =
+          token.user_library_visibility as boolean;
       }
       return session;
     },
@@ -51,6 +56,8 @@ export const {
           return;
         } else {
           token.role = value.user_authority_id;
+          token.user_visibility = value.user_visibility;
+          token.user_library_visibility = value.user_library_visibility;
         }
       });
       return token;

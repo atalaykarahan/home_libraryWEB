@@ -16,18 +16,25 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserProfilePrivacySchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const UserPrivacy = () => {
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
+
   const form = useForm<z.infer<typeof UserProfilePrivacySchema>>({
     resolver: zodResolver(UserProfilePrivacySchema),
     defaultValues: {
-      user_visibility: true,
-      user_library_visibility: true,
+      user_visibility: user?.user_visibility,
+      user_library_visibility: user?.user_library_visibility,
     },
   });
 
