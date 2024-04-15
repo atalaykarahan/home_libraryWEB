@@ -13,6 +13,7 @@ import {
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Menu } from "@headlessui/react";
 import { ExitIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 import { useState } from "react";
 import { FaRegBell, FaUser } from "react-icons/fa";
 
@@ -72,41 +73,46 @@ const NavbarLoggedInView = () => {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-40" align="end">
-            <DropdownMenuItem>Profil</DropdownMenuItem>
+            <Link href="/profile">
+              <DropdownMenuItem>Profil</DropdownMenuItem>
+            </Link>
             {/* {user ? <NavbarLoggedInView /> : <NavbarLoggedOutView />} */}
-            {user && user.role >= 2 ? (
-              <>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setAuthorModal(true);
-                  }}
-                >
-                  Yazarlar
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setCategoryModal(true);
-                  }}
-                >
-                  Kategoriler
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setPublisherModal(true);
-                  }}
-                >
-                  Yayınevleri
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setCreateBookModal(true);
-                  }}
-                >
-                  Kitap Ekle
-                </DropdownMenuItem>
-              </>
-            ) : undefined}
-            <DropdownMenuItem>Ayarlar</DropdownMenuItem>
+
+            <>
+              <DropdownMenuItem
+                disabled={user?.role == 1}
+                onClick={() => {
+                  setAuthorModal(true);
+                }}
+              >
+                Yazarlar
+              </DropdownMenuItem>
+              <DropdownMenuItem
+               disabled={user?.role == 1}
+                onClick={() => {
+                  setCategoryModal(true);
+                }}
+              >
+                Kategoriler
+              </DropdownMenuItem>
+              <DropdownMenuItem
+               disabled={user?.role == 1}
+                onClick={() => {
+                  setPublisherModal(true);
+                }}
+              >
+                Yayınevleri
+              </DropdownMenuItem>
+              <DropdownMenuItem
+               disabled={user?.role == 1}
+                onClick={() => {
+                  setCreateBookModal(true);
+                }}
+              >
+                Kitap Ekle
+              </DropdownMenuItem>
+            </>
+
             <LogoutButton>
               <DropdownMenuItem>
                 <ExitIcon className="h-4 w-4 mr-2" />

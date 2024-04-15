@@ -20,17 +20,12 @@ import { Switch } from "@/components/ui/switch";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserProfilePrivacySchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { IoAlertCircleOutline } from "react-icons/io5";
+import { z } from "zod";
 
 const UserPrivacy = () => {
   const user = useCurrentUser();
-
-  // useEffect(() => {
-  //   console.log(user);
-  // }, []);
 
   const form = useForm<z.infer<typeof UserProfilePrivacySchema>>({
     resolver: zodResolver(UserProfilePrivacySchema),
