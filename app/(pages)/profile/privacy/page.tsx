@@ -18,6 +18,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { UserProfilePrivacySchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -31,14 +32,7 @@ const UserPrivacy = () => {
   });
 
   function onSubmit(data: z.infer<typeof UserProfilePrivacySchema>) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
+    console.log(data);
   }
 
   return (
@@ -75,7 +69,12 @@ const UserPrivacy = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(value) => {
+                            if (value)
+                              form.setValue("user_library_visibility", true);
+
+                            field.onChange(value);
+                          }}
                         />
                       </FormControl>
                     </FormItem>
@@ -100,7 +99,7 @@ const UserPrivacy = () => {
                         <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
-                          disabled
+                          disabled={form.getValues("user_visibility")}
                           aria-readonly
                         />
                       </FormControl>
