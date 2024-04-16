@@ -15,15 +15,15 @@ import { auth } from "@/auth";
 import { currentUser } from "@/lib/auth";
 
 const NavItems = [
-    {
-      title: "Genel",
-      href: "/profile",
-    },
-    {
-      title: "Gizlilik",
-      href: "/profile/privacy",
-    },
-  ]
+  {
+    title: "Genel",
+    href: "/profile",
+  },
+  {
+    title: "Gizlilik",
+    href: "/profile/privacy",
+  },
+];
 
 interface ProfileLayoutProps {
   children: React.ReactNode;
@@ -63,6 +63,8 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = async ({ children }) => {
               Genel
             </Link>
             <Link href="/profile/privacy">Gizlilik</Link>
+            {user?.role == 2 && <Link href="/profile/users">Kullanıcılar</Link>}
+
             {/* <Link href="#">Integrations</Link>
               <Link href="#">Support</Link>
               <Link href="#">Organizations</Link>

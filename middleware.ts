@@ -4,11 +4,15 @@ import {
   authRoutes,
   publicRoutes,
   apiAuthPrefix,
+  adminRoutes,
 } from "@/routes";
+import { currentUser } from "./lib/auth";
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const user = await currentUser();
+  console.log(user);
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
@@ -16,10 +20,11 @@ export default auth((req) => {
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+  const isAdminRoute = adminRoutes.includes(nextUrl.pathname);
+
   if (isApiAuthRoute) return null;
 
   if (isAuthRoute) {
-
     // if (isLoggedIn) {
     //   return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     // }
@@ -29,6 +34,10 @@ export default auth((req) => {
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/login", nextUrl));
     // return null;
+  }
+
+  if (user && user.role != 2 && isAdminRoute) {
+    return Response.redirect(new URL("/", nextUrl));
   }
 
   return null;
