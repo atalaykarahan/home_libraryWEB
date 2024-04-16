@@ -18,7 +18,6 @@ const UserTablePage = () => {
       if (res.status !== 200) {
         throw new Error("User ile ilgili bir hata oluştu");
       }
-
       setUsers(res.data);
     } catch (error) {
       console.warn("user try&catch hata -> ", error);

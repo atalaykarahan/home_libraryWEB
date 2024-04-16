@@ -9,6 +9,7 @@ export type UserTableModel = {
   completed_book_count: string;
   abandoned_book_count:string;
   favorite_author:string;
+  user_library_visibility:boolean;
 };
 
 

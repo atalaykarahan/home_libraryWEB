@@ -4,10 +4,15 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Table,
   TableBody,
@@ -16,14 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import BookTablePage from "../../allbooks/book_table/book-table-page";
-import UserCollapsibleTablePage from "../user-collapsible-table/page";
 import { VscTriangleRight } from "react-icons/vsc";
+import UserCollapsibleTablePage from "../user-collapsible-table/page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -74,9 +73,11 @@ export function DataTable<TData, TValue>({
                       data-state={row.getIsSelected() && "selected"}
                     >
                       <TableCell style={{ cursor: "pointer" }}>
-                        <CollapsibleTrigger asChild>
-                          <VscTriangleRight />
-                        </CollapsibleTrigger>
+                        {!row.original.user_library_visibility && (
+                          <CollapsibleTrigger asChild>
+                            <VscTriangleRight />
+                          </CollapsibleTrigger>
+                        )}
                       </TableCell>
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
