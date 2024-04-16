@@ -80,7 +80,6 @@ const NavbarLoggedInView = () => {
 
             <>
               <DropdownMenuItem
-                disabled={user?.role == 1}
                 onClick={() => {
                   setAuthorModal(true);
                 }}
@@ -88,7 +87,6 @@ const NavbarLoggedInView = () => {
                 Yazarlar
               </DropdownMenuItem>
               <DropdownMenuItem
-               disabled={user?.role == 1}
                 onClick={() => {
                   setCategoryModal(true);
                 }}
@@ -96,7 +94,6 @@ const NavbarLoggedInView = () => {
                 Kategoriler
               </DropdownMenuItem>
               <DropdownMenuItem
-               disabled={user?.role == 1}
                 onClick={() => {
                   setPublisherModal(true);
                 }}

@@ -1,4 +1,5 @@
 "use client";
+import { patchUpdateVisibility } from "@/app/_api/services/userService";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +23,7 @@ import { UserProfilePrivacySchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { IoAlertCircleOutline } from "react-icons/io5";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const UserPrivacy = () => {
@@ -35,9 +37,39 @@ const UserPrivacy = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof UserProfilePrivacySchema>) {
+  const onSubmit = async (data: z.infer<typeof UserProfilePrivacySchema>) => {
     console.log(data);
-  }
+
+    try {
+      const resStatus = await patchUpdateVisibility(
+        data.user_visibility,
+        data.user_library_visibility
+      );
+      if (resStatus.status == 200) {
+        toast.success(`GÜNCELLEME BAŞARILI`, {
+          description: "Gizlilik ayarlarınız güncellendi",
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+      } else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error(`update visibility error -> ${resStatus}`);
+      }
+    } catch (error) {
+      toast.error(`HATA`, {
+        description: `${error}`,
+        position: "top-right",
+      });
+      throw new Error(`update visibility try&catch hata -> ${error}`);
+    }
+  };
 
   return (
     <>
