@@ -1,29 +1,6 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { Badge } from "@/components/ui/badge";
-import { auth } from "@/auth";
 import { currentUser } from "@/lib/auth";
-
-const NavItems = [
-  {
-    title: "Genel",
-    href: "/profile",
-  },
-  {
-    title: "Gizlilik",
-    href: "/profile/privacy",
-  },
-];
+import SidebarLinks from "./sidebar-links";
 
 interface ProfileLayoutProps {
   children: React.ReactNode;
@@ -55,21 +32,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = async ({ children }) => {
           </h1>
         </div>
         <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-          <nav
-            className="grid gap-4 text-sm text-muted-foreground"
-            x-chunk="dashboard-04-chunk-0"
-          >
-            <Link href="/profile" className="font-semibold text-primary">
-              Genel
-            </Link>
-            <Link href="/profile/privacy">Gizlilik</Link>
-            {user?.role == 2 && <Link href="/profile/users">Kullanıcılar</Link>}
-
-            {/* <Link href="#">Integrations</Link>
-              <Link href="#">Support</Link>
-              <Link href="#">Organizations</Link>
-              <Link href="#">Advanced</Link> */}
-          </nav>
+          <SidebarLinks />
           <div className="grid gap-6">{children}</div>
         </div>
       </main>
