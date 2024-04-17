@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 export type UserTableModel = {
   user_id: string;
@@ -32,21 +33,61 @@ export const columns: ColumnDef<UserTableModel>[] = [
     header: "Üye Olma Tarihi",
   },
   {
-    accessorKey: "authority",
+    id: "authority",
     header: "Yetki",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <>
+          {user.authority == "guest" && (
+            <Badge variant="outline">{user.authority}</Badge>
+          )}
+          {user.authority == "user" && <Badge>{user.authority}</Badge>}
+          {user.authority == "admin" && (
+            <Badge variant="secondary">{user.authority}</Badge>
+          )}
+        </>
+      );
+    },
   },
   {
-    accessorKey: "user_visibility",
+    id: "user_visibility",
     header: "Gizlilik",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <>
+          {user.user_visibility == true && (
+            <Badge variant="destructive">Açık</Badge>
+          )}
+          {user.user_visibility == false && (
+            <Badge variant="success">Kapalı</Badge>
+          )}
+        </>
+      );
+    },
   },
   {
-    accessorKey: "user_library_visibility",
+    id: "user_library_visibility",
     header: "Kütüphane Gizliliği",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <>
+          {user.user_library_visibility == true && (
+            <Badge variant="destructive">Açık</Badge>
+          )}
+          {user.user_library_visibility == false && (
+            <Badge variant="success">Kapalı</Badge>
+          )}
+        </>
+      );
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -57,15 +98,8 @@ export const columns: ColumnDef<UserTableModel>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Düzenle</DropdownMenuItem>
+            <DropdownMenuItem>Sil</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
