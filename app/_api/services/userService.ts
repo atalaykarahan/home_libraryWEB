@@ -15,3 +15,7 @@ export const patchUpdateVisibility = (
 
   return axios.patch(`/users/update-visibility`, props);
 };
+
+export const getAllUsers = () => {
+  return axios.get(`/users/get-all-users`);
+};
