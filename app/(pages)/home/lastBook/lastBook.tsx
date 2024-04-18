@@ -78,17 +78,15 @@ const LastBook = () => {
                   </li>
                   <li>
                     <VscTriangleRight />
-                    <p>
-                      KATEGORI:{" "}
-                      <Each
-                        of={book.categories}
-                        render={(item, index) => (
-                          <>
-                            <Badge>{item.category_name}</Badge>{" "}
-                          </>
-                        )}
-                      />
-                    </p>
+                    <p className="inline-flex">KATEGORI: </p>
+                    <Each
+                      of={book.categories}
+                      render={(item, index) => (
+                        <>
+                          <Badge>{item.category_name}</Badge>{" "}
+                        </>
+                      )}
+                    />
                   </li>
                   <li>
                     <VscTriangleRight />
