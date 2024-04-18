@@ -3,12 +3,17 @@ import { useEffect, useState } from "react";
 import { UserTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getAllUsers } from "@/app/_api/services/userService";
+import { updateUserAuthorityEmitter } from "../edit-dialog/edit-dialog";
 
 const UserTablePage = () => {
   const [users, setUsers] = useState<UserTableModel[]>([]);
 
   useEffect(() => {
     fetchData();
+    updateUserAuthorityEmitter.on("updateGrid",fetchData);
+    return () => {
+      updateUserAuthorityEmitter.off("updateGrid",fetchData);
+    }
   }, []);
 
   const fetchData = async () => {

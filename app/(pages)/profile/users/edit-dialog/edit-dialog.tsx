@@ -1,10 +1,4 @@
-import {
-  getMyReading,
-  updateMyReadingClient,
-} from "@/app/_api/services/readingService";
-import { getMyStatusesClient } from "@/app/_api/services/statusService";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { updateUserAuthority } from "@/app/_api/services/userService";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -17,38 +11,25 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import { EditMyReadingSchema } from "@/schemas/reading";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { EditUsersSchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import EventEmitter from "events";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { UserTableModel } from "../user_table/columns";
-import { EditUsersSchema } from "@/schemas/user";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 type Status = {
   value: string;
@@ -61,7 +42,7 @@ interface EditUserDialogProps {
   user: UserTableModel;
 }
 
-export const eventEmitter = new EventEmitter();
+export const updateUserAuthorityEmitter = new EventEmitter();
 const EditUserDialog: React.FC<EditUserDialogProps> = ({
   isOpen,
   setIsOpen,
@@ -134,7 +115,27 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({
 
   const onSubmit = async (data: z.infer<typeof EditUsersSchema>) => {
     try {
-      console.log(data);
+      const resStatus = await updateUserAuthority(user.user_id, data.authority);
+
+      if (resStatus.status == 200) {
+        updateUserAuthorityEmitter.emit("updateGrid");
+        setIsOpen(false);
+        toast.success(`GÜNCELLEME BAŞARILI`, {
+          description: `${user.user_name}`,
+          position: "top-right",
+          style: {
+            backgroundColor: "hsl(143, 85%, 96%)",
+            color: "hsl(140, 100%, 27%)",
+            borderColor: "hsl(145, 92%, 91%)",
+          },
+        });
+      } else {
+        toast.error(`Bir hata meydana geldi`, {
+          description: `Daha sonra tekrar deneyin!`,
+          position: "top-right",
+        });
+        throw new Error(`updateUserAuthority error -> ${resStatus}`);
+      }
     } catch (error) {
       toast.error(`HATA`, {
         description: `${error}`,

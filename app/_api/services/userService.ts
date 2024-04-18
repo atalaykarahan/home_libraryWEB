@@ -19,3 +19,11 @@ export const patchUpdateVisibility = (
 export const getAllUsers = () => {
   return axios.get(`/users/get-all-users`);
 };
+
+export const updateUserAuthority = (target_user_id: string, authority_id:string) => {
+  const props = {
+    target_user_id:target_user_id,
+    authority_id:authority_id,
+  }
+  return axios.patch(`/users/update-user-authority`,props);
+}

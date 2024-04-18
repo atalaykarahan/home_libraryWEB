@@ -12,7 +12,6 @@ export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const user = await currentUser();
-  console.log(user);
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
