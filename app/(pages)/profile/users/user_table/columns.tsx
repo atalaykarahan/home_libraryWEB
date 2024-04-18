@@ -11,6 +11,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import EditUserDialog from "../edit-dialog/edit-dialog";
 
 export type UserTableModel = {
   user_id: string;
@@ -86,8 +88,10 @@ export const columns: ColumnDef<UserTableModel>[] = [
     id: "actions",
     cell: ({ row }) => {
       const user = row.original;
+      const [openUserDialog, setOpenUserDialog] = useState(false);
 
       return (
+        <>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -96,10 +100,26 @@ export const columns: ColumnDef<UserTableModel>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Düzenle</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenUserDialog(true)} >Düzenle</DropdownMenuItem>
             <DropdownMenuItem>Sil</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+
+        {/* Edit user dialog */}
+        {openUserDialog && (
+          <EditUserDialog
+            isOpen={openUserDialog}
+            setIsOpen={setOpenUserDialog}
+            user={user}
+          />
+        )}
+
+        </>
+
+
+
+
       );
     },
   },

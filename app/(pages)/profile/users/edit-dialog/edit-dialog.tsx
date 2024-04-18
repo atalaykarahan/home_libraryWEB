@@ -3,7 +3,7 @@ import {
   updateMyReadingClient,
 } from "@/app/_api/services/readingService";
 import { getMyStatusesClient } from "@/app/_api/services/statusService";
-import { Status } from "@/app/_models/status";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Dialog,
@@ -45,102 +46,95 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { MyBookTableModel } from "../my_book_table/columns";
+import { UserTableModel } from "../user_table/columns";
+import { EditUsersSchema } from "@/schemas/user";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
-interface EditMyBookDialogProps {
+type Status = {
+  value: string;
+  label: string;
+};
+
+interface EditUserDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  book: MyBookTableModel;
+  user: UserTableModel;
 }
 
 export const eventEmitter = new EventEmitter();
-const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
+const EditUserDialog: React.FC<EditUserDialogProps> = ({
   isOpen,
   setIsOpen,
-  book,
+  user,
 }) => {
-  const defaultImageUrl = process.env.DEFAULT_IMAGE ?? "";
-  const [statusPopover, setStatusPopover] = useState(false);
-  const [statuses, setStatuses] = useState<Status[]>([]);
-  const [selectedImage, setSelectedImage] = useState(defaultImageUrl);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [selectedStatus, setSelectedStatus] = useState<Status | null>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      if (book.book_image) setSelectedImage(book.book_image);
-
-      fetchData();
-    }
-  }, [isOpen]);
-
-  const fetchData = async () => {
-    //#region Get statuses for select box
-    const resStatus = await getMyStatusesClient();
-    if (resStatus.status !== 200) {
-      throw new Error("Statuses ile ilgili bir hata oluştu");
-    }
-    setStatuses(resStatus.data);
-    //#endregion
-
-    //#region reading info
-    const resReading = await getMyReading(book.reading_id);
-    if (resReading.status !== 200) {
-      throw new Error("Reading ile ilgili bir hata oluştu");
-    }
-    if (resReading.data.comment)
-      form.setValue("comment", resReading.data.comment);
-    //#endregion
-  };
-
-  const form = useForm<z.infer<typeof EditMyReadingSchema>>({
-    resolver: zodResolver(EditMyReadingSchema),
+  const form = useForm<z.infer<typeof EditUsersSchema>>({
+    resolver: zodResolver(EditUsersSchema),
   });
 
-  const onSubmit = async (data: z.infer<typeof EditMyReadingSchema>) => {
+  const statuses: Status[] = [
+    {
+      value: "2",
+      label: "Admin",
+    },
+    {
+      value: "3",
+      label: "User",
+    },
+    {
+      value: "1",
+      label: "Guest",
+    },
+  ];
+
+  function StatusList({
+    setOpen,
+    setSelectedStatus,
+  }: {
+    setOpen: (open: boolean) => void;
+    setSelectedStatus: (status: Status | null) => void;
+  }) {
+    return (
+      <Command>
+        <CommandInput placeholder="Ara..." />
+        <CommandList>
+          <CommandEmpty>Yetki bulunamadı.</CommandEmpty>
+          <CommandGroup>
+            {statuses.map((status) => (
+              <CommandItem
+                key={status.value}
+                value={status.label}
+                onSelect={(value) => {
+                  form.setValue("authority", status.value);
+                  setSelectedStatus(
+                    statuses.find((st) => st.label.toLowerCase() == value) ||
+                      null
+                  );
+                  setOpen(false);
+                }}
+              >
+                {status.label}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    );
+  }
+  useEffect(() => {
+    setSelectedStatus(
+      statuses.filter(
+        (status: Status) => status.label.toLowerCase() == user.authority
+      )[0]
+    );
+  }, []);
+
+  const onSubmit = async (data: z.infer<typeof EditUsersSchema>) => {
     try {
-      const formData = new FormData();
-      formData.append("reading_id", book.reading_id.toString());
-
-      //if user change a status
-      if (data.status_id)
-        formData.append("status_id", data.status_id.toString());
-
-      // if user change a comment
-      if (data.comment) formData.append("comment", data.comment);
-
-      //if user add a image
-      if (selectedFile) {
-        formData.append("book_image", selectedFile);
-      } else if (book.book_image && selectedImage == defaultImageUrl) {
-        formData.append("remove_book_image", "true");
-      }
-
-      const resStatus = await updateMyReadingClient(formData);
-      if (resStatus.status === 200) {
-        //this is for update grid
-        eventEmitter.emit("updateGrid");
-        if (inputRef.current) {
-          inputRef.current.value = "";
-        }
-
-        setIsOpen(false);
-        toast.success(`GÜNCELLEME BAŞARILI`, {
-          description: `${book.book_title}`,
-          position: "top-right",
-          style: {
-            backgroundColor: "hsl(143, 85%, 96%)",
-            color: "hsl(140, 100%, 27%)",
-            borderColor: "hsl(145, 92%, 91%)",
-          },
-        });
-      } else {
-        toast.error(`Bir hata meydana geldi`, {
-          description: `Daha sonra tekrar deneyin!`,
-          position: "top-right",
-        });
-        throw new Error(`updateMyReading error -> ${resStatus}`);
-      }
+      console.log(data);
     } catch (error) {
       toast.error(`HATA`, {
         description: `${error}`,
@@ -159,124 +153,60 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Kitap: {book.book_title}</DialogTitle>
-          <DialogDescription>Yazar: {book.author}</DialogDescription>
-
+          <DialogTitle>Kullanıcı: {user.user_name}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-4">
                 <FormField
-                  name="book_image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Kitap Resmi</FormLabel>
-                      <FormControl>
-                        <Input
-                          ref={inputRef}
-                          type="file"
-                          onChange={({ target }) => {
-                            if (target.files) {
-                              const file = target.files[0];
-                              setSelectedImage(URL.createObjectURL(file));
-                              setSelectedFile(file);
-                            }
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* status */}
-                <FormField
                   control={form.control}
-                  name="status_id"
+                  name="authority"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Durum</FormLabel>
-                      <Popover
-                        open={statusPopover}
-                        onOpenChange={setStatusPopover}
-                      >
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "justify-between",
-                                !field.value && "text-muted-foreground"
+                      <FormLabel>Yetkiler</FormLabel>
+                      {isDesktop == true ? (
+                        <Popover open={open} onOpenChange={setOpen}>
+                          <PopoverTrigger asChild>
+                            <Button variant="outline" className="justify-start">
+                              {selectedStatus ? (
+                                <>{selectedStatus.label}</>
+                              ) : (
+                                <>Yetki Seç</>
                               )}
-                            >
-                              {field.value
-                                ? statuses.find(
-                                    (status) =>
-                                      status.status_id.toString() == field.value
-                                  )?.status_name
-                                : book.status}
-                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          className="p-0"
-                          style={{
-                            maxHeight: "15rem",
-                            overflow: "auto",
-                          }}
-                        >
-                          <Command>
-                            <CommandInput
-                              placeholder="Durum ara..."
-                              className="h-9"
+                          </PopoverTrigger>
+                          <PopoverContent
+                            className="w-[200px] p-0"
+                            align="start"
+                          >
+                            <StatusList
+                              setOpen={setOpen}
+                              setSelectedStatus={setSelectedStatus}
                             />
-                            <CommandEmpty>Durum bulunamadı.</CommandEmpty>
-                            <CommandGroup>
-                              {statuses.map((status) => (
-                                <CommandItem
-                                  value={status.status_name}
-                                  key={status.status_id}
-                                  onSelect={() => {
-                                    form.setValue(
-                                      "status_id",
-                                      status.status_id.toString()
-                                    );
-                                    setStatusPopover(false);
-                                  }}
-                                >
-                                  {status.status_name}
-                                  <CheckIcon
-                                    className={cn(
-                                      "ml-auto h-4 w-4",
-                                      status.status_id.toString() == field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
-                  )}
-                />
-                {/* personel command */}
-                <FormField
-                  control={form.control}
-                  name="comment"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Notlarım</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Notların..."
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
+                          </PopoverContent>
+                        </Popover>
+                      ) : (
+                        <Drawer open={open} onOpenChange={setOpen}>
+                          <DrawerTrigger asChild>
+                            <Button variant="outline" className="justify-start">
+                              {selectedStatus ? (
+                                <>{selectedStatus.label}</>
+                              ) : (
+                                <>Yetki Seç</>
+                              )}
+                            </Button>
+                          </DrawerTrigger>
+                          <DrawerContent>
+                            <div className="mt-4 border-t">
+                              <StatusList
+                                setOpen={setOpen}
+                                setSelectedStatus={setSelectedStatus}
+                              />
+                            </div>
+                          </DrawerContent>
+                        </Drawer>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -286,10 +216,10 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
               </div>
             </form>
           </Form>
-        </DialogHeader>
+        </div>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default EditMyBookDialog;
+export default EditUserDialog;
