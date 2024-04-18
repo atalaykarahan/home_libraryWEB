@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { deleteMyBookEmitter } from "../delete-dialog/delete-dialog";
 import { MyBookTableModel, columns } from "./columns";
 import { DataTable } from "./data-table";
+import { updateMyBookEmitter } from "../edit-dialog/edit-dialog";
 
 const MyBookTablePage = () => {
   const [myBooks, setMyBooks] = useState<MyBookTableModel[]>([]);
@@ -13,8 +14,10 @@ const MyBookTablePage = () => {
 
     //this is for when user update his reading;
     deleteMyBookEmitter.on("updateGrid", fetchData);
+    updateMyBookEmitter.on("updateGrid", fetchData);
     return () => {
       deleteMyBookEmitter.off("updateGrid", fetchData);
+      updateMyBookEmitter.off("updateGrid", fetchData);
     };
   }, []);
 

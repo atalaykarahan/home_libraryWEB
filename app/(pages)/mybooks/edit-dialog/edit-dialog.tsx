@@ -53,7 +53,7 @@ interface EditMyBookDialogProps {
   book: MyBookTableModel;
 }
 
-export const eventEmitter = new EventEmitter();
+export const updateMyBookEmitter = new EventEmitter();
 const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
   isOpen,
   setIsOpen,
@@ -119,7 +119,7 @@ const EditMyBookDialog: React.FC<EditMyBookDialogProps> = ({
       const resStatus = await updateMyReadingClient(formData);
       if (resStatus.status === 200) {
         //this is for update grid
-        eventEmitter.emit("updateGrid");
+        updateMyBookEmitter.emit("updateGrid");
         if (inputRef.current) {
           inputRef.current.value = "";
         }
