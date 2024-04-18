@@ -45,7 +45,7 @@ const UserTablePage = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 overflow-auto">
       <DataTable columns={columns} data={users} />
     </div>
   );
