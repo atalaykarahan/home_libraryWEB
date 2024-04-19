@@ -165,7 +165,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
     },
   });
 
-  const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onSubmit = async (data: z.infer<typeof CreateBookSchema>) => {
@@ -185,6 +184,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
 
       if (resInsertBook.status == 201) {
         form.reset();
+        setSelectedFile(null);
         if (inputRef.current) {
           inputRef.current.value = "";
         }
@@ -243,7 +243,6 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                         onChange={({ target }) => {
                           if (target.files) {
                             const file = target.files[0];
-                            setSelectedImage(URL.createObjectURL(file));
                             setSelectedFile(file);
                           }
                         }}
