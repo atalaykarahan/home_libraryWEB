@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { VscTriangleRight } from "react-icons/vsc";
-import CollapsibleTablePage from "../user-collapsible-table/page";
+import CollapsibleTablePage from "../user-collapsible-table/collapsible-page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
