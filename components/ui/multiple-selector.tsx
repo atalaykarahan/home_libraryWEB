@@ -279,11 +279,11 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
               return;
             }
             setInputValue('');
-            const newOptions = [...selected, { value, label: value }];
+            const newOptions = [...selected, { value, label: inputValue }];
             setSelected(newOptions);
             onChange?.(newOptions);
           }}
-        >{`Create "${inputValue}"`}</CommandItem>
+        >{`Oluştur "${inputValue}"`}</CommandItem>
       );
 
       // For normal creatable
