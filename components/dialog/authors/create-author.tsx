@@ -53,7 +53,6 @@ const CreateAuthor: React.FC = ({}) => {
         console.log("createAuthor ile ilgili bir hata oluştu");
       }
     } catch (error: any) {
-      console.log(error.message);
       if (error.message == "This author already exists.") {
         toast.error(`HATA`, {
           description:
