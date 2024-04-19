@@ -18,9 +18,17 @@ const NavBar = () => {
   const router = useRouter();
 
   const navigation = [
-    { name: "Anasyfa", href: "/", current: true },
+    { name: "Anasayfa", href: "/", current: true },
     { name: "Tüm Kitaplar", href: "/allbooks", current: false },
     { name: "Üyeler", href: "/users", current: false },
+  ];
+
+  const navigationMobile = [
+    { name: "Anasayfa", href: "/", current: true },
+    { name: "Tüm Kitaplar", href: "/allbooks", current: false },
+    { name: "Üyeler", href: "/users", current: false },
+    { name: "Giriş Yap", href: "/login", current: false },
+    { name: "Üye Ol", href: "/register", current: false },
   ];
 
   function classNames(...classes: string[]) {
@@ -72,15 +80,17 @@ const NavBar = () => {
                   <NavbarLinks />
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {user ? <NavbarLoggedInView /> : <NavbarLoggedOutView />}
-              </div>
+              {user && <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <NavbarLoggedInView /> 
+              </div>}
+              
             </div>
           </div>
 
+{/* mobile view */}
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
+              {navigationMobile.map((item) => (
                 <Disclosure.Button
                   key={item.name}
                   as="a"
