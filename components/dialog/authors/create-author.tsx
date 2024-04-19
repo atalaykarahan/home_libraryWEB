@@ -46,7 +46,6 @@ const CreateAuthor: React.FC = ({}) => {
           },
         });
       } else {
-        console.log("buraya düşdü müüüü------------");
         toast.error(`Bir hata meydana geldi`, {
           description: `Daha sonra tekrar deneyin!`,
           position: "top-right",
@@ -54,10 +53,16 @@ const CreateAuthor: React.FC = ({}) => {
         console.log("createAuthor ile ilgili bir hata oluştu");
       }
     } catch (error: any) {
-      if (error.response.data.error == "This author already exists.") {
+      console.log(error.message);
+      if (error.message == "This author already exists.") {
         toast.error(`HATA`, {
           description:
             "Bu yazar zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
+          position: "top-right",
+        });
+      } else if (error.message == "Request failed with status code 401") {
+        toast.error(`GEÇERSİZ YETKİ`, {
+          description: `Bu işlemi yapabilmeniz için yetkiniz yeterli değil!`,
           position: "top-right",
         });
       } else {

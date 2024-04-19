@@ -36,11 +36,14 @@ const PatchCaller = async ({
       console.log(`patch caller error -> ${res}`);
     }
   } catch (error) {
-    toast.error(`HATA`, {
-      description: `${error}`,
-      position: "top-right",
-    });
-    console.log(`API call error -> ${error}`);
+    if(error == "AxiosError: Request failed with status code 401"){
+      console.log("yetki hatası")
+    }
+    // toast.error(`HATA`, {
+    //   description: `${error}`,
+    //   position: "top-right",
+    // });
+    // console.log(`API call error -> ${error}`);
   }
 };
 
