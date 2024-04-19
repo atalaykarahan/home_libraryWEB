@@ -48,21 +48,25 @@ const CreatePublisher: React.FC = ({}) => {
         });
         console.log("cratePublisher ile ilgili bir hata oluştu");
       }
-    } catch (error :any) {
-      if (error.response.data.error == "This publisher already exists.") {
+    } catch (error: any) {
+      if (error.message == "This publisher already exists.") {
         toast.error(`HATA`, {
           description:
             "Bu yayınevi zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
           position: "top-right",
         });
-      }else {
+      } else if (error.message == "Request failed with status code 401") {
+        toast.error(`GEÇERSİZ YETKİ`, {
+          description: `Bu işlemi yapabilmeniz için yetkiniz yeterli değil!`,
+          position: "top-right",
+        });
+      } else {
         toast.error(`HATA`, {
           description: `${error}`,
           position: "top-right",
         });
         console.log(error);
       }
-      
     }
   };
   return (
