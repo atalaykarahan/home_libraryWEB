@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { VscTriangleRight } from "react-icons/vsc";
-import UserCollapsibleTablePage from "../user-collapsible-table/page";
+import CollapsibleTablePage from "../user-collapsible-table/page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
                     <CollapsibleContent asChild>
                       <tr>
                         <td colSpan={6}>
-                          <UserCollapsibleTablePage
+                          <CollapsibleTablePage
                             user_id={row.original.user_id}
                           />
                         </td>

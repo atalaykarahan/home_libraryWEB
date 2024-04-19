@@ -4,11 +4,11 @@ import { UserCollapsibleModel, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getUserBookGridCollapseList } from "@/app/_api/services/bookService";
 
-interface UserCollapsibleTablePageProps {
+interface CollapsibleTablePageProps {
   user_id: string;
 }
 
-const UserCollapsibleTablePage: React.FC<UserCollapsibleTablePageProps> = ({
+const CollapsibleTablePage: React.FC<CollapsibleTablePageProps> = ({
   user_id,
 }) => {
   const [userDetail, setUserDetail] = useState<UserCollapsibleModel[]>([]);
@@ -33,4 +33,4 @@ const UserCollapsibleTablePage: React.FC<UserCollapsibleTablePageProps> = ({
   return <DataTable height={"25rem"} columns={columns} data={userDetail} />;
 };
 
-export default UserCollapsibleTablePage;
+export default CollapsibleTablePage;
