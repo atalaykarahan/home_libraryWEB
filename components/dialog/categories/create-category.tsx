@@ -49,10 +49,15 @@ const CreateCategory: React.FC = ({}) => {
         console.log("crateCategory ile ilgili bir hata oluştu");
       }
     } catch (error: any) {
-      if (error.response.data.error == "This category already exists.") {
+      if (error.message == "This category already exists.") {
         toast.error(`HATA`, {
           description:
             "Bu kategori zaten daha önceden eklenmiş lütfen yeni bir tane ekleyin",
+          position: "top-right",
+        });
+      } else if (error.message == "Request failed with status code 401") {
+        toast.error(`GEÇERSİZ YETKİ`, {
+          description: `Bu işlemi yapabilmeniz için yetkiniz yeterli değil!`,
           position: "top-right",
         });
       } else {
