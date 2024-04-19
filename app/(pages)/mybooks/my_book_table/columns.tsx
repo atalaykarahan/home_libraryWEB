@@ -13,6 +13,7 @@ import TableBookImage from "@/components/table-book-image";
 import { useState } from "react";
 import DeleteMyBookDialog from "../delete-dialog/delete-dialog";
 import EditMyBookDialog from "../edit-dialog/edit-dialog";
+import ActionsTableCell from "./actions-table-cell";
 
 export type MyBookTableModel = {
   book_image: string;
@@ -52,47 +53,8 @@ export const columns: ColumnDef<MyBookTableModel>[] = [
     id: "actions",
     cell: ({ row }) => {
       const myBook = row.original;
-      const [removeBookDialog, setRemoveBookDialog] = useState(false);
-      const [openReadingDialog, setOpenReadingDialog] = useState(false);
 
-      return (
-        <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <TbDots className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setOpenReadingDialog(true)}>
-                Düzenle
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setRemoveBookDialog(true)}>
-                Kitaplığımdan Kaldır
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Edit reading dialog */}
-          {openReadingDialog && (
-            <EditMyBookDialog
-              isOpen={openReadingDialog}
-              setIsOpen={setOpenReadingDialog}
-              book={myBook}
-            />
-          )}
-
-          {/* delete book dialog */}
-          {removeBookDialog && (
-            <DeleteMyBookDialog
-              isOpen={removeBookDialog}
-              setIsOpen={setRemoveBookDialog}
-              book={myBook}
-            />
-          )}
-        </>
-      );
+      return <ActionsTableCell myBook={myBook} />;
     },
   },
 ];

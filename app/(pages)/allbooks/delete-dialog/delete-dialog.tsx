@@ -70,7 +70,7 @@ const DeleteGeneralBookDialog: React.FC<DeleteGeneralBookDialogProps> = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            "{book.book_title}" kitabını kalıcı olarak silmek istediğine emin
+            {book.book_title} kitabını kalıcı olarak silmek istediğine emin
             misin?
           </AlertDialogTitle>
           <AlertDialogDescription>

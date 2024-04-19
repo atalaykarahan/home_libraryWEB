@@ -61,7 +61,7 @@ const DeleteMyBookDialog: React.FC<DeleteMyBookDialogProps> = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            "{book.book_title}" kitabını kitaplığından kaldırmak istediğine emin
+            {book.book_title} kitabını kitaplığından kaldırmak istediğine emin
             misin?
           </AlertDialogTitle>
           <AlertDialogDescription>
