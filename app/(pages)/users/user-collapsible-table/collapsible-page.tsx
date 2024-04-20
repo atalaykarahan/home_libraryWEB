@@ -7,7 +7,7 @@ import { getUserBookGridCollapseList } from "@/app/_api/services/bookService";
 interface CollapsibleTablePageProps {
   user_id: string;
 }
-
+// base url degisti icin
 const CollapsibleTablePage: React.FC<CollapsibleTablePageProps> = ({
   user_id,
 }) => {
