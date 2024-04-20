@@ -3,6 +3,7 @@ import axios from "../axios";
 import { cookies } from "next/dist/client/components/headers";
 import { RegisterDto } from "@/app/_models/DTOs/registerDto";
 import parse, { splitCookiesString } from "set-cookie-parser";
+import credentials from "next-auth/providers/credentials";
 
 // Getting cookie for server side request (XmlHttpRequest)
 export const getMyCookie = () => {
@@ -57,7 +58,7 @@ export const signUpServer = async (user: RegisterDto) => {
 export const signInServer = async (
   user_name: string,
   email: string,
-  password?:string,
+  password?: string,
   google_id?: string
 ) => {
   const props = {
@@ -126,7 +127,7 @@ export const newPasswordServer = async (password: string, token: string) => {
 //#region All client side code start
 
 export const loginClient = (user: LoginDto) => {
-  return axios.post(`/users/login`, user);
+  return axios.post(`/users/login`, user, { withCredentials: true });
 };
 
 export const logoutClient = () => {
