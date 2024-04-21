@@ -1,6 +1,5 @@
 import { getInsertCategoryClient } from "@/app/_api/services/categoryService";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -12,13 +11,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { CreateCategorySchema } from "@/schemas/category";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import EventEmitter from "events";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const eventEmitter = new EventEmitter();
 
-const CreateCategory: React.FC = ({}) => {
+interface CreateCategoryProps {
+  user: any;
+}
+
+const CreateCategory: React.FC<CreateCategoryProps> = ({ user }) => {
   const form = useForm<z.infer<typeof CreateCategorySchema>>({
     resolver: zodResolver(CreateCategorySchema),
     defaultValues: {
@@ -87,7 +91,7 @@ const CreateCategory: React.FC = ({}) => {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
+        <Button disabled={user.role == 1} type="submit" className="w-full">
           Oluştur
         </Button>
       </form>
