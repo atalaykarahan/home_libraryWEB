@@ -51,6 +51,7 @@ const LoginForm: React.FC = () => {
           })
           .then((response: any) => {
             // login islemleri esas ve cookie kaydı esas burda yapılıyor
+            //env yenilensin diye yorum satırı
             loginAction(values).then((data) => {
               if (data && data.error) {
                 // data varsa ve içinde error varsa, hata mesajını set et
