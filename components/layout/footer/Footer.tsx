@@ -16,13 +16,10 @@ const Footer = () => {
           <div className="w-full md:w-1/3 mb-6 md:mb-0">
             <h3 className="text-base font-bold">Ben kimim</h3>
             <p className="mb-2">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci
-              sint non fuga necessitatibus, provident dolor accusamus iusto, vel
-              sit, libero consequatur est accusantium velit deserunt dicta
-              voluptates temporibus quae cupiditate.
+            Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri bulundurmaktadır. Kaynak kodları için GitHub hesabımı ziyaret edebilirsiniz.
             </p>
             <p>
-              &copy; {new Date().getFullYear()} Kitaplık. Tüm hakları saklıdır.
+              &copy; {new Date().getFullYear()} Karahan Kitaplık. Tüm hakları saklıdır.
             </p>
           </div>
           <FooterList>
