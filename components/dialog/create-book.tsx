@@ -1,4 +1,5 @@
 import { getAllAuthorsSelectClient } from "@/app/_api/services/authorService";
+import { postInsertBookClient } from "@/app/_api/services/bookService";
 import { getCategories } from "@/app/_api/services/categoryService";
 import { getAllPublisherClient } from "@/app/_api/services/publisherService";
 import { getAllStatusesClient } from "@/app/_api/services/statusService";
@@ -6,13 +7,6 @@ import { Category } from "@/app/_models/category";
 import { Publisher } from "@/app/_models/publisher";
 import { Status } from "@/app/_models/status";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -28,28 +22,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { CreateBookSchema } from "@/schemas/book";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import EventEmitter from "events";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import MultipleSelector, {
   MultipleSelectorRef,
   Option,
 } from "../ui/multiple-selector";
 import { Textarea } from "../ui/textarea";
-import { postInsertBookClient } from "@/app/_api/services/bookService";
-import { InsertBook } from "@/app/_models/book";
-import { toast } from "sonner";
-import EventEmitter from "events";
-import axios from "@/app/_api/axios";
 
 export const eventEmitter = new EventEmitter();
 interface CreateCategoryProps {
