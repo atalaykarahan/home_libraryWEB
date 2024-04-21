@@ -18,7 +18,10 @@ import { z } from "zod";
 
 export const eventEmitter = new EventEmitter();
 
-const CreatePublisher: React.FC = ({}) => {
+interface CreatePublisherProps {
+  user: any;
+}
+const CreatePublisher: React.FC<CreatePublisherProps> = ({ user }) => {
   const form = useForm<z.infer<typeof CreatePublisherSchema>>({
     resolver: zodResolver(CreatePublisherSchema),
     defaultValues: {
@@ -87,7 +90,7 @@ const CreatePublisher: React.FC = ({}) => {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
+        <Button disabled={user.role == 1} type="submit" className="w-full">
           Oluştur
         </Button>
       </form>
