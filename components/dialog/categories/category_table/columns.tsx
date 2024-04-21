@@ -22,7 +22,6 @@ export const columns: ColumnDef<CategoryTableModel>[] = [
     id: "actions",
     cell: ({ row }) => {
       const category = row.original;
-
       return <ActionsTableCell category={category} />;
     },
   },

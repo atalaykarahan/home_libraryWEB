@@ -1,18 +1,7 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { TbDots } from "react-icons/tb";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import TableBookImage from "@/components/table-book-image";
-import { useState } from "react";
-import DeleteMyBookDialog from "../delete-dialog/delete-dialog";
-import EditMyBookDialog from "../edit-dialog/edit-dialog";
+import { ColumnDef } from "@tanstack/react-table";
 import ActionsTableCell from "./actions-table-cell";
 
 export type MyBookTableModel = {
