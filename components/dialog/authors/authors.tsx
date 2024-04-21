@@ -37,7 +37,7 @@ const Authors: React.FC<CreateCategoryProps> = ({ openModal, closeModal }) => {
           </Alert>
         )}
 
-        <CreateAuthor />
+        <CreateAuthor user={user} />
         <AuthorTablePage />
       </DialogContent>
     </Dialog>
