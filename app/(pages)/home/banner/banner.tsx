@@ -27,7 +27,7 @@ const Banner = () => {
                 18 yaşında Java ile ilk Android telefon uygulamamı geliştirdim.
                 O zamandan beri full-stack developer olarak çalışıyorum.
                 Genellikle CSS ve tasarım gerektiren projelerde yer aldım. Şu
-                anda backend developer olma yolunda Node.js'e odaklanıyorum.
+                anda backend developer olma yolunda Node.js&apos;e odaklanıyorum.
                 Bununla birlikte, iş hayatımda .NET Web API, Angular, Blazor,
                 Jquery, Sybase, Postgresql gibi kavramlarla da ilgilendim, ancak
                 odak noktam genellikle back-end oldu.{" "}
