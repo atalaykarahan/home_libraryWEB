@@ -47,9 +47,8 @@ const LastBook = () => {
           description: `En son eklenen kitabı anasayfada görebilmek ve siteden tam verim alabilmek için lütfen kitap ekleyin!`,
           position: "top-right",
         });
-      } else if (res.status == 200) {
-        console.log("buraya düştüyse kitap var içini doldurabilirsin demektir");
-        // setBook(res.data);
+      } else if (res.status == 200 && typeof res.data == "object") {
+        setBook(res.data);
       }
     } catch (error: any) {
       throw new Error("Home Page Last Book ile ilgili bir hata oluştu", error);

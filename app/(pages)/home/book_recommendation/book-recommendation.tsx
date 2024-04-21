@@ -25,20 +25,19 @@ const BookRecommendation = () => {
   const fetchData = async () => {
     try {
       const res = await getRandomBookRecommendation();
-      if (res.status == 200 && res.data > 0) {
+      if (res.status == 200 && res.data.length > 3) {
         setBooks(res.data);
       } else if (res.status == 200 && res.data == 0) {
         toast(`KİTAP ÖNERİSİ İÇİN YETERLİ KİTAP YOK`, {
           description: `Rastgele kitap önerisi için lütfen minimum 4 adet kullanılmayan kitaplıkta duran kitap ekleyin!`,
           position: "top-right",
         });
-      } else {
-        throw new Error(
-          "Home Page Random book recommendation ile ilgili bir hata oluştu"
-        );
       }
     } catch (error: any) {
-      throw new Error("Home Page Last Book ile ilgili bir hata oluştu", error);
+      throw new Error(
+        "Home Page Book recommendation ile ilgili bir hata oluştu",
+        error
+      );
     }
   };
   if (books)
