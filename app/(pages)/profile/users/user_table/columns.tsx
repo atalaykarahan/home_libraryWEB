@@ -1,18 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { TbDots } from "react-icons/tb";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useState } from "react";
-import EditUserDialog from "../edit-dialog/edit-dialog";
 import ActionsTableCell from "./actions-table-cell";
 
 export type UserTableModel = {

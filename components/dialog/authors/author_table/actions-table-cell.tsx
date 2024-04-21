@@ -2,10 +2,10 @@ import { deleteAuthorClient } from "@/app/_api/services/authorService";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { TbDots } from "react-icons/tb";
 import DeleteDialog from "../../alert-dialog/delete-dialog";

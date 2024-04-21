@@ -8,6 +8,7 @@ import { VscTriangleRight } from "react-icons/vsc";
 import bg from "../../../../public/images/last_book_bg.png";
 import lBook from "../../../../public/images/placeHolders/lastBook.png";
 import "./LastBook.css";
+import { toast } from "sonner";
 
 interface Category {
   category_id: number;
@@ -39,10 +40,20 @@ const LastBook = () => {
   }, []);
 
   const fetchData = async () => {
-    const res = await getLastInsertedReachableBook();
-    if (res.status !== 200)
-      throw new Error("Home Page Last Book ile ilgili bir hata oluştu");
-    setBook(res.data);
+    try {
+      const res = await getLastInsertedReachableBook();
+      if (res.status == 200 && typeof res.data == "string") {
+        toast(`KİTAPLIKTA KİTAP YOK`, {
+          description: `En son eklenen kitabı anasayfada görebilmek ve siteden tam verim alabilmek için lütfen kitap ekleyin!`,
+          position: "top-right",
+        });
+      } else if (res.status == 200) {
+        console.log("buraya düştüyse kitap var içini doldurabilirsin demektir");
+        // setBook(res.data);
+      }
+    } catch (error: any) {
+      throw new Error("Home Page Last Book ile ilgili bir hata oluştu", error);
+    }
   };
   if (book)
     return (

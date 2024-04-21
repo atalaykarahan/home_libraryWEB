@@ -10,31 +10,39 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between pt-16 pb-8">
           <FooterList>
             <Link href="/">Anasayfa</Link>
-            <Link href="/">Tüm kitaplar</Link>
-            <Link href="/">Üyeler</Link>
+            <Link href="/allbooks">Tüm kitaplar</Link>
+            <Link href="/users">Üyeler</Link>
           </FooterList>
           <div className="w-full md:w-1/3 mb-6 md:mb-0">
             <h3 className="text-base font-bold">Ben kimim</h3>
             <p className="mb-2">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci
-              sint non fuga necessitatibus, provident dolor accusamus iusto, vel
-              sit, libero consequatur est accusantium velit deserunt dicta
-              voluptates temporibus quae cupiditate.
+              Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri
+              öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere
+              tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri
+              bulundurmaktadır. Kaynak kodları için GitHub hesabımı ziyaret
+              edebilirsiniz.
             </p>
             <p>
-              &copy; {new Date().getFullYear()} Kitaplık. Tüm hakları saklıdır.
+              &copy; {new Date().getFullYear()} Karahan Kitaplık. Tüm hakları
+              saklıdır.
             </p>
           </div>
           <FooterList>
             <h3 className="text-base font-bold">Beni Takip Et</h3>
             <div className="flex gap-2">
-              <Link href="#">
+              <Link
+                href="https://www.linkedin.com/in/atalay-karahan-050985250/"
+                target="_blank"
+              >
                 <FaLinkedin size={24} />
               </Link>
-              <Link href="#">
+              <Link
+                href="https://www.instagram.com/krhnatalay/"
+                target="_blank"
+              >
                 <AiFillInstagram size={24} />
               </Link>
-              <Link href="#">
+              <Link href="https://github.com/atalaykarahan" target="_blank">
                 <AiOutlineGithub size={24} />
               </Link>
             </div>

@@ -24,20 +24,25 @@ const Banner = () => {
             <div className="banner-text-area">
               <h2> Atalay Karahan Back-End Developer</h2>
               <p>
-                Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri
-                öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere
-                tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri
-                bulundurmaktadır. Kaynak kodları için GitHub hesabımı ziyaret
-                edebilirsiniz.{" "}
+                18 yaşında Java ile ilk Android telefon uygulamamı geliştirdim.
+                O zamandan beri full-stack developer olarak çalışıyorum.
+                Genellikle CSS ve tasarım gerektiren projelerde yer aldım. Şu
+                anda backend developer olma yolunda Node.js&apos;e odaklanıyorum.
+                Bununla birlikte, iş hayatımda .NET Web API, Angular, Blazor,
+                Jquery, Sybase, Postgresql gibi kavramlarla da ilgilendim, ancak
+                odak noktam genellikle back-end oldu.{" "}
               </p>
               <ul className="banner-links">
                 <li>
-                  <Link href="https://github.com/atalaykarahan">
+                  <Link href="https://github.com/atalaykarahan" target="_blank">
                     <span>Github</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://www.linkedin.com/in/atalay-karahan-050985250/">
+                  <Link
+                    href="https://www.linkedin.com/in/atalay-karahan-050985250/"
+                    target="_blank"
+                  >
                     <span>LinkedIn</span>
                   </Link>
                 </li>
