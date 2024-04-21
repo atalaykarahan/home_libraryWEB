@@ -1,8 +1,7 @@
 'use client';
 
 import * as React from 'react';
-// import { X } from 'lucide-react';
-import { ImCross } from "react-icons/im";
+import { ImCross } from 'react-icons/im';
 
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Command as CommandPrimitive, useCommandState } from 'cmdk';
@@ -201,7 +200,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
         setSelected(newOptions);
         onChange?.(newOptions);
       },
-      [selected],
+      [onChange, selected],
     );
 
     const handleKeyDown = React.useCallback(
@@ -219,7 +218,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
           }
         }
       },
-      [selected],
+      [handleUnselect, selected],
     );
 
     useEffect(() => {
@@ -260,7 +259,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
       };
 
       void exec();
-    }, [debouncedSearchTerm, open]);
+    }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus]);
 
     const CreatableItem = () => {
       if (!creatable) return undefined;
@@ -279,11 +278,11 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
               return;
             }
             setInputValue('');
-            const newOptions = [...selected, { value, label: inputValue }];
+            const newOptions = [...selected, { value, label: value }];
             setSelected(newOptions);
             onChange?.(newOptions);
           }}
-        >{`Oluştur "${inputValue}"`}</CommandItem>
+        >{`Create "${inputValue}"`}</CommandItem>
       );
 
       // For normal creatable
