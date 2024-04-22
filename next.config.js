@@ -1,12 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  module.exports = {
-  images: {
-    unoptimized: true,
-  },
-}
   images: {
     domains: [
+       unoptimized: true,
       "tailwindui.com",
       "images.unsplash.com",
       "img.kitapyurdu.com",
