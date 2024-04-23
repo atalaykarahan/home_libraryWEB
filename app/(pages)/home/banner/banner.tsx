@@ -23,14 +23,14 @@ const Banner = () => {
           <div>
             <div className="banner-text-area">
               <h2> Atalay Karahan Back-End Developer</h2>
+              <h3> Neden Kütüphane Projesi?</h3>
               <p>
-                18 yaşında Java ile ilk Android telefon uygulamamı geliştirdim.
-                O zamandan beri full-stack developer olarak çalışıyorum.
-                Genellikle CSS ve tasarım gerektiren projelerde yer aldım. Şu
-                anda backend developer olma yolunda Node.js&apos;e odaklanıyorum.
-                Bununla birlikte, iş hayatımda .NET Web API, Angular, Blazor,
-                Jquery, Sybase, Postgresql gibi kavramlarla da ilgilendim, ancak
-                odak noktam genellikle back-end oldu.{" "}
+              Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri
+              öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere
+              tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri
+              bulundurmaktadır. İlerleyen zamanda redis, nest.js gibi teknolojileride kullanıp test edebileceğim bir proje. 
+              Kaynak kodları için GitHub hesabımı ziyaret
+              edebilirsiniz.
               </p>
               <ul className="banner-links">
                 <li>
