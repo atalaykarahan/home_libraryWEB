@@ -23,14 +23,14 @@ const Banner = () => {
           <div>
             <div className="banner-text-area">
               <h2> Atalay Karahan Back-End Developer</h2>
-              <h3> Neden Kütüphane Projesi?</h3>
+              <h3 className="text-white text-2xl">Neden Kütüphane Projesi?</h3>
               <p>
-              Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri
-              öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere
-              tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri
-              bulundurmaktadır. İlerleyen zamanda redis, nest.js gibi teknolojileride kullanıp test edebileceğim bir proje. 
-              Kaynak kodları için GitHub hesabımı ziyaret
-              edebilirsiniz.
+                Bu internet sitesi, kendimi geliştirmek, yeni teknolojileri
+                öğrenmek ve evimdeki kitapların log bilgilerini tutmak üzere
+                tasarlanmıştır. İçerisinde SMTP, S3 Bucket gibi teknolojileri
+                bulundurmaktadır. İlerleyen zamanda redis, nest.js gibi
+                teknolojileride kullanıp test edebileceğim bir proje. Kaynak
+                kodları için GitHub hesabımı ziyaret edebilirsiniz.
               </p>
               <ul className="banner-links">
                 <li>
