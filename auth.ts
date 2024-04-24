@@ -119,15 +119,15 @@ export const {
   ],
   cookies: {
     sessionToken: {
-        name: `next-auth.session-token`,
-        options: {
-            httpOnly: true,
-            sameSite: 'strict',
-            path: '/',
-            secure: false,
-            domain: ".atalaykarahan.com" // add a . in front so that subdomains are included
-
-        }
-    },
+      name: "next-auth.session-token",
+      options: {
+        domain: ".atalaykarahan.com",
+        path: "/",
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false
+      }
+    }
+  }
 },
-});
+);
