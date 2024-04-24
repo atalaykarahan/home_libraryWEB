@@ -38,6 +38,7 @@ export const {
         session.user.id = token.sub;
       }
 
+
       if (token.role && session.user) {
         //auth.js new version is making some error so we fix it like this
         session.user.role = token.role as 1 | 2 | 3;
@@ -116,4 +117,17 @@ export const {
       },
     }),
   ],
+  cookies: {
+    sessionToken: {
+        name: `next-auth.session-token`,
+        options: {
+            httpOnly: true,
+            sameSite: 'strict',
+            path: '/',
+            secure: false,
+            domain: ".atalaykarahan.com" // add a . in front so that subdomains are included
+
+        }
+    },
+},
 });
