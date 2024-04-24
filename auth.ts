@@ -82,9 +82,9 @@ export const {
         if (signUpServerApi.error) {
           console.log(signUpServerApi.error);
           return false;
+        } else {
+          return true;
         }
-
-        return true;
       } else if (account && account.provider == "credentials" && !profile) {
         return true;
       }

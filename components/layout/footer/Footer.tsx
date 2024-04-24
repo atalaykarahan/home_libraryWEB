@@ -16,15 +16,13 @@ const Footer = () => {
           <div className="w-full md:w-1/3 mb-6 md:mb-0">
             <h3 className="text-base font-bold">Ben kimim</h3>
             <p className="mb-2">
-            18 yaşında Java ile ilk Android telefon uygulamamı geliştirdim.
-                O zamandan beri full-stack developer olarak çalışıyorum.
-                Genellikle CSS ve tasarım gerektiren projelerde yer aldım. Şu
-                anda backend developer olma yolunda Node.js&apos;e odaklanıyorum.
-                Bununla birlikte, iş hayatımda .NET Web API, Angular, Blazor,
-                Jquery, Sybase, Postgresql gibi kavramlarla da ilgilendim, ancak
-                odak noktam genellikle back-end oldu.{" "}
-
-              
+              18 yaşında Java ile ilk Android telefon uygulamamı geliştirdim. O
+              zamandan beri full-stack developer olarak çalışıyorum. Genellikle
+              CSS ve tasarım gerektiren projelerde yer aldım. Şu anda backend
+              developer olma yolunda Node.js&apos;e odaklanıyorum. Bununla
+              birlikte, iş hayatımda .NET Web API, Angular, Blazor, Jquery,
+              Sybase, Postgresql gibi kavramlarla da ilgilendim, ancak odak
+              noktam genellikle back-end oldu.{" "}
             </p>
             <p>
               &copy; {new Date().getFullYear()} Karahan Kitaplık. Tüm hakları
