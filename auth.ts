@@ -117,17 +117,5 @@ export const {
       },
     }),
   ],
-  cookies: {
-    sessionToken: {
-      name: "__Secure-authjs.callback-url",
-      options: {
-        domain: ".atalaykarahan.com",
-        path: "/",
-        httpOnly: true,
-        sameSite: "lax",
-        secure: false
-      }
-    }
-  }
 },
 );
