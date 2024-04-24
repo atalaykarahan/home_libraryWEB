@@ -119,7 +119,7 @@ export const {
   ],
   cookies: {
     sessionToken: {
-      name: "next-auth.session-token",
+      name: "__Secure-authjs.callback-url",
       options: {
         domain: ".atalaykarahan.com",
         path: "/",
