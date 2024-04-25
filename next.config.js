@@ -17,5 +17,6 @@ const nextConfig = {
     DEFAULT_IMAGE: process.env.DEFAULT_IMAGE,
   },
 };
+///asdasdasdas
 
 module.exports = nextConfig;
