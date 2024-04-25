@@ -137,16 +137,7 @@ export const {
         secure: true
       }
     },
-    csrfToken: {
-      name: `__Host-next-auth.csrf-token`,
-      options: {
-        domain: ".atalaykarahan.com",
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: true
-      }
-    },
+  
   }
 },
 );
