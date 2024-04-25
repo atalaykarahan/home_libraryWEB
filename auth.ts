@@ -140,6 +140,7 @@ export const {
       csrfToken: {
       name: `__Host-authjs.csrf-token`,
       options: {
+        domain: "atalaykarahan.com",
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
