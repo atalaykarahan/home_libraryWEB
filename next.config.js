@@ -16,7 +16,7 @@ const nextConfig = {
     BASE_URL: process.env.BASE_URL,
     DEFAULT_IMAGE: process.env.DEFAULT_IMAGE,
   },
-  
+  //asdasdadas
 };
 
 module.exports = nextConfig;
