@@ -40,7 +40,7 @@ export const {
 
 
       if (token.role && session.user) {
-        //auth.js new version is making some error so we fix it like this
+        //auth.js new version is making some error so we fix it like this referes
         session.user.role = token.role as 1 | 2 | 3;
         session.user.user_visibility = token.user_visibility as boolean;
         session.user.user_library_visibility =
