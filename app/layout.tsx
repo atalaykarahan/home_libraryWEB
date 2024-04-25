@@ -21,7 +21,7 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    <SessionProvider session={session} basePath="/api">
+    <SessionProvider session={session}>
       <html lang="en">
         <head>
           <meta
