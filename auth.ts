@@ -117,37 +117,6 @@ export const {
       },
     }),
   ],
-  //   cookies: {
-  //   sessionToken: {
-  //     name: `__Secure-next-auth.session-token`,
-  //     options: {
-  //       httpOnly: true,
-  //       domain:".atalaykarahan.com",
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       secure: true
-  //     }
-  //   },
-  //   callbackUrl: {
-  //     name: `__Secure-authjs.callback-url`,
-  //     options: {
-  //       domain: ".atalaykarahan.com",
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       secure: true
-  //     }
-  //   },
-  //      csrfToken: {
-  //     name: `__Host-authjs.csrf-token`,
-  //     options: {
-  //       domain: ".atalaykarahan.com",
-  //       httpOnly: true,
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       secure: true
-  //     }
-  //   },
   
-  // }
 },
 );
