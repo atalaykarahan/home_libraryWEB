@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
+const headers = [
+  "Accept", "Accept-Version", "Content-Length",
+  "Content-MD5", "Content-Type", "Date", "X-Api-Version",
+  "X-CSRF-Token", "X-Requested-With",
+];
+
+
 const nextConfig = {
   images: {
        unoptimized: true,
