@@ -14,6 +14,19 @@ const nextConfig = {
     BASE_URL: process.env.BASE_URL,
     DEFAULT_IMAGE: process.env.DEFAULT_IMAGE,
   },
+   async headers() {
+    return [
+      {
+        source: "/api/(.*)",
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          {  key: 'Access-Control-Allow-Origin', value: "www.atalaykarahan.com" },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST" },
+          { key: "Access-Control-Allow-Headers", value: headers.join(", ") }
+          ]
+      }
+    ];
+  }
 };
 
 module.exports = nextConfig;
