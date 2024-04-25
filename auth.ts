@@ -122,6 +122,7 @@ export const {
       name: `__Secure-next-auth.session-token`,
       options: {
         httpOnly: true,
+        domain:".atalaykarahan.com",
         sameSite: 'lax',
         path: '/',
         secure: true
