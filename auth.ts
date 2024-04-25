@@ -128,7 +128,7 @@ export const {
       }
     },
     callbackUrl: {
-      name: `__Secure-next-auth.callback-url`,
+      name: `__Secure-authjs.callback-url`,
       options: {
         domain: ".atalaykarahan.com",
         sameSite: 'lax',
