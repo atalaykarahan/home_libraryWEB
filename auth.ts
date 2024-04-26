@@ -38,9 +38,8 @@ export const {
         session.user.id = token.sub;
       }
 
-
       if (token.role && session.user) {
-        //auth.js new version is making some error so we fix it like this
+        //auth.js new version is making some error so we fix it like this referes
         session.user.role = token.role as 1 | 2 | 3;
         session.user.user_visibility = token.user_visibility as boolean;
         session.user.user_library_visibility =
@@ -116,38 +115,36 @@ export const {
         return null;
       },
     }),
-  
   ],
   // cookies: {
   //   sessionToken: {
   //     name: `__Secure-next-auth.session-token`,
   //     options: {
   //       httpOnly: true,
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       secure: true
-  //     }
+  //       domain: ".atalaykarahan.com",
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //     },
   //   },
   //   callbackUrl: {
-  //     name: `__Secure-next-auth.callback-url`,
+  //     name: `__Secure-authjs.callback-url`,
   //     options: {
   //       domain: ".atalaykarahan.com",
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       secure: true
-  //     }
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //     },
   //   },
   //   csrfToken: {
   //     name: `__Host-authjs.csrf-token`,
   //     options: {
-  //       domain: ".atalaykarahan.com",
+  //       domain: "atalaykarahan.com",
   //       httpOnly: true,
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       secure: true
-  //     }
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //     },
   //   },
-  // }
-  
-},
-);
+  // },
+});
