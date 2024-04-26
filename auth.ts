@@ -117,7 +117,26 @@ export const {
     }),
   ],
   cookies: {
-  
+    sessionToken: {
+      name: `__Secure-authjs.session-token`,
+      options: {
+        httpOnly: true,
+        domain: ".atalaykarahan.com",
+        sameSite: "lax",
+        path: "/",
+        secure: true,
+      },
+    },
+    callbackUrl: {
+      name: `__Secure-authjs.callback-url`,
+      options: {
+        domain: ".atalaykarahan.com",
+        sameSite: "lax",
+        httpOnly: true,
+        path: "/",
+        secure: true,
+      },
+    },
     
   },
 });

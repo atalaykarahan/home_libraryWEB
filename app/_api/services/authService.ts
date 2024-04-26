@@ -83,6 +83,7 @@ export const signInServer = async (
     cookies().set({
       name: myCookie[0].name,
       value: myCookie[0].value,
+      domain: myCookie[0].domain,
       expires: myCookie[0].expires,
       httpOnly: myCookie[0].httpOnly,
       path: myCookie[0].path,
