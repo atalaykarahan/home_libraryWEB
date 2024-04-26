@@ -137,16 +137,25 @@ export const {
         secure: true,
       },
     },
-     pkceCodeVerifier: {
-        name: `__Secure-authjs.pkce.code_verifier`,
-        options: {
-          domain: ".atalaykarahan.com",
-          httpOnly: true,
-          sameSite: 'lax',
-          path: '/',
-          secure: true,
-        }
+    csrfToken: {
+      name: `__Host-authjs.csrf-token`,
+      options: {
+        domain: ".atalaykarahan.com",
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: true,
       },
-    
+    },
+    pkceCodeVerifier: {
+      name: `__Secure-authjs.pkce.code_verifier`,
+      options: {
+        domain: ".atalaykarahan.com",
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: true,
+      },
+    },
   },
 });
