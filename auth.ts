@@ -137,6 +137,16 @@ export const {
         secure: true,
       },
     },
+     pkceCodeVerifier: {
+        name: `__Secure-authjs.pkce.code_verifier`,
+        options: {
+          domain: ".atalaykarahan.com",
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          secure: true,
+        }
+      },
     
   },
 });
