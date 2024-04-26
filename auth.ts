@@ -121,7 +121,7 @@ export const {
       name: `__Secure-authjs.session-token`,
       options: {
         httpOnly: true,
-        domain: ".atalaykarahan.com",
+        domain: `${process.env.COOKIE_DOMAIN}`,
         sameSite: "lax",
         path: "/",
         secure: true,
@@ -130,7 +130,7 @@ export const {
     callbackUrl: {
       name: `__Secure-authjs.callback-url`,
       options: {
-        domain: ".atalaykarahan.com",
+        domain: `${process.env.COOKIE_DOMAIN}`,
         sameSite: "lax",
         httpOnly: true,
         path: "/",
@@ -140,7 +140,7 @@ export const {
     pkceCodeVerifier: {
       name: `__Secure-authjs.pkce.code_verifier`,
       options: {
-        domain: ".atalaykarahan.com",
+        domain: `${process.env.COOKIE_DOMAIN}`,
         httpOnly: true,
         sameSite: "lax",
         path: "/",

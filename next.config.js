@@ -27,7 +27,7 @@ const nextConfig = {
         source: "/api/(.*)",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          {  key: 'Access-Control-Allow-Origin', value: "www.atalaykarahan.com" },
+          { key: 'Access-Control-Allow-Origin', value: "atalaykarahan.com" },
           { key: "Access-Control-Allow-Methods", value: "GET,POST" },
           { key: "Access-Control-Allow-Headers", value: headers.join(", ") }
           ]
