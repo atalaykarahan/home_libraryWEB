@@ -116,36 +116,36 @@ export const {
       },
     }),
   ],
-  cookies: {
-    sessionToken: {
-      name: `__Secure-authjs.session-token`,
-      options: {
-        httpOnly: true,
-        domain: `${process.env.COOKIE_DOMAIN}`,
-        sameSite: "lax",
-        path: "/",
-        secure: true,
-      },
-    },
-    callbackUrl: {
-      name: `__Secure-authjs.callback-url`,
-      options: {
-        domain: `${process.env.COOKIE_DOMAIN}`,
-        sameSite: "lax",
-        httpOnly: true,
-        path: "/",
-        secure: true,
-      },
-    },
-    pkceCodeVerifier: {
-      name: `__Secure-authjs.pkce.code_verifier`,
-      options: {
-        domain: `${process.env.COOKIE_DOMAIN}`,
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: true,
-      },
-    },
-  },
+  // cookies: {
+  //   sessionToken: {
+  //     name: `__Secure-authjs.session-token`,
+  //     options: {
+  //       httpOnly: true,
+  //       domain: `${process.env.COOKIE_DOMAIN}`,
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //     },
+  //   },
+  //   callbackUrl: {
+  //     name: `__Secure-authjs.callback-url`,
+  //     options: {
+  //       domain: `${process.env.COOKIE_DOMAIN}`,
+  //       sameSite: "lax",
+  //       httpOnly: true,
+  //       path: "/",
+  //       secure: true,
+  //     },
+  //   },
+  //   pkceCodeVerifier: {
+  //     name: `__Secure-authjs.pkce.code_verifier`,
+  //     options: {
+  //       domain: `${process.env.COOKIE_DOMAIN}`,
+  //       httpOnly: true,
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //     },
+  //   },
+  // },
 });
