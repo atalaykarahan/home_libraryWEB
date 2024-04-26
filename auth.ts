@@ -116,68 +116,68 @@ export const {
       },
     }),
   ],
-  cookies: {
-    sessionToken: {
-      name: `__Secure-authjs.session-token`,
-      options: {
-        httpOnly: true,
-        domain: ".atalaykarahan.com",
-        sameSite: "lax",
-        path: "/",
-        secure: true,
-      },
-    },
-    callbackUrl: {
-      name: `__Secure-authjs.callback-url`,
-      options: {
-        domain: ".atalaykarahan.com",
-        sameSite: "lax",
-        httpOnly: true,
-        path: "/",
-        secure: true,
-      },
-    },
-    // csrfToken: {
-    //   name: `__Host-authjs.csrf-token`,
-    //   options: {
-    //     domain: ".atalaykarahan.com",
-    //     httpOnly: true,
-    //     sameSite: "lax",
-    //     path: "/",
-    //     secure: true,
-    //   },
-    // },
-    // pkceCodeVerifier: {
-    //   name: `__Secure-authjs.pkce.code_verifier`,
-    //   options: {
-    //     domain: ".atalaykarahan.com",
-    //     httpOnly: true,
-    //     sameSite: 'lax',
-    //     path: '/',
-    //     secure: true,
-    //     maxAge: 900
-    //   }
-    // },
-    // state: {
-    //   name: `__Secure-authjs.state`,
-    //   options: {
-    //     domain: ".atalaykarahan.com",
-    //     httpOnly: true,
-    //     sameSite: "lax",
-    //     path: "/",
-    //     secure: true,
-    //     maxAge: 900
-    //   },
-    // },
-    // nonce: {
-    //   name: `__Secure-authjs.nonce`,
-    //   options: {
-    //     domain: ".atalaykarahan.com",
-    //     httpOnly: true,
-    //     sameSite: "lax",
-    //     path: "/",
-    //     secure: true,
-    //   },
-    // },
-  },
+  // cookies: {
+  //   sessionToken: {
+  //     name: `__Secure-authjs.session-token`,
+  //     options: {
+  //       httpOnly: true,
+  //       domain: ".atalaykarahan.com",
+  //       sameSite: "lax",
+  //       path: "/",
+  //       secure: true,
+  //     },
+  //   },
+  //   callbackUrl: {
+  //     name: `__Secure-authjs.callback-url`,
+  //     options: {
+  //       domain: ".atalaykarahan.com",
+  //       sameSite: "lax",
+  //       httpOnly: true,
+  //       path: "/",
+  //       secure: true,
+  //     },
+  //   },
+  //   // csrfToken: {
+  //   //   name: `__Host-authjs.csrf-token`,
+  //   //   options: {
+  //   //     domain: ".atalaykarahan.com",
+  //   //     httpOnly: true,
+  //   //     sameSite: "lax",
+  //   //     path: "/",
+  //   //     secure: true,
+  //   //   },
+  //   // },
+  //   // pkceCodeVerifier: {
+  //   //   name: `__Secure-authjs.pkce.code_verifier`,
+  //   //   options: {
+  //   //     domain: ".atalaykarahan.com",
+  //   //     httpOnly: true,
+  //   //     sameSite: 'lax',
+  //   //     path: '/',
+  //   //     secure: true,
+  //   //     maxAge: 900
+  //   //   }
+  //   // },
+  //   // state: {
+  //   //   name: `__Secure-authjs.state`,
+  //   //   options: {
+  //   //     domain: ".atalaykarahan.com",
+  //   //     httpOnly: true,
+  //   //     sameSite: "lax",
+  //   //     path: "/",
+  //   //     secure: true,
+  //   //     maxAge: 900
+  //   //   },
+  //   // },
+  //   // nonce: {
+  //   //   name: `__Secure-authjs.nonce`,
+  //   //   options: {
+  //   //     domain: ".atalaykarahan.com",
+  //   //     httpOnly: true,
+  //   //     sameSite: "lax",
+  //   //     path: "/",
+  //   //     secure: true,
+  //   //   },
+  //   // },
+  // },
 });
