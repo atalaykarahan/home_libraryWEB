@@ -21,7 +21,6 @@ declare module "next-auth" {
     user: ExtendedUser;
   }
 }
-// refreshenv
 export const {
   handlers: { GET, POST },
   auth,
