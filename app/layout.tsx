@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import { cookies } from "next/dist/client/components/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const cookieStore = cookies();
+  cookieStore
+    .getAll()
+    .map((cookie) =>
+      cookies().set(cookie.name, cookie.value, { domain: ".atalaykarahan.com" })
+    );
   return (
     <SessionProvider session={session}>
       <html lang="en">
