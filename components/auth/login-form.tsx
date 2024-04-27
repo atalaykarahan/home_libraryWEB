@@ -51,7 +51,6 @@ const LoginForm: React.FC = () => {
           })
           .then((response: any) => {
             // login islemleri esas ve cookie kaydı esas burda yapılıyor
-            //env yenilensin diye yorum satırı
             loginAction(values).then((data) => {
               if (data && data.error) {
                 // data varsa ve içinde error varsa, hata mesajını set et
@@ -62,11 +61,12 @@ const LoginForm: React.FC = () => {
             });
           })
           .catch((err: any) => {
-            toast(`catch kısmı ${err}`);
-            if (err.response.status) {
+            if (err.response.data.error == "Invalid credentials") {
               setErrorMessage("Geçersiz kullanıcı bilgileri");
-              console.log("düştü");
+            } else {
+              setErrorMessage("Bilinmeyen bir hata oluştu");
             }
+
             console.log(err);
           });
       } catch (error) {
@@ -92,7 +92,7 @@ const LoginForm: React.FC = () => {
                 <FormItem>
                   <FormLabel>Kullanıcı Adı</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" />
+                    <Input {...field} type="text" disabled={isPending} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,7 +105,7 @@ const LoginForm: React.FC = () => {
                 <FormItem>
                   <FormLabel>Şifre</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="********" type="password" />
+                    <Input {...field} placeholder="********" type="password" disabled={isPending} />
                   </FormControl>
                   <Button
                     size="sm"
@@ -120,9 +120,8 @@ const LoginForm: React.FC = () => {
               )}
             />
           </div>
-          <FormError message="" />
-          <FormSuccess message="" />
-          <Button type="submit" className="w-full">
+          <FormError message={errorMessage} />
+          <Button type="submit" className="w-full" disabled={isPending}>
             Giriş Yap
           </Button>
         </form>
