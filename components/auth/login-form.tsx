@@ -1,7 +1,7 @@
 "use client";
-import * as z from "zod";
-import { CardWrapper } from "./card-wrapper";
-import { Input } from "@/components/ui/input";
+import { loginAction } from "@/actions/login";
+import { loginClient } from "@/app/_api/services/authService";
+import { LoginDto } from "@/app/_models/DTOs/loginDto";
 import {
   Form,
   FormControl,
@@ -10,18 +10,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { LoginDto } from "@/app/_models/DTOs/loginDto";
-import FormError from "../form-error";
-import FormSuccess from "../form-success";
-import { Button } from "../ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
 import { LoginSchema } from "@/schemas";
-import { useState, useTransition } from "react";
-import { loginClient } from "@/app/_api/services/authService";
-import { loginAction } from "@/actions/login";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { BeatLoader } from "react-spinners";
+import * as z from "zod";
+import FormError from "../form-error";
+import { Button } from "../ui/button";
+import { CardWrapper } from "./card-wrapper";
 
 const LoginForm: React.FC = () => {
   const [isPending, startTransition] = useTransition();
@@ -82,50 +81,61 @@ const LoginForm: React.FC = () => {
       backButtonHref="/register"
       showSocial
     >
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="nick_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Kullanıcı Adı</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" disabled={isPending} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Şifre</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="********" type="password" disabled={isPending} />
-                  </FormControl>
-                  <Button
-                    size="sm"
-                    variant="link"
-                    asChild
-                    className="px-0 font-normal"
-                  >
-                    <Link href="/reset">Şifremi unuttum!</Link>
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormError message={errorMessage} />
-          <Button type="submit" className="w-full" disabled={isPending}>
-            Giriş Yap
-          </Button>
-        </form>
-      </Form>
+      {isPending == true ? (
+        <div className="flex items-center w-full justify-center">
+          <BeatLoader />
+        </div>
+      ) : (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="nick_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kullanıcı Adı</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="text" disabled={isPending} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Şifre</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="********"
+                        type="password"
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <Button
+                      size="sm"
+                      variant="link"
+                      asChild
+                      className="px-0 font-normal"
+                    >
+                      <Link href="/reset">Şifremi unuttum!</Link>
+                    </Button>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormError message={errorMessage} />
+            <Button type="submit" className="w-full" disabled={isPending}>
+              Giriş Yap
+            </Button>
+          </form>
+        </Form>
+      )}
     </CardWrapper>
   );
 };
