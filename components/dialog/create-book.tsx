@@ -7,6 +7,7 @@ import { Category } from "@/app/_models/category";
 import { Publisher } from "@/app/_models/publisher";
 import { Status } from "@/app/_models/status";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ import MultipleSelector, {
   Option,
 } from "../ui/multiple-selector";
 import { Textarea } from "../ui/textarea";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 export const eventEmitter = new EventEmitter();
 interface CreateCategoryProps {
@@ -44,6 +46,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   openModal,
   closeModal,
 }) => {
+  const defaultImageUrl = process.env.DEFAULT_IMAGE ?? "";
   //publisher
   const [publishers, setPublishers] = useState<Option[]>([]);
   const publisherInputRef = useRef<MultipleSelectorRef>(null);
@@ -55,6 +58,8 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   //status
   const [statuses, setStatuses] = useState<Option[]>([]);
   const statusInputRef = useRef<MultipleSelectorRef>(null);
+
+  const [selectedImage, setSelectedImage] = useState(defaultImageUrl);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -237,6 +242,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                         onChange={({ target }) => {
                           if (target.files) {
                             const file = target.files[0];
+                            setSelectedImage(URL.createObjectURL(file));
                             setSelectedFile(file);
                           }
                         }}
@@ -246,6 +252,30 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                   </FormItem>
                 )}
               />
+              <div style={{ maxWidth: "110px", maxHeight: "310px" }}>
+                <AspectRatio ratio={220 / 310} className="bg-muted">
+                  <Image
+                    src={selectedImage}
+                    alt="newImage"
+                    fill
+                    className="rounded-md object-cover"
+                  />
+                </AspectRatio>
+                <Button
+                  variant="destructive"
+                  className="mt-3"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setSelectedImage(defaultImageUrl);
+                    if (inputRef.current) {
+                      inputRef.current.value = "";
+                    }
+                    setSelectedFile(null);
+                  }}
+                >
+                  Resmi Çıkar
+                </Button>
+              </div>
 
               {/* book name */}
               <FormField
