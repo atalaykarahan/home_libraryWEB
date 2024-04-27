@@ -200,6 +200,11 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
           description: `Bu işlemi yapabilmeniz için yetkiniz yeterli değil!`,
           position: "top-right",
         });
+      } else if (error.response.data.error == "Failed to upload image.") {
+        toast.error(`RESIM HATASI`, {
+          description: `Resim yüklenirken bir sorun oluştu lütfen tekrar deneyin.`,
+          position: "top-right",
+        });
       } else {
         toast.error(`HATA`, {
           description: `${error}`,
