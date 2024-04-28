@@ -64,83 +64,87 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        //#region publisher query
-        const resPublisher = await getAllPublisherClient();
 
-        if (resPublisher.status !== 200) {
-          throw new Error("publisher ile ilgili bir hata oluştu");
-        }
+      fetchData();
+      
 
-        const responsePublisher: Publisher[] = await resPublisher.data;
 
-        const transformedPublishers = responsePublisher.map((publisher) => ({
-          label: publisher.publisher_name,
-          value: publisher.publisher_name,
-          key: publisher.publisher_id.toString(),
-        }));
-
-        if (transformedPublishers) setPublishers(transformedPublishers);
-        //#endregion
-
-        //#region author query
-        const resAuthor = await getAllAuthorsSelectClient();
-
-        if (resAuthor.status !== 200) {
-          throw new Error("author ile ilgili bir hata oluştu");
-        }
-
-        // const responseAuthor: Author[] = resPublisher.data;
-        const responseAuthor: Option[] = resAuthor.data;
-        const transformedAuthors = responseAuthor.map((author) => ({
-          label: author.label,
-          value: author.label,
-          key: author.value,
-        }));
-        if (transformedAuthors) setAuthors(transformedAuthors);
-        //#endregion
-
-        //#region status query
-        const resStatus = await getAllStatusesClient();
-
-        if (resStatus.status !== 200)
-          throw new Error("status ile ilgili bir hata oluştu");
-
-        const responseStatus: Status[] = await resStatus.data;
-
-        const transformedStatuses = responseStatus.map((status) => ({
-          label: status.status_name,
-          value: status.status_name,
-          key: status.status_id.toString(),
-        }));
-        if (transformedStatuses) setStatuses(transformedStatuses);
-        //#endregion
-
-        //#region category query
-        const resCategory = await getCategories();
-        if (resCategory.status !== 200) {
-          throw new Error("category ile ilgili bir hata oluştu");
-        }
-        const responseCategory: Category[] = await resCategory.data;
-
-        const transformedCategories = responseCategory.map((category) => ({
-          label: category.category_name,
-          value: category.category_name,
-          key: category.category_id.toString(),
-        }));
-
-        if (transformedCategories) {
-          setCategories(transformedCategories);
-        }
-        //#endregion
-      } catch (error) {
-        console.warn("fetchData try&catch hata -> ", error);
-      }
-    };
-
-    fetchData();
   }, [openModal]);
+
+  const fetchData = async () => {
+    try {
+      //#region publisher query
+      const resPublisher = await getAllPublisherClient();
+
+      if (resPublisher.status !== 200) {
+        throw new Error("publisher ile ilgili bir hata oluştu");
+      }
+
+      const responsePublisher: Publisher[] = await resPublisher.data;
+
+      const transformedPublishers = responsePublisher.map((publisher) => ({
+        label: publisher.publisher_name,
+        value: publisher.publisher_name,
+        key: publisher.publisher_id.toString(),
+      }));
+
+      if (transformedPublishers) setPublishers(transformedPublishers);
+      //#endregion
+
+      //#region author query
+      const resAuthor = await getAllAuthorsSelectClient();
+
+      if (resAuthor.status !== 200) {
+        throw new Error("author ile ilgili bir hata oluştu");
+      }
+
+      // const responseAuthor: Author[] = resPublisher.data;
+      const responseAuthor: Option[] = resAuthor.data;
+      const transformedAuthors = responseAuthor.map((author) => ({
+        label: author.label,
+        value: author.label,
+        key: author.value,
+      }));
+      if (transformedAuthors) setAuthors(transformedAuthors);
+      //#endregion
+
+      //#region status query
+      const resStatus = await getAllStatusesClient();
+
+      if (resStatus.status !== 200)
+        throw new Error("status ile ilgili bir hata oluştu");
+
+      const responseStatus: Status[] = await resStatus.data;
+
+      const transformedStatuses = responseStatus.map((status) => ({
+        label: status.status_name,
+        value: status.status_name,
+        key: status.status_id.toString(),
+      }));
+      if (transformedStatuses) setStatuses(transformedStatuses);
+      //#endregion
+
+      //#region category query
+      const resCategory = await getCategories();
+      if (resCategory.status !== 200) {
+        throw new Error("category ile ilgili bir hata oluştu");
+      }
+      const responseCategory: Category[] = await resCategory.data;
+
+      const transformedCategories = responseCategory.map((category) => ({
+        label: category.category_name,
+        value: category.category_name,
+        key: category.category_id.toString(),
+      }));
+
+      if (transformedCategories) {
+        setCategories(transformedCategories);
+      }
+      //#endregion
+    } catch (error) {
+      console.warn("fetchData try&catch hata -> ", error);
+    }
+  };
 
   const form = useForm<z.infer<typeof CreateBookSchema>>({
     resolver: zodResolver(CreateBookSchema),
@@ -267,9 +271,9 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                   onClick={(event) => {
                     event.preventDefault();
                     setSelectedImage(defaultImageUrl);
-                    if (inputRef.current) {
-                      inputRef.current.value = "";
-                    }
+                     if (inputRef.current) {
+          inputRef.current.value = "";
+        }
                     setSelectedFile(null);
                   }}
                 >
@@ -316,6 +320,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                             publisherInputRef.current?.input.blur();
                         }}
                         defaultOptions={publishers}
+                        options={publishers}
                         placeholder=""
                         creatable
                         emptyIndicator={
@@ -353,6 +358,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                             authorInputRef.current?.input.blur();
                         }}
                         defaultOptions={authors}
+                        options={authors}
                         placeholder=""
                         creatable
                         emptyIndicator={
@@ -413,6 +419,7 @@ const CreateBook: React.FC<CreateCategoryProps> = ({
                       <MultipleSelector
                         value={field.value}
                         defaultOptions={categories}
+                        options={categories}
                         placeholder=""
                         creatable
                         onChange={field.onChange}

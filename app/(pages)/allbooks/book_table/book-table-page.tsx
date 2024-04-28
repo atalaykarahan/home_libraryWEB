@@ -6,7 +6,10 @@ import { DataTable } from "./data-table";
 import { getAllBooksClient } from "@/app/_api/services/bookService";
 import { deleteBookEmitter } from "../delete-dialog/delete-dialog";
 import { addMyLibraryEmitter } from "../add-my-library-dialog/add-my-library-dialog";
+import EventEmitter from "events";
 
+
+export const turnOffSkeletonEmitter = new EventEmitter();
 const BookTablePage = () => {
   const [books, setBooks] = useState<BookTableModel[]>([]);
 
@@ -30,7 +33,7 @@ const BookTablePage = () => {
       const res = await getAllBooksClient();
 
       if (res.status !== 200) {
-        throw new Error("User ile ilgili bir hata oluştu");
+        throw new Error("All books ile ilgili bir hata oluştu");
       }
 
       //we formatted response type for table component
@@ -51,6 +54,7 @@ const BookTablePage = () => {
 
       // const response = res.data;
       setBooks(formattedResponse);
+      turnOffSkeletonEmitter.emit("turnOff");
     } catch (error) {
       console.warn("publisher try&catch hata -> ", error);
     }

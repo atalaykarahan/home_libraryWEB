@@ -1,5 +1,8 @@
 "use client";
-import { patchUpdateVisibility } from "@/app/_api/services/userService";
+import {
+  getMyVisibilityStatus,
+  patchUpdateVisibility,
+} from "@/app/_api/services/userService";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,10 +20,12 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserProfilePrivacySchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { toast } from "sonner";
@@ -28,6 +33,26 @@ import { z } from "zod";
 
 const UserPrivacy = () => {
   const user = useCurrentUser();
+  const [libraryVisibility, setLibraryVisibility] = useState<boolean | null>(
+    null
+  );
+  const [userVisibility, setUserVisibility] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await getMyVisibilityStatus();
+      if (res.status == 200) {
+        setUserVisibility(res.data.user_visibility);
+        setLibraryVisibility(res.data.user_library_visibility);
+      }
+    } catch (error) {
+      console.log("Visibility ayarları ile ilgili bir sorun oluştu ", error);
+    }
+  };
 
   const form = useForm<z.infer<typeof UserProfilePrivacySchema>>({
     resolver: zodResolver(UserProfilePrivacySchema),
@@ -38,12 +63,10 @@ const UserPrivacy = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof UserProfilePrivacySchema>) => {
-    console.log(data);
-
     try {
       const resStatus = await patchUpdateVisibility(
-        data.user_visibility,
-        data.user_library_visibility
+        userVisibility ?? true,
+        libraryVisibility ?? true
       );
       if (resStatus.status == 200) {
         toast.success(`GÜNCELLEME BAŞARILI`, {
@@ -105,26 +128,38 @@ const UserPrivacy = () => {
                     name="user_visibility"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Profili Gizle
-                          </FormLabel>
-                          <FormDescription>
-                            Profilini gizlersen kütüphanen dahil tamamen
-                            görünmez olursun hesabın hiç var olmamış gibi.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            disabled={user?.role == 1}
-                            onCheckedChange={(value) => {
-                              if (value)
-                                form.setValue("user_library_visibility", true);
-                              field.onChange(value);
-                            }}
-                          />
-                        </FormControl>
+                        {userVisibility == null ? (
+                          <div className="space-y-0.5 w-full">
+                            <Skeleton className=" w-full h-[20px] rounded-full block" />
+                            <br />
+                            <Skeleton className=" w-full h-[20px] rounded-full block" />
+                          </div>
+                        ) : (
+                          <>
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Profili Gizle
+                              </FormLabel>
+
+                              <FormDescription>
+                                Profilini gizlersen kütüphanen dahil tamamen
+                                görünmez olursun hesabın hiç var olmamış gibi.
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={userVisibility}
+                                disabled={user?.role == 1}
+                                onCheckedChange={(value) => {
+                                  setUserVisibility(value);
+                                  if (value) {
+                                    setLibraryVisibility(value);
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                          </>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -133,24 +168,36 @@ const UserPrivacy = () => {
                     name="user_library_visibility"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Kütüphaneyi Gizle
-                          </FormLabel>
-                          <FormDescription>
-                            Kütüphaneni gizlersen kaç kitap okuyup kaç tanesini
-                            yarım bıraktığın gözükür ancak bunların hangi
-                            kitaplar olduğu gözükmez.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            disabled={form.getValues("user_visibility")}
-                            aria-readonly
-                          />
-                        </FormControl>
+                        {libraryVisibility == null ? (
+                          <div className="space-y-0.5 w-full">
+                            <Skeleton className=" w-full h-[20px] rounded-full block" />
+                            <br />
+                            <Skeleton className=" w-full h-[20px] rounded-full block" />
+                          </div>
+                        ) : (
+                          <>
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Kütüphaneyi Gizle
+                              </FormLabel>
+                              <FormDescription>
+                                Kütüphaneni gizlersen kaç kitap okuyup kaç
+                                tanesini yarım bıraktığın gözükür ancak bunların
+                                hangi kitaplar olduğu gözükmez.
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={libraryVisibility}
+                                onCheckedChange={(value) =>
+                                  setLibraryVisibility(value)
+                                }
+                                disabled={userVisibility ?? true}
+                                aria-readonly
+                              />
+                            </FormControl>
+                          </>
+                        )}
                       </FormItem>
                     )}
                   />
