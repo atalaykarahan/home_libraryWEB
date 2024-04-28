@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
 import { VscTriangleRight } from "react-icons/vsc";
 import CollapsibleTablePage from "../user-collapsible-table/collapsible-page";
 
@@ -33,12 +34,20 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData | any, TValue>) {
+  const [openRows, setOpenRows] = useState<{ [key: string]: boolean }>({});
   const table = useReactTable({
     data,
     columns,
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const toggleRow = (rowId: string) => {
+    setOpenRows((prevState) => ({
+      ...prevState,
+      [rowId]: !prevState[rowId],
+    }));
+  };
 
   return (
     <div>
@@ -74,7 +83,13 @@ export function DataTable<TData, TValue>({
                     >
                       <TableCell style={{ cursor: "pointer" }}>
                         {!row.original.user_library_visibility && (
-                          <CollapsibleTrigger asChild>
+                          <CollapsibleTrigger
+                            asChild
+                            className={`transition ${
+                              openRows[row.id] ? "rotate-90" : ""
+                            }`}
+                            onClick={() => toggleRow(row.id)}
+                          >
                             <VscTriangleRight />
                           </CollapsibleTrigger>
                         )}

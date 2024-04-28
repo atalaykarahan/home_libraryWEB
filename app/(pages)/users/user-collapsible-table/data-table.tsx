@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
   Row,
@@ -9,22 +8,14 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import Image from "next/image";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { TableCell, TableHead, TableRow } from "@/components/ui/table";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { TableVirtuoso } from "react-virtuoso";
-import { HTMLAttributes, forwardRef } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { HTMLAttributes, forwardRef, useEffect, useState } from "react";
+import { TableVirtuoso } from "react-virtuoso";
+import { useSelector } from "react-redux";
 
 const TableComponent = forwardRef<
   HTMLTableElement,
@@ -38,42 +29,91 @@ const TableComponent = forwardRef<
 ));
 TableComponent.displayName = "TableComponent";
 
-const TableRowComponent = <TData,>(rows: Row<TData>[]) =>
+const TableRowComponent = <TData,>(
+  rows: Row<TData>[],
+  columns?: ColumnDef<TData>
+) =>
   function getTableRow(props: HTMLAttributes<HTMLTableRowElement>) {
+    const [skeletonResponse, setSkeletonResponse] = useState<boolean>(true);
+  
     // @ts-expect-error data-index is a valid attribute
     const index = props["data-index"];
     const row = rows[index];
 
     if (!row) return null;
+    const skeletonStatus = useSelector((state:any )=> state.grid)
+   useEffect(()=>{
+    console.log(skeletonStatus["userCollapse"])
+    setSkeletonResponse(skeletonStatus["userCollapse"])
+   },[skeletonStatus]);
 
     return (
-      <TableRow
-        key={row.id}
-        data-state={row.getIsSelected() && "selected"}
-        {...props}
-      >
-        {row.getVisibleCells().map((cell) => (
-          <TableCell key={cell.id}>
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </TableCell>
-        ))}
-      </TableRow>
+      <>
+        {skeletonResponse == true ? (
+          <>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+          </>
+        ) : (
+          <TableRow
+            key={row.id}
+            data-state={row.getIsSelected() && "selected"}
+            {...props}
+          >
+            {row.getVisibleCells().map((cell) => (
+              <TableCell key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))}
+          </TableRow>
+        )}
+      </>
     );
   };
 
-  function SortingIndicator({ isSorted }: { isSorted: SortDirection | false }) {
-    if (!isSorted) return null;
-    return (
-      <div>
+function SortingIndicator({ isSorted }: { isSorted: SortDirection | false }) {
+  if (!isSorted) return null;
+  return (
+    <div>
+      {
         {
-          {
-            asc: "↑",
-            desc: "↓",
-          }[isSorted]
-        }
-      </div>
-    );
-  }
+          asc: "↑",
+          desc: "↓",
+        }[isSorted]
+      }
+    </div>
+  );
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

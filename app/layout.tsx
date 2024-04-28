@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import Providers from "@/redux/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,11 +31,14 @@ export default async function RootLayout({
           />
         </head>
         <body className={inter.className}>
+          <Providers>
           <div className="flex flex-col min-h-screen">
             <NavBar />
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
+          </Providers>
+         
           <Toaster closeButton />
         </body>
       </html>
