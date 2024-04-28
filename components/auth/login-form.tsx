@@ -23,9 +23,8 @@ import { Button } from "../ui/button";
 import { CardWrapper } from "./card-wrapper";
 
 const LoginForm: React.FC = () => {
-  const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [transitionResponse, setTransitionResponse] = useState(false);
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -35,7 +34,7 @@ const LoginForm: React.FC = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    startTransition(() => {
+    setTransitionResponse(true);
       const serverProps: LoginDto = {
         user_name: values.nick_name,
         password: values.password,
@@ -54,8 +53,6 @@ const LoginForm: React.FC = () => {
               if (data && data.error) {
                 // data varsa ve içinde error varsa, hata mesajını set et
                 setErrorMessage(data.error);
-              } else {
-                // Başka bir işlem yap veya başarı durumunu işle
               }
             });
           })
@@ -65,12 +62,14 @@ const LoginForm: React.FC = () => {
             } else {
               setErrorMessage("Bilinmeyen bir hata oluştu");
             }
+            setTransitionResponse(false);
             console.log(err);
           });
       } catch (error) {
+        setTransitionResponse(false);
         console.log("kullanıcı ile ilgili bir sorun oluştu ", error);
       }
-    });
+
   };
 
   return (
@@ -80,7 +79,7 @@ const LoginForm: React.FC = () => {
       backButtonHref="/register"
       showSocial
     >
-      {isPending == true ? (
+      {transitionResponse == true ? (
         <div className="flex items-center w-full justify-center">
           <BeatLoader />
         </div>
@@ -95,7 +94,7 @@ const LoginForm: React.FC = () => {
                   <FormItem>
                     <FormLabel>Kullanıcı Adı</FormLabel>
                     <FormControl>
-                      <Input {...field} type="text" disabled={isPending} />
+                      <Input {...field} type="text" disabled={transitionResponse} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -112,7 +111,7 @@ const LoginForm: React.FC = () => {
                         {...field}
                         placeholder="********"
                         type="password"
-                        disabled={isPending}
+                        disabled={transitionResponse}
                       />
                     </FormControl>
                     <Button
@@ -129,7 +128,7 @@ const LoginForm: React.FC = () => {
               />
             </div>
             <FormError message={errorMessage} />
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button type="submit" className="w-full" disabled={transitionResponse}>
               Giriş Yap
             </Button>
           </form>
