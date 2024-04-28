@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
   Row,
@@ -9,22 +8,12 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import Image from "next/image";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { TableCell, TableHead, TableRow } from "@/components/ui/table";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { TableVirtuoso } from "react-virtuoso";
-import { HTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
+import { HTMLAttributes, forwardRef } from "react";
+import { TableVirtuoso } from "react-virtuoso";
 
 const TableComponent = forwardRef<
   HTMLTableElement,
@@ -61,19 +50,19 @@ const TableRowComponent = <TData,>(rows: Row<TData>[]) =>
     );
   };
 
-  function SortingIndicator({ isSorted }: { isSorted: SortDirection | false }) {
-    if (!isSorted) return null;
-    return (
-      <div>
+function SortingIndicator({ isSorted }: { isSorted: SortDirection | false }) {
+  if (!isSorted) return null;
+  return (
+    <div>
+      {
         {
-          {
-            asc: "↑",
-            desc: "↓",
-          }[isSorted]
-        }
-      </div>
-    );
-  }
+          asc: "↑",
+          desc: "↓",
+        }[isSorted]
+      }
+    </div>
+  );
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
