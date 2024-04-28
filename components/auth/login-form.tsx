@@ -65,7 +65,6 @@ const LoginForm: React.FC = () => {
             } else {
               setErrorMessage("Bilinmeyen bir hata oluştu");
             }
-
             console.log(err);
           });
       } catch (error) {
