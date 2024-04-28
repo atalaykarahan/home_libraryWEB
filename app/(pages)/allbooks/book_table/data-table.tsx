@@ -24,6 +24,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { turnOffSkeletonEmitter } from "./book-table-page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +40,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [skeletonResponse, setSkeletonResponse] = useState<boolean>(true);
 
   const table = useReactTable({
     data,
@@ -69,6 +72,11 @@ export function DataTable<TData, TValue>({
           column.toggleVisibility(false);
         }
       });
+
+    turnOffSkeletonEmitter.on("turnOff", () => setSkeletonResponse(false));
+    return () => {
+      turnOffSkeletonEmitter.off("turnOff", () => setSkeletonResponse(false));
+    };
   }, []);
 
   return (
@@ -106,51 +114,90 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  style={{
-                    backgroundColor: (() => {
-                      let color = "inherit";
-                      row.getVisibleCells().find((cell) => {
-                        const value = cell.getValue();
-                        switch (value) {
-                          case "Okunuyor":
-                            color = "rgb(254, 166, 166)";
-                            break;
-                          case "Kitaplıkta":
-                            color = "rgb(199, 236, 199)";
-                            break;
-                          case "Kitaplıkta değil":
-                            color = "lightyellow";
-                            break;
-                        }
-                      });
-                      return color;
-                    })(),
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+            {skeletonResponse == true ? (
+              <>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+                  </TableCell>
+                  <TableCell colSpan={columns.length - 1}>
+                    <Skeleton className=" w-full h-[20px] rounded-full block" />
+                  </TableCell>
                 </TableRow>
-              ))
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+                  </TableCell>
+                  <TableCell colSpan={columns.length - 1}>
+                    <Skeleton className=" w-full h-[20px] rounded-full block" />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+                  </TableCell>
+                  <TableCell colSpan={columns.length - 1}>
+                    <Skeleton className=" w-full h-[20px] rounded-full block" />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+                  </TableCell>
+                  <TableCell colSpan={columns.length - 1}>
+                    <Skeleton className=" w-full h-[20px] rounded-full block" />
+                  </TableCell>
+                </TableRow>
+              </>
             ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
+              <>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      style={{
+                        backgroundColor: (() => {
+                          let color = "inherit";
+                          row.getVisibleCells().find((cell) => {
+                            const value = cell.getValue();
+                            switch (value) {
+                              case "Okunuyor":
+                                color = "rgb(254, 166, 166)";
+                                break;
+                              case "Kitaplıkta":
+                                color = "rgb(199, 236, 199)";
+                                break;
+                              case "Kitaplıkta değil":
+                                color = "lightyellow";
+                                break;
+                            }
+                          });
+                          return color;
+                        })(),
+                      }}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             )}
           </TableBody>
         </Table>
