@@ -11,9 +11,11 @@ import {
 
 import { TableCell, TableHead, TableRow } from "@/components/ui/table";
 
+
 import { cn } from "@/lib/utils";
 import { HTMLAttributes, forwardRef } from "react";
 import { TableVirtuoso } from "react-virtuoso";
+
 
 const TableComponent = forwardRef<
   HTMLTableElement,
@@ -27,26 +29,75 @@ const TableComponent = forwardRef<
 ));
 TableComponent.displayName = "TableComponent";
 
-const TableRowComponent = <TData,>(rows: Row<TData>[]) =>
+const TableRowComponent = <TData,>(
+  rows: Row<TData>[],
+  columns?: ColumnDef<TData>
+) =>
   function getTableRow(props: HTMLAttributes<HTMLTableRowElement>) {
+    const [skeletonResponse, setSkeletonResponse] = useState<boolean>(true);
+  
     // @ts-expect-error data-index is a valid attribute
     const index = props["data-index"];
     const row = rows[index];
 
     if (!row) return null;
+    const skeletonStatus = useSelector((state:any )=> state.grid)
+   useEffect(()=>{
+    console.log(skeletonStatus["userCollapse"])
+    setSkeletonResponse(skeletonStatus["userCollapse"])
+   },[skeletonStatus]);
 
     return (
-      <TableRow
-        key={row.id}
-        data-state={row.getIsSelected() && "selected"}
-        {...props}
-      >
-        {row.getVisibleCells().map((cell) => (
-          <TableCell key={cell.id}>
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </TableCell>
-        ))}
-      </TableRow>
+      <>
+        {skeletonResponse == true ? (
+          <>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Skeleton className=" w-[50px] h-[78px] rounded-md block" />
+              </TableCell>
+              <TableCell colSpan={row.getVisibleCells().length - 1}>
+                <Skeleton className=" w-full h-[20px] rounded-full block" />
+              </TableCell>
+            </TableRow>
+          </>
+        ) : (
+          <TableRow
+            key={row.id}
+            data-state={row.getIsSelected() && "selected"}
+            {...props}
+          >
+            {row.getVisibleCells().map((cell) => (
+              <TableCell key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))}
+          </TableRow>
+        )}
+      </>
     );
   };
 

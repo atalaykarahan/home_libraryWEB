@@ -1,8 +1,10 @@
 "use client";
+import { getUserBookGridCollapseList } from "@/app/_api/services/bookService";
 import { useEffect, useState } from "react";
 import { UserCollapsibleModel, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getUserBookGridCollapseList } from "@/app/_api/services/bookService";
+import { useDispatch } from "react-redux";
+import { turnOffSkeleton } from "@/redux/slices/grid-slice";
 
 interface CollapsibleTablePageProps {
   user_id: string;
@@ -12,7 +14,7 @@ const CollapsibleTablePage: React.FC<CollapsibleTablePageProps> = ({
   user_id,
 }) => {
   const [userDetail, setUserDetail] = useState<UserCollapsibleModel[]>([]);
-
+const dispatch = useDispatch()
   useEffect(() => {
     fetchData();
   }, []);
@@ -25,6 +27,7 @@ const CollapsibleTablePage: React.FC<CollapsibleTablePageProps> = ({
         throw new Error("User collapse ile ilgili bir hata oluştu");
       }
       setUserDetail(res.data);
+      dispatch(turnOffSkeleton("userCollapse"))
     } catch (error) {
       console.warn("user collapse try&catch hata -> ", error);
     }
