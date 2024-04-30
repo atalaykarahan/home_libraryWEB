@@ -23,15 +23,10 @@ const NavbarLoggedInView = () => {
   const [publisherModal, setPublisherModal] = useState<boolean>(false);
   const [authorModal, setAuthorModal] = useState<boolean>(false);
 
-  function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-  }
-
   const user = useCurrentUser();
 
   return (
     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-
       {createBookModal && (
         <CreateBook
           openModal={createBookModal}

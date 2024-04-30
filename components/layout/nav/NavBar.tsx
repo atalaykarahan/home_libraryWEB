@@ -1,43 +1,18 @@
 "use client";
-import { useState, Fragment } from "react";
-import logo from "../../../public/images/logo.png";
-import krhnlogo from "@/public/images/atalayLogo.png";
-import Image from "next/image";
-import Link from "next/link";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { FaRegBell } from "react-icons/fa";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import NavbarLinks from "./navbar-links";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import krhnlogo from "@/public/images/atalayLogo.png";
+import { Disclosure } from "@headlessui/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { RxHamburgerMenu } from "react-icons/rx";
+import NavbarLinks from "./navbar-links";
 import NavbarLoggedInView from "./navbar-logged-in-view";
 import NavbarLoggedOutView from "./navbar-logged-out-view";
-import { useRouter } from "next/navigation";
+import NavbarMobile from "./navbar-mobile";
 
 const NavBar = () => {
   const user = useCurrentUser();
   const router = useRouter();
-
-  const navigation = [
-    { name: "Anasayfa", href: "/", current: true },
-    { name: "Tüm Kitaplar", href: "/allbooks", current: false },
-    { name: "Üyeler", href: "/users", current: false },
-  ];
-
-  const navigationMobile = [
-    { name: "Anasayfa", href: "/", current: true },
-    { name: "Tüm Kitaplar", href: "/allbooks", current: false },
-    { name: "Üyeler", href: "/users", current: false },
-    { name: "Giriş Yap", href: "/login", current: false },
-    { name: "Üye Ol", href: "/register", current: false },
-  ];
-
-  function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-  }
-
-  // if user login in mobil view he can see private books link
-  if (user)
-    navigation.push({ name: "Kitaplarım", href: "/mybooks", current: false });
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -88,26 +63,7 @@ const NavBar = () => {
           </div>
 
           {/* mobile view */}
-          <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigationMobile.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-          </Disclosure.Panel>
+          <NavbarMobile />
         </>
       )}
     </Disclosure>
